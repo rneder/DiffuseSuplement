@@ -1,0 +1,2 @@
+JMOL_HOME=$HOME/JMOL/aaa
+export JMOL_HOME

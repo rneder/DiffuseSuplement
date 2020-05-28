@@ -1,0 +1,6 @@
+PGPLOT_DIR=/home/reinhard/pgplot
+PGPLOT_FONT=/home/reinhard/pgplot/grfont.dat
+PGPLOT_DEV=/XSERVE
+export PGPLOT_DIR
+export PGPLOT_DEV
+export PGPLOT_FONT

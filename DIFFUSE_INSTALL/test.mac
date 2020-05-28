@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+set -e
+#
+source ./ask.sh
+#
+if [[ $DISCUS_INSTALL == 0 ]]; then
+
+  echo " DISCUS INSTALLATION IS GLOBAL"
+
+elif [[ $DISCUS_INSTALL == 1 ]]; then
+
+  echo " DISCUS INSTALLATION IS LOCAL"
+
+fi
+

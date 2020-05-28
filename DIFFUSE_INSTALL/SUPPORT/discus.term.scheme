@@ -1,0 +1,28 @@
+# Terminal color schemes
+#
+# Available options:
+# background : black, red, yellow, blue, white, light_yellow
+#
+# All other colors are foreground colors with the options:
+#
+# foreground : black, red, green, yellow, blue, magenta, cyan, white
+# error      : 
+# highlight  : 
+# information: 
+# Alternative colores can be set accoring to the Xterm  escape sequences,
+# See for example misc.flogisoft.com/bash/tip_colors_and_formatting
+#
+Background:  white
+#Background:  231
+Foreground:  black
+Error:       red
+Highlight:   red
+Information: blue
+#
+# Black Background White Foreground Scheme
+#
+#Background:   16
+#Foreground:   15
+#Error:         9
+#Highlight:     9 
+#Information:  14
