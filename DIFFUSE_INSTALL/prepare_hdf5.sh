@@ -28,6 +28,22 @@ fi
 if [[ $HDF_DONE == 1 ]]; then
   if [[ "$OPERATING" == "DISCUS_LINUX" || "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
 #
+    if [ ! -e HDF_${HDF5_Version}_${OPERATING_VERSION}.tar.gz ]; then
+#
+#     File does not exist, obtain
+#
+      export DISCUS_SUPPLEMENT=$(curl --silent "https://github.com/rneder/DiffuseSuplement/releases/latest" | grep -Poe 'v.[0-9]*.[0-9]*.[0-9]*')
+      export DISCUS_HDF_URL='https://github.com/rneder/DiffuseSuplement/releases/download/'${DISCUS_SUPPLEMENT}'/HDF_'${HDF5_Version}_${OPERATING_VERSION}'.tar.gz'
+      if curl --output /dev/null --silent --head --fail "${SICUS_HDF_URL}"; then
+        curl -o HDF_${HDF5_Version}_${OPERATING_VERSION}.tar.gz -SL ${DISCUS_HDF_URL}
+        export DISCUS_HDF_PRE=1
+      else
+        source prepare_hdf5_complete.sh
+        export DISCUS_HDF_PRE=0
+      fi
+    fi
+    if [[ "$DISCUS_HDF_PRE" == "1" ]]; then
+#
 # unpack precompiled HDF5 version
 #
     tar -zxf HDF_${HDF5_Version}_${OPERATING_VERSION}.tar.gz
@@ -45,6 +61,7 @@ if [[ $HDF_DONE == 1 ]]; then
       ln -s /lib/x86_64-linux-gnu/libz.so.1      libz.so
       ln -s /lib/x86_64-linux-gnu/libz.so.1.2.11 libz.so.1
       ln -s /lib/x86_64-linux-gnu/libz.so.1.2.11 libz.so.1.2.11
+    fi
     fi
   export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5
   fi
@@ -68,4 +85,3 @@ else
   fi
   export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5
 fi
-echo "DONE WITH HDF5 INSTALLATION "
