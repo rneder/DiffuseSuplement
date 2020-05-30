@@ -22,6 +22,7 @@ sudo apt-get -y install  gfortran
 sudo apt-get -y install  cmake
 sudo apt-get -y install  cmake-curses-gui
 sudo apt-get -y install  curl
+sudo apt-get -y install  chrpath
 sudo apt-get -y install  psmisc
 sudo apt-get -y install  ghostscript
 sudo apt-get -y install  qpdfview
