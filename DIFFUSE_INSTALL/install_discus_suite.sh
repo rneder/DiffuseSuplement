@@ -40,25 +40,6 @@ fi
 #
 source prepare_os.sh
 #
-#  If called without parameters, install DISCUS from GITHUB
-#
-if [ "$#" -ne 1 ]; then
-  echo 
-  echo " Installation of DISCUS_SUITE from code at github"
-  echo " Download may take a moment, please be patient "
-  echo
-  curl -o DIFFUSE_CODE.tar.gz -fSL ${DISCUS_CODE_URL}
-  export DISCUS_TAR_SOURCE=DIFFUSE_CODE.tar.gz
-  echo
-  echo " Download of ${DISCUS_TAR_SOURCE} Version ${DISCUS_VERSION} is complete "
-  echo
-else
-  export DISCUS_TAR_SOURCE=$1
-  echo
-  echo " Installation from local archive " ${DISCUS_TAR_SOURCE}
-  echo
-fi
-#
 # 
 echo
 echo " DISCUS_SUITE INSTALLATION"
@@ -71,22 +52,94 @@ source prepare_hdf5.sh
 #
 cd $DISCUS_INST_DIR
 #
-if [[ "$OPERATING" == "DISCUS_LINUX" ]]; then
+if [[ "$OPERATING_NAME" == "Ubuntu" ]]; then
 #
-  source  ./compile_pgplot.sh
+  source ./set_pgplot_bash.sh
+  source ./get_diffuse_ubuntu.sh
+  if [ -e DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz ]; then
 #
-  export DIFFEV_MPI_FLAG=ON
-  source   ./compile_discus.sh
+#   Precompiled file exists for this Ubuntu
+#
+    tar -zxf DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz
+    cd ${OPERATING_NAME}_${OPERATING_VERSION}
+    source ../modify_chrpath.sh
+    if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]]; then
+      mkdir -p ${DISCUS_BIN_PREFIX}/bin
+      cp -r bin/discus_suite    ${DISCUS_BIN_PREFIX}/bin/
+      cp -r pgplot ${DISCUS_BIN_PREFIX}
+      cp -r share  ${DISCUS_BIN_PREFIX}
+    else
+      sudo mkdir -p ${DISCUS_BIN_PREFIX}/bin
+      sudo cp -r bin/discus_suite    ${DISCUS_BIN_PREFIX}/bin/
+      sudo cp -r pgplot ${DISCUS_BIN_PREFIX}
+      sudo cp -r share  ${DISCUS_BIN_PREFIX}
+    fi
+  else
+#
+#   Precompiled file does not exist, do full installation
+#
+#
+#  If called without parameters, install DISCUS from GITHUB
+#
+    if [ "$#" -ne 1 ]; then
+      echo 
+      echo " Installation of DISCUS_SUITE from code at github"
+      echo " Download may take a moment, please be patient "
+      echo
+      curl -o DIFFUSE_CODE.tar.gz -fSL ${DISCUS_CODE_URL}
+      export DISCUS_TAR_SOURCE=DIFFUSE_CODE.tar.gz
+      echo
+      echo " Download of ${DISCUS_TAR_SOURCE} Version ${DISCUS_VERSION} is complete "
+      echo
+    else
+      export DISCUS_TAR_SOURCE=$1
+      echo
+      echo " Installation from local archive " ${DISCUS_TAR_SOURCE}
+      echo
+    fi
+#
+    source set_source.sh
+#
+    source  ./compile_pgplot.sh
+#
+    if [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
+      export DIFFEV_MPI_FLAG=OFF
+      source   ./compile_discus.sh
+      sudo cp /usr/local/bin/discus_suite /usr/local/bin/discus_suite_noparallel
+      export DIFFEV_MPI_FLAG=ON
+      source   ./compile_discus.sh
+#
+      cd $DISCUS_INST_DIR
+      sudo cp SHELLS/discus_suite_ubuntu.sh     /usr/local/bin
+      sudo cp SHELLS/discus_suite_run_ubuntu.sh /usr/local/bin
+      sudo cp SHELLS/terminal_wrapper.sh        /usr/local/bin
+    else
+      export DIFFEV_MPI_FLAG=ON
+      echo ABOUT TO COMPILE DISCUS
+      source   ./compile_discus.sh
+    fi
+#
+  fi
+  cd ..
 #
 elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
 #
-  tar -zxf DIFFUSE_UBUNTU_${OPERATING_VERSION}.tar.gz
-  cd UBUNTU_${OPERATING_VERSION}
-  sudo cp -r pgplot ${DISCUS_BIN_PREFIX}
-  sudo cp -r bin    ${DISCUS_BIN_PREFIX}
-  sudo cp -r share  ${DISCUS_BIN_PREFIX}
-  cd ..
   source ./set_pgplot_bash.sh
+  source ./get_diffuse_ubuntu.sh
+  tar -zxf DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz
+  cd ${OPERATING_NAME}_${OPERATING_VERSION}
+  source ./set_pgplot_bash.sh
+  source ../modify_chrpath.sh
+  if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]]; then
+    cp -r pgplot ${DISCUS_BIN_PREFIX}
+    cp -r bin    ${DISCUS_BIN_PREFIX}
+    cp -r share  ${DISCUS_BIN_PREFIX}
+  else
+    sudo cp -r pgplot ${DISCUS_BIN_PREFIX}
+    sudo cp -r bin    ${DISCUS_BIN_PREFIX}
+    sudo cp -r share  ${DISCUS_BIN_PREFIX}
+  fi
+  cd ..
 #
 #Q#  source  ./compile_pgplot.sh
 #
@@ -101,30 +154,63 @@ elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
 #Q#  sudo cp SHELLS/discus_suite_run_ubuntu.sh /usr/local/bin
 #Q#  sudo cp SHELLS/terminal_wrapper.sh        /usr/local/bin
 #
-elif [[ "$OPERATING" == "DISCUS_CYGWIN" ]]; then
+else
 #
-  source  ./compile_pgplot.sh
-  export DIFFEV_MPI_FLAG=ON
-  source  ./compile_discus.sh
-  cp $DISCUS_BIN_PREFIX/bin/discus_suite.exe $DISCUS_BIN_PREFIX/bin/discus_suite_parallel.exe
-  cp $DISCUS_BIN_PREFIX/bin/discus_suite.exe                   /bin/discus_suite_parallel.exe
-  export DIFFEV_MPI_FLAG=OFF
-  source  ./compile_discus.sh
-  cp $DISCUS_BIN_PREFIX/bin/kuplot.exe /bin
-  cp $DISCUS_BIN_PREFIX/bin/discus_suite.exe /bin
+#  NOT Ubuntu or WSL, do complete installation
 #
-  cd $DISCUS_INST_DIR
-  cp SHELLS/* /usr/local/bin
-  cp SHELLS/*           /bin
-  source  ./set_pgplot_bash.sh
+#  If called without parameters, install DISCUS from GITHUB
 #
-elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
+  if [ "$#" -ne 1 ]; then
+    echo 
+    echo " Installation of DISCUS_SUITE from code at github"
+    echo " Download may take a moment, please be patient "
+    echo
+    curl -o DIFFUSE_CODE.tar.gz -fSL ${DISCUS_CODE_URL}
+    export DISCUS_TAR_SOURCE=DIFFUSE_CODE.tar.gz
+    echo
+    echo " Download of ${DISCUS_TAR_SOURCE} Version ${DISCUS_VERSION} is complete "
+    echo
+  else
+    export DISCUS_TAR_SOURCE=$1
+    echo
+    echo " Installation from local archive " ${DISCUS_TAR_SOURCE}
+    echo
+  fi
 #
-  source  ./compile_pgplot.sh
-  export DIFFEV_MPI_FLAG=ON
-  source  ./compile_discus.sh
-  source ./install_jre_jmol.sh
+  source set_source.sh
 #
+  if [[ "$OPERATING" == "DISCUS_LINUX" ]]; then
+#
+    source  ./compile_pgplot.sh
+#
+    export DIFFEV_MPI_FLAG=ON
+    source   ./compile_discus.sh
+#
+  elif [[ "$OPERATING" == "DISCUS_CYGWIN" ]]; then
+#
+    source  ./compile_pgplot.sh
+    export DIFFEV_MPI_FLAG=ON
+    source  ./compile_discus.sh
+    cp $DISCUS_BIN_PREFIX/bin/discus_suite.exe $DISCUS_BIN_PREFIX/bin/discus_suite_parallel.exe
+    cp $DISCUS_BIN_PREFIX/bin/discus_suite.exe                   /bin/discus_suite_parallel.exe
+    export DIFFEV_MPI_FLAG=OFF
+    source  ./compile_discus.sh
+    cp $DISCUS_BIN_PREFIX/bin/kuplot.exe /bin
+    cp $DISCUS_BIN_PREFIX/bin/discus_suite.exe /bin
+#
+    cd $DISCUS_INST_DIR
+    cp SHELLS/* /usr/local/bin
+    cp SHELLS/*           /bin
+    source  ./set_pgplot_bash.sh
+#
+  elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
+#
+    source  ./compile_pgplot.sh
+    export DIFFEV_MPI_FLAG=ON
+    source  ./compile_discus.sh
+    source ./install_jre_jmol.sh
+#
+  fi
 fi
 #
 if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]] && [[ ! "$OPERATING" == "DISCUS_CYGWIN" ]]; then
