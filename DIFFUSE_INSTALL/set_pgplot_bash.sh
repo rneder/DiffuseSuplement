@@ -37,6 +37,7 @@ if [[ -e $HOME/.profile.local ]]; then
   source substitute.sh $HOME/.profile.local "export PGPLOT_FONT" "export PGPLOT_FONT"
   if [[ "$OPERATING" == "DISCUS_LINUX"  || "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
     source substitute.sh $HOME/.profile.local "DISCUS_NCPU=" 'DISCUS_NCPU=$(grep --count ^processor /proc/cpuinfo)'
+    echo "export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5"  >> $HOME/.profile.local
   elif [[ "$OPERATING" == "DISCUS_CYGWIN" ]]; then
      source substitute.sh $HOME/.profile.local "DISCUS_NCPU=" 'DISCUS_NCPU=$(grep --count ^processor /proc/cpuinfo)'
   elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
@@ -51,26 +52,35 @@ fi
 #
 if [[ $DISCUS_INSTALL == $DISCUS_GLOBAL ]] && [[ ! $OPERATING == "DISCUS_CYGWIN" ]]; then
   if [[ -e /etc/profile.d/profile.local ]]; then
-    sudo source substitute.sh /etc/profile.d/profile.local PGPLOT_DIR= PGPLOT_DIR=$PGPLOT_ROOT_DIR/pgplot
-    sudo source substitute.sh /etc/profile.d/profile.local PGPLOT_FONT= PGPLOT_FONT=$PGPLOT_ROOT_DIR/pgplot/grfont.dat
-    sudo source substitute.sh /etc/profile.d/profile.local "PGPLOT_DEV=" "PGPLOT_DEV=/XSERVE"
-    sudo source substitute.sh /etc/profile.d/profile.local "export PGPLOT_DIR" "export PGPLOT_DIR"
-    sudo source substitute.sh /etc/profile.d/profile.local "export PGPLOT_DEV" "export PGPLOT_DEV"
-    sudo source substitute.sh /etc/profile.d/profile.local "export PGPLOT_FONT" "export PGPLOT_FONT"
+    cp /etc/profile.d/profile.local profile.local
+    source substitute.sh profile.local PGPLOT_DIR= PGPLOT_DIR=$PGPLOT_ROOT_DIR/pgplot
+    source substitute.sh profile.local PGPLOT_FONT= PGPLOT_FONT=$PGPLOT_ROOT_DIR/pgplot/grfont.dat
+    source substitute.sh profile.local "PGPLOT_DEV=" "PGPLOT_DEV=/XSERVE"
+    source substitute.sh profile.local "export PGPLOT_DIR" "export PGPLOT_DIR"
+    source substitute.sh profile.local "export PGPLOT_DEV" "export PGPLOT_DEV"
+    source substitute.sh profile.local "export PGPLOT_FONT" "export PGPLOT_FONT"
+    if [[ "$OPERATING" == "DISCUS_LINUX"  || "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
+      source substitute.sh profile.local "DISCUS_NCPU=" 'DISCUS_NCPU=$(grep --count ^processor /proc/cpuinfo)'
+      echo "export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5"  >> profile.local
+    elif [[ "$OPERATING" == "DISCUS_CYGWIN" ]]; then
+       source substitute.sh profile.local "DISCUS_NCPU=" 'DISCUS_NCPU=$(grep --count ^processor /proc/cpuinfo)'
+    elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
+      source substitute.sh profile.local "DISCUS_NCPU=" 'DISCUS_NCPU=$(sysctl -n hw.ncpu)'
+    fi
+    source substitute.sh profile.local "export DISCUS_NCPU" "export DISCUS_NCPU"
+    sudo cp profile.local /etc/profile.d/
 #    cat /etc/profile/profile.local profile.local > profile.new
 #    mv profile.new /etc/profile/profile.local
   fi
-elif [[ $DISCUS_INSTALL == $DISCUS_GLOBAL ]] && [[ $OPERATING == "DISCUS_CYGWIN" ]]; then
-  if [[ -e /etc/profile.d/profile.local ]]; then
-    source substitute.sh /etc/profile.d/profile.local PGPLOT_DIR= PGPLOT_DIR=$PGPLOT_ROOT_DIR/pgplot
-    source substitute.sh /etc/profile.d/profile.local PGPLOT_FONT= PGPLOT_FONT=$PGPLOT_ROOT_DIR/pgplot/grfont.dat
-    source substitute.sh /etc/profile.d/profile.local "PGPLOT_DEV=" "PGPLOT_DEV=/XSERVE"
-    source substitute.sh /etc/profile.d/profile.local "export PGPLOT_DIR" "export PGPLOT_DIR"
-    source substitute.sh /etc/profile.d/profile.local "export PGPLOT_DEV" "export PGPLOT_DEV"
-    source substitute.sh /etc/profile.d/profile.local "export PGPLOT_FONT" "export PGPLOT_FONT"
-#    cat /etc/profile/profile.local profile.local > profile.new
-#    mv profile.new /etc/profile/profile.local
-  fi
+#elif [[ $DISCUS_INSTALL == $DISCUS_GLOBAL ]] && [[ $OPERATING == "DISCUS_CYGWIN" ]]; then
+#  if [[ -e /etc/profile.d/profile.local ]]; then
+#    source substitute.sh /etc/profile.d/profile.local PGPLOT_DIR= PGPLOT_DIR=$PGPLOT_ROOT_DIR/pgplot
+#    source substitute.sh /etc/profile.d/profile.local PGPLOT_FONT= PGPLOT_FONT=$PGPLOT_ROOT_DIR/pgplot/grfont.dat
+#    source substitute.sh /etc/profile.d/profile.local "PGPLOT_DEV=" "PGPLOT_DEV=/XSERVE"
+#    source substitute.sh /etc/profile.d/profile.local "export PGPLOT_DIR" "export PGPLOT_DIR"
+#    source substitute.sh /etc/profile.d/profile.local "export PGPLOT_DEV" "export PGPLOT_DEV"
+#    source substitute.sh /etc/profile.d/profile.local "export PGPLOT_FONT" "export PGPLOT_FONT"
+##  fi
 fi
 #cp $DISCUS_INST_DIR/profile.local /etc/profile.d/
 #
