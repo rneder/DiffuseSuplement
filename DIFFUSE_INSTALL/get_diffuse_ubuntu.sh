@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+if [[ ! ${DISCUS_DO_COMPILE} == "COMPILE" ]]; then
 if [ ! -e DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz ]; then
 #
 #  File does not exist, obtain
@@ -16,4 +17,5 @@ if [ ! -e DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz ]; then
   else
     echo ${DISCUS_UBUNTU_URL} does not exist exists
   fi
+fi
 fi
