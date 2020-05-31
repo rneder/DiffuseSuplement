@@ -87,7 +87,8 @@ fi
 rm -rf bashrc
 if [[ -e $HOME/${MY_SHELL_RC} ]]; then
   if fgrep  "source" $HOME/${MY_SHELL_RC} | fgrep -q "profile.local"; then
-    echo "$HOME/${MY_SHELL_RC} already contains a line source ..profile.local"
+    echo
+#   echo "$HOME/${MY_SHELL_RC} already contains a line source ..profile.local"
   else
     cat ~/${MY_SHELL_RC} ./PROFILE.txt > bashrc
     mv bashrc ~/${MY_SHELL_RC}
