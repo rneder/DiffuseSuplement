@@ -76,38 +76,18 @@ if [[ "$OPERATING_NAME" == "Ubuntu" ]]; then
     fi
   else
 #
-#   Precompiled file does not exist, do full installation
+#   Precompiled file does not exist, do full installation, pass down argument 1
 #
-#
-#  If called without parameters, install DISCUS from GITHUB
-#
-    if [ "$#" -ne 1 ]; then
-      echo 
-      echo " Installation of DISCUS_SUITE from code at github"
-      echo " Download may take a moment, please be patient "
-      echo
-      curl -o DIFFUSE_CODE.tar.gz -fSL ${DISCUS_CODE_URL}
-      export DISCUS_TAR_SOURCE=DIFFUSE_CODE.tar.gz
-      echo
-      echo " Download of ${DISCUS_TAR_SOURCE} Version ${DISCUS_VERSION} is complete "
-      echo
-    else
-      export DISCUS_TAR_SOURCE=$1
-      echo
-      echo " Installation from local archive " ${DISCUS_TAR_SOURCE}
-      echo
-    fi
-#
-    source set_source.sh
+    source set_source.sh $1
 #
     source  ./compile_pgplot.sh
 #
     if [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
       export DIFFEV_MPI_FLAG=OFF
-      source   ./compile_discus.sh
+      source   ./compile_discus.sh clean
       sudo cp /usr/local/bin/discus_suite /usr/local/bin/discus_suite_noparallel
       export DIFFEV_MPI_FLAG=ON
-      source   ./compile_discus.sh
+      source   ./compile_discus.sh noclean
 #
       cd $DISCUS_INST_DIR
       sudo cp SHELLS/discus_suite_ubuntu.sh     /usr/local/bin
@@ -115,8 +95,7 @@ if [[ "$OPERATING_NAME" == "Ubuntu" ]]; then
       sudo cp SHELLS/terminal_wrapper.sh        /usr/local/bin
     else
       export DIFFEV_MPI_FLAG=ON
-      echo ABOUT TO COMPILE DISCUS
-      source   ./compile_discus.sh
+      source   ./compile_discus.sh clean
     fi
 #
   fi
@@ -126,75 +105,62 @@ elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
 #
   source ./set_pgplot_bash.sh
   source ./get_diffuse_ubuntu.sh
-  tar -zxf DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz
-  cd ${OPERATING_NAME}_${OPERATING_VERSION}
-  source ./set_pgplot_bash.sh
-  source ../modify_chrpath.sh
-  if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]]; then
-    cp -r pgplot ${DISCUS_BIN_PREFIX}
-    cp -r bin    ${DISCUS_BIN_PREFIX}
-    cp -r share  ${DISCUS_BIN_PREFIX}
+  if [ -e DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz ]; then
+    tar -zxf DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz
+    cd ${OPERATING_NAME}_${OPERATING_VERSION}
+    source ./set_pgplot_bash.sh
+    source ../modify_chrpath.sh
+    if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]]; then
+      cp -r pgplot ${DISCUS_BIN_PREFIX}
+      cp -r bin    ${DISCUS_BIN_PREFIX}
+      cp -r share  ${DISCUS_BIN_PREFIX}
+    else
+      sudo cp -r pgplot ${DISCUS_BIN_PREFIX}
+      sudo cp -r bin    ${DISCUS_BIN_PREFIX}
+      sudo cp -r share  ${DISCUS_BIN_PREFIX}
+    fi
   else
-    sudo cp -r pgplot ${DISCUS_BIN_PREFIX}
-    sudo cp -r bin    ${DISCUS_BIN_PREFIX}
-    sudo cp -r share  ${DISCUS_BIN_PREFIX}
+#
+#   Precompiled file does not exist, do full installation, pass down argument 1
+#
+    source set_source.sh $1
+    source  ./compile_pgplot.sh
+    export DIFFEV_MPI_FLAG=OFF
+    source   ./compile_discus.sh clean
+    sudo cp /usr/local/bin/discus_suite /usr/local/bin/discus_suite_noparallel
+    export DIFFEV_MPI_FLAG=ON
+    source   ./compile_discus.sh noclean
+#
+    cd $DISCUS_INST_DIR
+    sudo cp SHELLS/discus_suite_ubuntu.sh     /usr/local/bin
+    sudo cp SHELLS/discus_suite_run_ubuntu.sh /usr/local/bin
+    sudo cp SHELLS/terminal_wrapper.sh        /usr/local/bin
   fi
+#
   cd ..
-#
-#Q#  source  ./compile_pgplot.sh
-#
-#Q#  export DIFFEV_MPI_FLAG=OFF
-#Q#  source   ./compile_discus.sh
-#Q#  sudo cp /usr/local/bin/discus_suite /usr/local/bin/discus_suite_noparallel
-#Q#  export DIFFEV_MPI_FLAG=ON
-#Q#  source   ./compile_discus.sh
-#
-#Q#  cd $DISCUS_INST_DIR
-#Q#  sudo cp SHELLS/discus_suite_ubuntu.sh     /usr/local/bin
-#Q#  sudo cp SHELLS/discus_suite_run_ubuntu.sh /usr/local/bin
-#Q#  sudo cp SHELLS/terminal_wrapper.sh        /usr/local/bin
 #
 else
 #
 #  NOT Ubuntu or WSL, do complete installation
 #
-#  If called without parameters, install DISCUS from GITHUB
-#
-  if [ "$#" -ne 1 ]; then
-    echo 
-    echo " Installation of DISCUS_SUITE from code at github"
-    echo " Download may take a moment, please be patient "
-    echo
-    curl -o DIFFUSE_CODE.tar.gz -fSL ${DISCUS_CODE_URL}
-    export DISCUS_TAR_SOURCE=DIFFUSE_CODE.tar.gz
-    echo
-    echo " Download of ${DISCUS_TAR_SOURCE} Version ${DISCUS_VERSION} is complete "
-    echo
-  else
-    export DISCUS_TAR_SOURCE=$1
-    echo
-    echo " Installation from local archive " ${DISCUS_TAR_SOURCE}
-    echo
-  fi
-#
-  source set_source.sh
+  source set_source.sh $1
 #
   if [[ "$OPERATING" == "DISCUS_LINUX" ]]; then
 #
     source  ./compile_pgplot.sh
 #
     export DIFFEV_MPI_FLAG=ON
-    source   ./compile_discus.sh
+    source   ./compile_discus.sh clean
 #
   elif [[ "$OPERATING" == "DISCUS_CYGWIN" ]]; then
 #
     source  ./compile_pgplot.sh
     export DIFFEV_MPI_FLAG=ON
-    source  ./compile_discus.sh
+    source  ./compile_discus.sh clean
     cp $DISCUS_BIN_PREFIX/bin/discus_suite.exe $DISCUS_BIN_PREFIX/bin/discus_suite_parallel.exe
     cp $DISCUS_BIN_PREFIX/bin/discus_suite.exe                   /bin/discus_suite_parallel.exe
     export DIFFEV_MPI_FLAG=OFF
-    source  ./compile_discus.sh
+    source  ./compile_discus.sh noclean
     cp $DISCUS_BIN_PREFIX/bin/kuplot.exe /bin
     cp $DISCUS_BIN_PREFIX/bin/discus_suite.exe /bin
 #
@@ -207,7 +173,7 @@ else
 #
     source  ./compile_pgplot.sh
     export DIFFEV_MPI_FLAG=ON
-    source  ./compile_discus.sh
+    source  ./compile_discus.sh clean
     source ./install_jre_jmol.sh
 #
   fi
@@ -244,3 +210,6 @@ rm -f PROFILE.txt
 #rm -rf src/
 #rm -rf develop/
 #rm -rf $PGPLOT_SRC_DIR/pgplot
+echo
+echo "DISCUS SUITE is installed into " ${DISCUS_BIN_PREFIX}/bin
+echo
