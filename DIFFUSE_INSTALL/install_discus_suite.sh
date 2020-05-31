@@ -12,6 +12,9 @@
 #
 # For other systems a full compilation is attempted
 #
+# if the variable DISCUS_DO_COMPILE is set to "COMPILE", full 
+#    compilation is forced
+#
 set -e
 #set -v
 # Determine operating system and User name
@@ -95,37 +98,8 @@ if [[ "$OPERATING_NAME" == "Ubuntu" ]]; then
     source  ./compile_pgplot.sh
 #
     source do_discus_complete.sh
-#   if [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
-#    export DIFFEV_MPI_FLAG=OFF
-#    source   ./compile_discus.sh clean
-#    if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]]; then
-#      cp /usr/local/bin/discus_suite /usr/local/bin/discus_suite_noparallel
-#    else
-#      sudo cp /usr/local/bin/discus_suite /usr/local/bin/discus_suite_noparallel
-#    fi
-#    export DIFFEV_MPI_FLAG=ON
-#    source   ./compile_discus.sh noclean
-##
-#    cd $DISCUS_INST_DIR
-#    if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]]; then
-#      cp SHELLS/discus_suite_ubuntu.sh     /usr/local/bin
-#      cp SHELLS/discus_suite_run_ubuntu.sh /usr/local/bin
-#      cp SHELLS/terminal_wrapper.sh        /usr/local/bin
-#    else
-#      sudo cp SHELLS/discus_suite_ubuntu.sh     /usr/local/bin
-#      sudo cp SHELLS/discus_suite_run_ubuntu.sh /usr/local/bin
-#      sudo cp SHELLS/terminal_wrapper.sh        /usr/local/bin
-#    fi
-#   else
-#     export DIFFEV_MPI_FLAG=OFF
-#     source   ./compile_discus.sh clean
-#     sudo cp /usr/local/bin/discus_suite /usr/local/bin/discus_suite_noparallel
-#     export DIFFEV_MPI_FLAG=ON
-#     source   ./compile_discus.sh clean
-#   fi
 #
   fi
-  cd ..
 #
 elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
 #
@@ -152,19 +126,8 @@ elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
     source set_source.sh $1
     source  ./compile_pgplot.sh
     source do_discus_complete.sh
-#    export DIFFEV_MPI_FLAG=OFF
-#    source   ./compile_discus.sh clean
-#    sudo cp /usr/local/bin/discus_suite /usr/local/bin/discus_suite_noparallel
-#    export DIFFEV_MPI_FLAG=ON
-#    source   ./compile_discus.sh noclean
-##
-#    cd $DISCUS_INST_DIR
-#    sudo cp SHELLS/discus_suite_ubuntu.sh     /usr/local/bin
-#    sudo cp SHELLS/discus_suite_run_ubuntu.sh /usr/local/bin
-#    sudo cp SHELLS/terminal_wrapper.sh        /usr/local/bin
   fi
 #
-  cd ..
 #
 else
 #
@@ -228,7 +191,6 @@ if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
   cp -r DiscusWSL $WSL_DIR
   cd SHELLS
   cp -r ./.DISCUS $HOME
-  cd ..
 # source ./install_vcxsrv.sh
 fi
 #
@@ -240,6 +202,7 @@ rm -f PROFILE.txt
 #rm -rf develop/
 #rm -rf $PGPLOT_SRC_DIR/pgplot
 source build_distribution.sh
+cd $DISCUS_INST_DIR/..
 echo
 echo "DISCUS SUITE is installed into " ${DISCUS_BIN_PREFIX}/bin
 echo
