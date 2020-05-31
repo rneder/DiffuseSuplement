@@ -27,7 +27,9 @@ elif  [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
 #
 fi
 #
-make clean
+if [[ "$1" == "clean" ]]; then
+  make clean
+fi
 #
 # Temporarily while phasing out the standalone programs DISCUS, DIFFEV, KUPLOT, REFINE, MIXSCAT
 if  [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]]  || [[ "$OPERATING" == "DISCUS_CYGWIN" ]]; then
