@@ -2,7 +2,7 @@
 #
 #  Install vcxsrv server
 #
-set -v
+#set -v
 #export DISCUS_VCX_VERSION=$(curl --silent "https://sourceforge.net/projects/vcxsrv/files/download" | grep -Poe '64.[0-9]*.[0-9]*.[0-9]*.[0-9]*')
 #export DISCUS_VCX_URL='https://sourceforge.net/projects/vcxsrv/files/latest/download/vcxsrv-'${DISCUS_VCX_VERSION}'.installer.exe'
 #echo 'VCX Version ' $DISCUS_VCX_VERSION

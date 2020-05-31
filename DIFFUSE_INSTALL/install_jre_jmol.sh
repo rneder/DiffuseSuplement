@@ -25,7 +25,6 @@ else
 fi
 
 if [[ $JMOL_INST == 1 ]]; then
-set -v
   curl -o OpenJava.pkg -fSL https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.5+10/OpenJDK11U-jre_x64_mac_hotspot_11.0.5_10.pkg 
   echo
   sudo installer -pkg OpenJava.pkg -target /

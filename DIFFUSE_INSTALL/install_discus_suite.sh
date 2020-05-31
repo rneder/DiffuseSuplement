@@ -1,5 +1,17 @@
 #!/bin/bash
 #
+# Installation script for DISCUS_SUITE at various operating systems
+#
+# Supported for:
+#
+# UBUNTU 18.04 and 20.04 Precompiled Versions
+# UBUNTU 18.04 and 20.04 Full Compilation
+# WINDOWS SUBSYSTEM LINUX: UBUNTU 18.04 and 20.04 Precompiled Versions
+# WINDOWS SUBSYSTEM LINUX: UBUNTU 18.04 and 20.04 Full Compilation
+# MAC OS Full Compilation
+#
+# For other systems a full compilation is attempted
+#
 set -e
 #set -v
 # Determine operating system and User name
@@ -56,7 +68,7 @@ if [[ "$OPERATING_NAME" == "Ubuntu" ]]; then
 #
   source ./set_pgplot_bash.sh
   source ./get_diffuse_ubuntu.sh
-  if [ -e DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz ]; then
+  if [[ -e DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz && ! ${DISCUS_DO_COMPILE} == "COMPILE" ]]; then
 #
 #   Precompiled file exists for this Ubuntu
 #
@@ -82,21 +94,35 @@ if [[ "$OPERATING_NAME" == "Ubuntu" ]]; then
 #
     source  ./compile_pgplot.sh
 #
-    if [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
-      export DIFFEV_MPI_FLAG=OFF
-      source   ./compile_discus.sh clean
-      sudo cp /usr/local/bin/discus_suite /usr/local/bin/discus_suite_noparallel
-      export DIFFEV_MPI_FLAG=ON
-      source   ./compile_discus.sh noclean
-#
-      cd $DISCUS_INST_DIR
-      sudo cp SHELLS/discus_suite_ubuntu.sh     /usr/local/bin
-      sudo cp SHELLS/discus_suite_run_ubuntu.sh /usr/local/bin
-      sudo cp SHELLS/terminal_wrapper.sh        /usr/local/bin
-    else
-      export DIFFEV_MPI_FLAG=ON
-      source   ./compile_discus.sh clean
-    fi
+    source do_discus_complete.sh
+#   if [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
+#    export DIFFEV_MPI_FLAG=OFF
+#    source   ./compile_discus.sh clean
+#    if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]]; then
+#      cp /usr/local/bin/discus_suite /usr/local/bin/discus_suite_noparallel
+#    else
+#      sudo cp /usr/local/bin/discus_suite /usr/local/bin/discus_suite_noparallel
+#    fi
+#    export DIFFEV_MPI_FLAG=ON
+#    source   ./compile_discus.sh noclean
+##
+#    cd $DISCUS_INST_DIR
+#    if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]]; then
+#      cp SHELLS/discus_suite_ubuntu.sh     /usr/local/bin
+#      cp SHELLS/discus_suite_run_ubuntu.sh /usr/local/bin
+#      cp SHELLS/terminal_wrapper.sh        /usr/local/bin
+#    else
+#      sudo cp SHELLS/discus_suite_ubuntu.sh     /usr/local/bin
+#      sudo cp SHELLS/discus_suite_run_ubuntu.sh /usr/local/bin
+#      sudo cp SHELLS/terminal_wrapper.sh        /usr/local/bin
+#    fi
+#   else
+#     export DIFFEV_MPI_FLAG=OFF
+#     source   ./compile_discus.sh clean
+#     sudo cp /usr/local/bin/discus_suite /usr/local/bin/discus_suite_noparallel
+#     export DIFFEV_MPI_FLAG=ON
+#     source   ./compile_discus.sh clean
+#   fi
 #
   fi
   cd ..
@@ -105,7 +131,7 @@ elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
 #
   source ./set_pgplot_bash.sh
   source ./get_diffuse_ubuntu.sh
-  if [ -e DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz ]; then
+  if [[ -e DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz && ! ${DISCUS_DO_COMPILE} == "COMPILE" ]]; then
     tar -zxf DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz
     cd ${OPERATING_NAME}_${OPERATING_VERSION}
     source ./set_pgplot_bash.sh
@@ -125,16 +151,17 @@ elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
 #
     source set_source.sh $1
     source  ./compile_pgplot.sh
-    export DIFFEV_MPI_FLAG=OFF
-    source   ./compile_discus.sh clean
-    sudo cp /usr/local/bin/discus_suite /usr/local/bin/discus_suite_noparallel
-    export DIFFEV_MPI_FLAG=ON
-    source   ./compile_discus.sh noclean
-#
-    cd $DISCUS_INST_DIR
-    sudo cp SHELLS/discus_suite_ubuntu.sh     /usr/local/bin
-    sudo cp SHELLS/discus_suite_run_ubuntu.sh /usr/local/bin
-    sudo cp SHELLS/terminal_wrapper.sh        /usr/local/bin
+    source do_discus_complete.sh
+#    export DIFFEV_MPI_FLAG=OFF
+#    source   ./compile_discus.sh clean
+#    sudo cp /usr/local/bin/discus_suite /usr/local/bin/discus_suite_noparallel
+#    export DIFFEV_MPI_FLAG=ON
+#    source   ./compile_discus.sh noclean
+##
+#    cd $DISCUS_INST_DIR
+#    sudo cp SHELLS/discus_suite_ubuntu.sh     /usr/local/bin
+#    sudo cp SHELLS/discus_suite_run_ubuntu.sh /usr/local/bin
+#    sudo cp SHELLS/terminal_wrapper.sh        /usr/local/bin
   fi
 #
   cd ..
@@ -147,13 +174,14 @@ else
 #
   if [[ "$OPERATING" == "DISCUS_LINUX" ]]; then
 #
+    source set_source.sh $1
     source  ./compile_pgplot.sh
+    source do_discus_complete.sh
 #
-    export DIFFEV_MPI_FLAG=ON
-    source   ./compile_discus.sh clean
 #
   elif [[ "$OPERATING" == "DISCUS_CYGWIN" ]]; then
 #
+    source set_source.sh $1
     source  ./compile_pgplot.sh
     export DIFFEV_MPI_FLAG=ON
     source  ./compile_discus.sh clean
@@ -161,7 +189,7 @@ else
     cp $DISCUS_BIN_PREFIX/bin/discus_suite.exe                   /bin/discus_suite_parallel.exe
     export DIFFEV_MPI_FLAG=OFF
     source  ./compile_discus.sh noclean
-    cp $DISCUS_BIN_PREFIX/bin/kuplot.exe /bin
+#   cp $DISCUS_BIN_PREFIX/bin/kuplot.exe /bin
     cp $DISCUS_BIN_PREFIX/bin/discus_suite.exe /bin
 #
     cd $DISCUS_INST_DIR
@@ -171,6 +199,7 @@ else
 #
   elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
 #
+    source set_source.sh $1
     source  ./compile_pgplot.sh
     export DIFFEV_MPI_FLAG=ON
     source  ./compile_discus.sh clean
@@ -210,6 +239,7 @@ rm -f PROFILE.txt
 #rm -rf src/
 #rm -rf develop/
 #rm -rf $PGPLOT_SRC_DIR/pgplot
+source build_distribution.sh
 echo
 echo "DISCUS SUITE is installed into " ${DISCUS_BIN_PREFIX}/bin
 echo
