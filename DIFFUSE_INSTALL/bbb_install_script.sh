@@ -5,6 +5,18 @@
 # starts the actual installation script
 #   install_discus_suite.sh
 #
+# Initially run through arguments to determine optional parameters
+DISCUS_TAR_SOURCE="GITHUB"
+DISCUS_DO_COMPILE="PRE"
+for var in "$@"
+do
+  current=$(echo $var | sed 's:=.*::')
+  if [[ "${current}" == "code" ]]; then
+    DISCUS_TAR_SOURCE=$(echo ${var} | sed 's:^.*=::')
+    DISCUS_DO_COMPILE="COMPILE"
+  fi
+done
+#
 cd $HOME
 #
 export DISCUS_WEB=0
