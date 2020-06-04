@@ -3,7 +3,7 @@
 #
 #  If called without parameters, install DISCUS from GITHUB
 #
-if [ "$#" -ne 1 ]; then
+if [[ "${DISCUS_TAR_SOURCE}" == "GITHUB"  ]]; then
   echo 
   echo " Installation of DISCUS_SUITE from code at github"
   echo " Download may take a moment, please be patient "
@@ -14,7 +14,7 @@ if [ "$#" -ne 1 ]; then
   echo " Download of ${DISCUS_TAR_SOURCE} Version ${DISCUS_VERSION} is complete "
   echo
 else
-  export DISCUS_TAR_SOURCE=$1
+# export DISCUS_TAR_SOURCE=$1
   echo
   echo " Installation from local archive " ${DISCUS_TAR_SOURCE}
   echo
