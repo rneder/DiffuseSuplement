@@ -25,6 +25,7 @@ export DISCUS_INST_DIR=$(pwd)
 #
 export DISCUS_GLOBAL=0
 export DISCUS_LOCAL=1
+export DISCUS_WAS_COMPILED="NO"   # Assume precompiled version
 #
 # For Linux and MACOS ask for installation type, 
 # for WSL_Linux and Cygwin do a global installation
@@ -66,85 +67,40 @@ source set_generic.sh
 source prepare_hdf5.sh
 #
 cd $DISCUS_INST_DIR
+export DIFFUSE_PRE="DIFFUSE_${OPERATING_TYPE}_${OPERATING_NAME}_${OPERATING_VERSION}_${DISCUS_VERSION}"
 #
-if [[ "$OPERATING_NAME" == "Ubuntu" ]]; then
+if [[ "$OPERATING" == "DISCUS_LINUX" ]]; then                # Native Linux  ######
 #
-  source ./set_pgplot_bash.sh
-  source ./get_diffuse_ubuntu.sh
-  if [[ -e DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz && ! ${DISCUS_DO_COMPILE} == "COMPILE" ]]; then
+  if [[ "$OPERATING_NAME" == "Ubuntu" ]]; then  # Ubuntu ; use script for installation
 #
-#   Precompiled file exists for this Ubuntu
+    source ./install_ubuntu.sh
 #
-    tar -zxf DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz
-    cd ${OPERATING_NAME}_${OPERATING_VERSION}
-    source ../modify_chrpath.sh
-    if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]]; then
-      mkdir -p ${DISCUS_BIN_PREFIX}/bin
-      cp -r bin/discus_suite    ${DISCUS_BIN_PREFIX}/bin/
-      cp -r pgplot ${DISCUS_BIN_PREFIX}
-      cp -r share  ${DISCUS_BIN_PREFIX}
-    else
-      sudo mkdir -p ${DISCUS_BIN_PREFIX}/bin
-      sudo cp -r bin/discus_suite    ${DISCUS_BIN_PREFIX}/bin/
-      sudo cp -r pgplot ${DISCUS_BIN_PREFIX}
-      sudo cp -r share  ${DISCUS_BIN_PREFIX}
-    fi
-  else
+  else                                          # Unknown Linux; try to compile
 #
-#   Precompiled file does not exist, do full installation, pass down argument 1
-#
-    source set_source.sh $1
-#
+    source set_source.sh
     source  ./compile_pgplot.sh
-#
     source do_discus_complete.sh
 #
   fi
 #
-elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
+elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then          # WINDOWS WSL ######
 #
-  source ./set_pgplot_bash.sh
-  source ./get_diffuse_ubuntu.sh
-  if [[ -e DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz && ! ${DISCUS_DO_COMPILE} == "COMPILE" ]]; then
-    tar -zxf DIFFUSE_${OPERATING_NAME}_${OPERATING_VERSION}.tar.gz
-    cd ${OPERATING_NAME}_${OPERATING_VERSION}
-    source ./set_pgplot_bash.sh
-    source ../modify_chrpath.sh
-    if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]]; then
-      cp -r pgplot ${DISCUS_BIN_PREFIX}
-      cp -r bin    ${DISCUS_BIN_PREFIX}
-      cp -r share  ${DISCUS_BIN_PREFIX}
-    else
-      sudo cp -r pgplot ${DISCUS_BIN_PREFIX}
-      sudo cp -r bin    ${DISCUS_BIN_PREFIX}
-      sudo cp -r share  ${DISCUS_BIN_PREFIX}
-    fi
-  else
+  if [[ "$OPERATING_NAME" == "Ubuntu" ]]; then  # Ubuntu ; use script for installation
 #
-#   Precompiled file does not exist, do full installation, pass down argument 1
+    source ./install_ubuntu.sh
 #
-    source set_source.sh $1
+  else                                          # Unknown Linux; try to compile
+#
+    source set_source.sh
     source  ./compile_pgplot.sh
     source do_discus_complete.sh
+#
   fi
 #
 #
-else
+elif [[ "$OPERATING" == "DISCUS_CYGWIN" ]]; then             # CYGWIN ######
 #
-#  NOT Ubuntu or WSL, do complete installation
-#
-  source set_source.sh $1
-#
-  if [[ "$OPERATING" == "DISCUS_LINUX" ]]; then
-#
-    source set_source.sh $1
-    source  ./compile_pgplot.sh
-    source do_discus_complete.sh
-#
-#
-  elif [[ "$OPERATING" == "DISCUS_CYGWIN" ]]; then
-#
-    source set_source.sh $1
+    source set_source.sh
     source  ./compile_pgplot.sh
     export DIFFEV_MPI_FLAG=ON
     source  ./compile_discus.sh clean
@@ -160,15 +116,14 @@ else
     cp SHELLS/*           /bin
     source  ./set_pgplot_bash.sh
 #
-  elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
+elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then              # MAC OS ######
 #
-    source set_source.sh $1
+    source set_source.sh
     source  ./compile_pgplot.sh
     export DIFFEV_MPI_FLAG=ON
     source  ./compile_discus.sh clean
     source ./install_jre_jmol.sh
 #
-  fi
 fi
 #
 if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]] && [[ ! "$OPERATING" == "DISCUS_CYGWIN" ]]; then
@@ -188,10 +143,17 @@ if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
   cp SHELLS/terminator.config $HOME/.config/terminator/config
   export WSL_DIR='/mnt/c/Users/DISCUS_INSTALLATION/'
   sudo rm -rf /mnt/c/Users/DISCUS_INSTALLATION/DiscusWSL
-  cp -r DiscusWSL $WSL_DIR
+  sudo cp -r DiscusWSL $WSL_DIR
   cd SHELLS
   cp -r ./.DISCUS $HOME
 # source ./install_vcxsrv.sh
+fi
+#
+# If complete compilation, build a distribution
+#
+if [[ "${DISCUS_WAS_COMPILED}" == "YES" ]]; then
+  cd ${DISCUS_INST_DIR}
+  source build_distribution.sh
 fi
 #
 # Do cleanup
@@ -201,7 +163,6 @@ rm -f PROFILE.txt
 #rm -rf src/
 #rm -rf develop/
 #rm -rf $PGPLOT_SRC_DIR/pgplot
-source build_distribution.sh
 cd $DISCUS_INST_DIR/..
 echo
 echo "DISCUS SUITE is installed into " ${DISCUS_BIN_PREFIX}/bin
