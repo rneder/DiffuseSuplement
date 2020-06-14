@@ -37,6 +37,10 @@ echo Initial download is complete, starting the installation
 #
 tar -zxf DIFFUSE_INSTALL_local.tar.gz
 #
+if [[ "${DISCUS_DO_COMPILE}" == "COMPILE" ]]; then
+  cp ${DISCUS_TAR_SOURCE} DIFFUSE_INSTALL
+fi
+#
 cd DIFFUSE_INSTALL
 #
 source ./install_discus_suite.sh
