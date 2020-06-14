@@ -118,11 +118,12 @@ elif [[ "$OPERATING" == "DISCUS_CYGWIN" ]]; then             # CYGWIN ######
 #
 elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then              # MAC OS ######
 #
-    source set_source.sh
-    source  ./compile_pgplot.sh
-    export DIFFEV_MPI_FLAG=ON
-    source  ./compile_discus.sh clean
-    source ./install_jre_jmol.sh
+    source install_mac.sh
+#   source set_source.sh
+#   source  ./compile_pgplot.sh
+#   export DIFFEV_MPI_FLAG=ON
+#   source  ./compile_discus.sh clean
+#   source ./install_jre_jmol.sh
 #
 fi
 #
