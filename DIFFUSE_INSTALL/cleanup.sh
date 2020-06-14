@@ -12,9 +12,13 @@ rm -f  DIFFUSE_INSTALL/DIFFUSE_WSL_*.tar.gz
 rm -f  DIFFUSE_INSTALL/DIFFUSE_LINUX_*.tar.gz
 rm -f  DIFFUSE_INSTALL/DIFFUSE_MAC_*.tar.gz
 rm -f  DIFFUSE_INSTALL/DIFFUSE_CODE.tar.gz
+rm -rf  DIFFUSE_INSTALL/DIFFUSE_MAC_*
 rm -f  DIFFUSE_INSTALL/HDF*.tar.gz
+rm -f  DIFFUSE_INSTALL/DIFFUSE_CODE*.tar.gz
 rm -rf DIFFUSE_INSTALL/CMake-hdf5-1.12.0/
 rm -f  DIFFUSE_INSTALL/CMake-hdf5-1.12.0.tar.gz
+rm -f  DIFFUSE_INSTALL/OpenJava.pkg
+rm -f  DIFFUSE_INSTALL/JmolLatest.zip
 rm -f  DIFFUSE_INSTALL/vcxsrv_installer.exe
 #
 tar -zcf DIFFUSE_INSTALL.tar.gz DIFFUSE_INSTALL
