@@ -24,11 +24,12 @@ if [ "$#" -eq 1 ]; then
 #  sudo cp $HOME/JMOL/$JMOL_SOURCE/jmol /usr/local/bin
 
   rm -f profile_jmol.sh
+  echo export "JAVA_HOME=\$(/usr/libexec/java_home)" >> profile_jmol.sh
   echo 'JMOL_HOME=$HOME/JMOL/'$JMOL_SOURCE >> profile_jmol.sh
   echo 'export JMOL_HOME' >> profile_jmol.sh 
   echo 'alias jmol=$JMOL_HOME/jmol.sh' >> profile_jmol.sh
 
-  if [ -e $HOME/${MY_SHELL_RC}]; then
+  if [ -e $HOME/${MY_SHELL_RC} ]; then
      PROFILE_FILE=$HOME/${MY_SHELL_RC}
   elif [ -e $HOME/.bash_profile ]; then
      PROFILE_FILE=$HOME/.bash_profile
