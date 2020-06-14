@@ -34,7 +34,6 @@ elif [[ "$OSTYPE" == *"darwin"* ]]; then
   export OPERATING_VERSION=$(sw_vers -productVersion | sed 's,ProductVersion:,,' | sed 's, ,,' | sed "s:\.::" | sed "s:\..*::")
   export DISCUS_USER=$USER
   export WINDOWS_USER=""
-  export OPERATING_VERSION="DARWIN"
 fi
 export MY_SHELL=$(echo $SHELL | sed 's/\/bin\///')
 export MY_SHELL_RC=$(echo ${MY_SHELL} | sed "s:${MY_SHELL}:.${MY_SHELL}rc:")
