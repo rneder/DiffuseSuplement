@@ -42,6 +42,7 @@ if [[ -e $HOME/.profile.local ]]; then
      source substitute.sh $HOME/.profile.local "DISCUS_NCPU=" 'DISCUS_NCPU=$(grep --count ^processor /proc/cpuinfo)'
   elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
     source substitute.sh $HOME/.profile.local "DISCUS_NCPU=" 'DISCUS_NCPU=$(sysctl -n hw.ncpu)'
+    echo "export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5"  >> $HOME/.profile.local
   fi
   source substitute.sh $HOME/.profile.local "export DISCUS_NCPU" "export DISCUS_NCPU"
 #  cat $HOME/.profile.local profile.local > profile.new
