@@ -7,12 +7,24 @@
 #
 export JRE_DONE=0
 export JRE_INST=0
-DD=$(/usr/libexec/java_home)
-if [[ "${DD}" == "/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jre/Contents/Home" ]]; then
-  echo "JAVA ${DD}"
+if [ -e "/Library/Java" ]; then
+  if [ -e "/Library/Java/JavaVirtualMachines" ]; then
+    LENGTH=$(ls /Library/Java/JavaVirtualMachines | wc -l | sed 's: ::g')
+    if [[ ! "$LENGTH" == "0" ]]; then
+      DD=$(/usr/libexec/java_home)
+      export JRE_DONE=1
+      if [[ "${DD}" == "/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jre/Contents/Home" ]]; then
+        echo "JAVA is openjdk ${DD}"
+      else
+        echo "JAVA is ${DD}"
+      fi
+    fi
+  fi
+fi
 #
 #  Java exists 
 #
+if [[ "$JRE_DONE" == "1" ]]; then 
   echo " JAVA is installed "
   export JRE_DONE=1
 else
