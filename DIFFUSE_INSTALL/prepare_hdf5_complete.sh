@@ -63,7 +63,16 @@ if [[ $HDF_DONE == 1 ]]; then
       ln -s /lib/x86_64-linux-gnu/libz.so.1.2.11 libz.so.1.2.11
     fi
 #   cd $DISCUS_INST_DIR
-    cd ${HOME}/DIFFUSE_INSTALL/
+    cd $DISCUS_INST_DIR
+  elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
+    cd ${HDF5_top}
+    source ./build-unix.sh
+    if [[ "$DISCUS_INSTALL" == "$DISCUS_GLOBAL" ]]; then
+      sudo cp -r ./build/_CPack_Packages/Darwin/TGZ/HDF5-${HDF5_Version}-Darwin/HDF_Group $DISCUS_BIN_PREFIX/HDF_Group
+    else
+      cp -r ./build/_CPack_Packages/Darwin/TGZ/HDF5-${HDF5_Version}-Darwin/HDF_Group $DISCUS_BIN_PREFIX/
+    fi
+    cd $DISCUS_INST_DIR
   fi
   export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5
 #else
@@ -83,7 +92,7 @@ else
       ln -s /lib/x86_64-linux-gnu/libz.so.1.2.11 libz.so.1.2.11
     fi
 #   cd $DISCUS_INST_DIR
-    cd ${HOME}/DIFFUSE_INSTALL/
+    cd $DISCUS_INST_DIR
   fi
   export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5
 fi

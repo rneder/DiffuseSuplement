@@ -26,16 +26,17 @@ fi
 ################################################################################
 #
 if [[ $HDF_DONE == 1 ]]; then
+  export HDF_PRE='HDF_'${HDF5_Version}_${OPERATING_NAME}_${OPERATING_VERSION}
   if [[ "$OPERATING" == "DISCUS_LINUX" || "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
 #
-    if [ ! -e HDF_${HDF5_Version}_${OPERATING_VERSION}.tar.gz ]; then
+    if [ ! -e ${HDF_PRE}.tar.gz ]; then
 #
 #     File does not exist, obtain
 #
       export DISCUS_SUPPLEMENT=$(curl --silent "https://github.com/rneder/DiffuseSuplement/releases/latest" | grep -Poe 'v.[0-9]*.[0-9]*.[0-9]*')
-      export DISCUS_HDF_URL='https://github.com/rneder/DiffuseSuplement/releases/download/'${DISCUS_SUPPLEMENT}'/HDF_'${HDF5_Version}_${OPERATING_VERSION}'.tar.gz'
-      if curl --output /dev/null --silent --head --fail "${SICUS_HDF_URL}"; then
-        curl -o HDF_${HDF5_Version}_${OPERATING_VERSION}.tar.gz -SL ${DISCUS_HDF_URL}
+      export DISCUS_HDF_URL='https://github.com/rneder/DiffuseSuplement/releases/download/'${DISCUS_SUPPLEMENT}'/'${HDF_PRE}'.tar.gz'
+      if curl --output /dev/null --silent --head --fail "${DISCUS_HDF_URL}"; then
+        curl -o ${HDF_PRE}.tar.gz -SL ${DISCUS_HDF_URL}
         export DISCUS_HDF_PRE=1
       else
         source prepare_hdf5_complete.sh
@@ -46,7 +47,7 @@ if [[ $HDF_DONE == 1 ]]; then
 #
 # unpack precompiled HDF5 version
 #
-    tar -zxf HDF_${HDF5_Version}_${OPERATING_VERSION}.tar.gz
+    tar -zxf ${HDF_PRE}.tar.gz
     if [[ "$DISCUS_INSTALL" == "$DISCUS_GLOBAL" ]]; then
       sudo cp -r HDF_Group ${DISCUS_BIN_PREFIX}
       cd $DISCUS_BIN_PREFIX/HDF_Group/HDF5/${HDF5_Version}/lib
@@ -64,6 +65,34 @@ if [[ $HDF_DONE == 1 ]]; then
     fi
     fi
   export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5
+#
+  elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
+#
+    if [ ! -e ${HDF_PRE}.tar.gz ]; then
+#
+#     File does not exist, obtain
+#
+      export DISCUS_SUPPLEMENT=$(curl --silent "https://github.com/rneder/DiffuseSuplement/releases/latest" | grep -oe 'v.[0-9]*.[0-9]*.[0-9]*')
+      export DISCUS_HDF_URL='https://github.com/rneder/DiffuseSuplement/releases/download/'${DISCUS_SUPPLEMENT}'/'${HDF_PRE}'.tar.gz'
+      if curl --output /dev/null --silent --head --fail "${DISCUS_HDF_URL}"; then
+        curl -o ${HDF_PRE}.tar.gz -SL ${DISCUS_HDF_URL}
+        export DISCUS_HDF_PRE=1
+      else
+        source prepare_hdf5_complete.sh
+        export DISCUS_HDF_PRE=0
+      fi
+    fi
+    if [[ "$DISCUS_HDF_PRE" == "1" ]]; then
+#
+# unpack precompiled HDF5 version
+#
+      tar -zxf ${HDF_PRE}.tar.gz
+      if [[ "$DISCUS_INSTALL" == "$DISCUS_GLOBAL" ]]; then
+        sudo cp -r HDF_Group ${DISCUS_BIN_PREFIX}
+      else
+        cp -r HDF_Group ${DISCUS_BIN_PREFIX}
+      fi
+    fi
   fi
 #
 else
