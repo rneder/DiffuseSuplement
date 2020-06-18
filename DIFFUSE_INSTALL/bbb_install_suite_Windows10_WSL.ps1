@@ -6,11 +6,10 @@
 #  To enable the Windows Sub System for Linux, open a powder shell 
 #  as administrator and type the followin lines:
 #
-#  Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
-#
+#  dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 #  You will need to reboot your Computer. 
 #
-#  After reboot, open the powder shell as administrator and run this script.
+#  After reboot, open the power shell as administrator and run this script.
 #  In the powershell type:
 #
 #     Set-executionPolicy Unrestricted
