@@ -14,12 +14,20 @@ if [[ -e ${DIFFUSE_PRE}.tar.gz && ! ${DISCUS_DO_COMPILE} == "COMPILE" ]]; then
   source ${DISCUS_INST_DIR}/modify_chrpath.sh
   if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]]; then
     mkdir -p ${DISCUS_BIN_PREFIX}/bin
-    cp -r bin/discus_suite    ${DISCUS_BIN_PREFIX}/bin/
+    cp -r bin/discus_suite      ${DISCUS_BIN_PREFIX}/bin/
+    cp -r pgplot/pgxwin_server  ${DISCUS_BIN_PREFIX}/bin/
     cp -r pgplot ${DISCUS_BIN_PREFIX}
     cp -r share  ${DISCUS_BIN_PREFIX}
   else
     sudo mkdir -p ${DISCUS_BIN_PREFIX}/bin
     sudo cp -r bin/discus_suite    ${DISCUS_BIN_PREFIX}/bin/
+    if [[ "${OPERATING}" == "DISCUS_WSL_LINUX" ]]; then
+      sudo cp -r bin/discus_suite_noparallel     ${DISCUS_BIN_PREFIX}/bin/
+      sudo cp -r bin/discus_suite_run_ubuntu.sh  ${DISCUS_BIN_PREFIX}/bin/
+      sudo cp -r bin/discus_suite_ubuntu.sh      ${DISCUS_BIN_PREFIX}/bin/
+      sudo cp -r bin/terminal_wrapper.sh         ${DISCUS_BIN_PREFIX}/bin/
+      sudo cp -r pgplot/pgxwin_server            ${DISCUS_BIN_PREFIX}/bin/
+    fi
     sudo cp -r pgplot ${DISCUS_BIN_PREFIX}
     sudo cp -r share  ${DISCUS_BIN_PREFIX}
   fi
