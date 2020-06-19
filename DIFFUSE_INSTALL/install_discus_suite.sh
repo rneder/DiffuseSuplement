@@ -143,8 +143,18 @@ if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
   mkdir -p $HOME/.config/terminator
   cp SHELLS/terminator.config $HOME/.config/terminator/config
   export WSL_DIR='/mnt/c/Users/DISCUS_INSTALLATION/'
-  sudo rm -rf /mnt/c/Users/DISCUS_INSTALLATION/DiscusWSL
-  sudo cp -r DiscusWSL $WSL_DIR
+#
+# Test if old 'bbb_install_suite.ps1" was used without "started=powershell"
+  if [[ "${DISCUS_STARTED}"  == "native" ]]; then
+    VERIFY=$(echo $PATH | grep 'CanonicalGroup')
+    if [ -z ${VERIFY} ]; then
+      DISCUS_STARTED="powershell"
+    fi
+  fi
+  if [[ "${DISCUS_STARTED}"  == "powershell" ]]; then
+    sudo rm -rf /mnt/c/Users/DISCUS_INSTALLATION/DiscusWSL
+    sudo cp -r DiscusWSL $WSL_DIR
+  fi
   cd SHELLS
   cp -r ./.DISCUS $HOME
 # source ./install_vcxsrv.sh

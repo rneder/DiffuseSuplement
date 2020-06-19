@@ -69,7 +69,7 @@ $DISCUS_INST_SCRIPT = "https://github.com/tproffen/DiffuseCode/releases/download
 
 curl.exe -L -o bbb_install_script.sh $DISCUS_INST_SCRIPT
 
-$DISCUS_INST_PATH = "/mnt/c/Users/" + $DISCUS_INST_NAME +"/bbb_install_script.sh"
+$DISCUS_INST_PATH = "/mnt/c/Users/" + $DISCUS_INST_NAME +"/bbb_install_script.sh started=powershell"
 
 #Write-host " DISCUS_INST_PATH "  $DISCUS_INST_PATH
 #ls
