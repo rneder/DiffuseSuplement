@@ -99,7 +99,7 @@ elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then          # WINDOWS WSL #####
 #
   sudo cp wsl.cfg /etc/wsl.cfg
   if [[ "${OPERATING_VERSION}" == "2004" ]]; then
-    strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5 
+    sudo strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5 
   fi
 #
 #
