@@ -97,6 +97,11 @@ elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then          # WINDOWS WSL #####
 #
   fi
 #
+  sudo cp wsl.cfg /etc/wsl.cfg
+  if [[ "${OPERATING_VERSION}" == "2004" ]]; then
+    strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5 
+  fi
+#
 #
 elif [[ "$OPERATING" == "DISCUS_CYGWIN" ]]; then             # CYGWIN ######
 #
