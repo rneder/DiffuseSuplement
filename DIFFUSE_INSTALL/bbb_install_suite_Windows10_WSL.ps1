@@ -46,7 +46,7 @@ If (-Not (Test-Path $IS_UBUNTU2004 -PathType leaf))
 }
 Else
 {
-  Write-host "Ubuntu1804 is already installed"
+  Write-host "Ubuntu2004 is already installed"
   $UBUNTU_EXE = "ubuntu2004.exe"
 }
 #

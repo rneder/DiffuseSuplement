@@ -8,12 +8,15 @@
 # Initially run through arguments to determine optional parameters
 DISCUS_TAR_SOURCE="GITHUB"
 DISCUS_DO_COMPILE="PRE"
+DISCUS_STARTED="native"
 for var in "$@"
 do
   current=$(echo $var | sed 's:=.*::')
   if [[ "${current}" == "code" ]]; then
     DISCUS_TAR_SOURCE=$(echo ${var} | sed 's:^.*=::')
     DISCUS_DO_COMPILE="COMPILE"
+  elif [[ "${current}" == "started" ]]; then
+    DISCUS_STARTED=$(echo ${var} | sed 's:^.*=::')
   fi
 done
 #
