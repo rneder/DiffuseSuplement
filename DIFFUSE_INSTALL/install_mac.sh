@@ -10,9 +10,8 @@ if [[ -e ${DIFFUSE_PRE}.tar.gz && ! ${DISCUS_DO_COMPILE} == "COMPILE" ]]; then
 #
   tar -zxf ${DIFFUSE_PRE}.tar.gz
   cd DIFFUSE_${OPERATING_TYPE}_${OPERATING_NAME}_${OPERATING_VERSION}_${DISCUS_VERSION}
-echo "MODIFY PATH "
   source ${DISCUS_INST_DIR}/modify_chrpath.sh
-echo "MODIFY PATH FINISHED"
+  source ${DISCUS_INST_DIR}/create_DiscusSuite.txt.sh
   if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]]; then
     mkdir -p ${DISCUS_BIN_PREFIX}/bin
     cp -r bin/discus_suite    ${DISCUS_BIN_PREFIX}/bin/
