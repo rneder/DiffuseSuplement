@@ -9,6 +9,7 @@ sudo apt-get -y upgrade
 sudo apt-get -y install dpkg
 #
 sudo apt-get -y install  build-essential
+sudo apt-get -y install  binutils
 sudo apt-get -y install  libx11-dev
 sudo apt-get -y install  libxmu-dev
 sudo apt-get -y install  xterm
