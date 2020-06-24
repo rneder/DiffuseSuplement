@@ -151,7 +151,7 @@ if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
 #
 # Test if old 'bbb_install_suite.ps1" was used without "started=powershell"
   if [[ "${DISCUS_STARTED}"  == "native" ]]; then
-    VERIFY=$(echo $PATH | grep 'CanonicalGroup')
+    VERIFY=$(echo $PATH | grep 'CanonicalGroup' | sed 's:^.*CanonicalGroup::' | sed 's:Ubuntu.*::')
     if [ -z ${VERIFY} ]; then
       DISCUS_STARTED="powershell"
     fi
