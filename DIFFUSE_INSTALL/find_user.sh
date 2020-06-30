@@ -19,7 +19,7 @@ if [[ "$OSTYPE" == *"linux"* ]]; then
     export DISCUS_USER=$USER
     export WINDOWS_USER=$(env | grep "PATH=" | sed -nr '0,/.*Users\/(\w+).*/ s//\1/p' )
   fi
-  export OPERATING_NAME=$(cat /etc/os-release | grep -v PRETTY | grep 'NAME="' | sed 's:NAME="::' | sed 's:"::' )
+  export OPERATING_NAME=$(cat /etc/os-release | grep -v PRETTY | grep 'NAME="' | sed 's:NAME="::' | sed 's:"::' | sed s': ::g' )
   export OPERATING_VERSION=$(lsb_release -r | sed "s.Release:.." | sed "s:\.::" | sed "s:\t::" )
 elif [[ "$OSTYPE" == "cygwin" ]]; then
   export OPERATING=DISCUS_CYGWIN
