@@ -73,7 +73,11 @@ if [[ "$OPERATING" == "DISCUS_LINUX" ]]; then                # Native Linux  ###
 #
   if [[ "$OPERATING_NAME" == "Ubuntu" ]]; then  # Ubuntu ; use script for installation
 #
-    source ./install_ubuntu.sh
+    source ./install_linux.sh
+elif [[ "$OPERATING_ID_LIKE" == "arch" ]]; then  # arch Linux (arch/ manjaro) ; use script for installation
+#
+    source ./install_linux.sh
+#
 #
   else                                          # Unknown Linux; try to compile
 #
@@ -87,7 +91,7 @@ elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then          # WINDOWS WSL #####
 #
   if [[ "$OPERATING_NAME" == "Ubuntu" ]]; then  # Ubuntu ; use script for installation
 #
-    source ./install_ubuntu.sh
+    source ./install_linux.sh
 #
   else                                          # Unknown Linux; try to compile
 #
