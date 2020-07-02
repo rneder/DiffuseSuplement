@@ -7,7 +7,15 @@ echo $OPERATING
 #
 if [[ "$OPERATING" == "DISCUS_LINUX" ]]; then
 #
-  source prepare_linux.sh
+  if [[ "$OPERATING_ID_LIKE" == "arch" ]]; then
+    source prepare_arch.sh
+  elif [[ "$OPERATING_ID_LIKE" == "debian" ]]; then
+    source prepare_debian.sh
+  elif [[ "$OPERATING_ID_LIKE" == "fedora" ]]; then
+    source prepare_fedora.sh
+  else
+    source prepare_linux.sh
+  fi
 #
 elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
 #
