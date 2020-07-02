@@ -1,5 +1,9 @@
 #!/bin/bash
 #
+if [[ "${OPERATING_ID_LIKE}"  == "arch" ]]; then
+  export HDF5_LIB="/usr/lib/libhdf5_fortran.so"
+  export HDF5_INC="/usr/include/"
+else
 #  Unpack and install HDF5
 #
 #curl -o q.tar.gz -fL https://www.hdfgroup.org/package/cmake-hdf5-1-12-0-tar-gz
@@ -65,6 +69,8 @@ if [[ $HDF_DONE == 1 ]]; then
     fi
     fi
   export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5
+  export HDF5_LIB=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/lib/libhdf5_fortran.so
+  export HDF5_INC=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/include/shared/
 #
   elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
 #
@@ -113,4 +119,7 @@ else
     cd ${HOME}/DIFFUSE_INSTALL/
   fi
   export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5
+  export HDF5_LIB=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/lib/libhdf5_fortran.so
+  export HDF5_INC=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/include/shared/
+fi
 fi

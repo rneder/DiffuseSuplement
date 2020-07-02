@@ -75,6 +75,8 @@ if [[ $HDF_DONE == 1 ]]; then
     cd $DISCUS_INST_DIR
   fi
   export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5
+  export HDF5_LIB=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/lib/libhdf5_fortran.so
+  export HDF5_INC=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/include/shared/
 #else
 #  export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}
 else
@@ -95,5 +97,7 @@ else
     cd $DISCUS_INST_DIR
   fi
   export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5
+  export HDF5_LIB=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/lib/libhdf5_fortran.so
+  export HDF5_INC=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/include/shared/
 fi
 echo "DONE WITH HDF5 INSTALLATION "
