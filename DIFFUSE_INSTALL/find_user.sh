@@ -19,9 +19,14 @@ if [[ "$OSTYPE" == *"linux"* ]]; then
     export DISCUS_USER=$USER
     export WINDOWS_USER=$(env | grep "PATH=" | sed -nr '0,/.*Users\/(\w+).*/ s//\1/p' )
   fi
-  export OPERATING_NAME=$(cat /etc/os-release | grep -v PRETTY | grep 'NAME="' | sed 's:NAME="::' | sed 's:"::' | sed 's: ::g')
-  export OPERATING_VERSION=$(lsb_release -r | sed "s.Release:.." | sed "s:\.::" | sed "s:\t::" )
-  export OPERATING_ID_LIKE=$(cat /etc/os-release | grep 'ID_LIKE=' | sed 's:ID_LIKE=::')
+  export OPERATING_NAME=$(cat /etc/os-release | grep '^NAME=' | sed 's:NAME=::' | sed 's:"::g' | sed 's: ::g')
+  if [[ "${OPERATING_NAME}" == "Fedora" ]]; then
+    export OPERATING_VERSION=$(cat /etc/os-release | grep '^REDHAT_SUPPORT_PRODUCT_VERSION' | sed 's:REDHAT_SUPPORT_PRODUCT_VERSION=::')
+    export OPERATING_ID_LIKE="fedora"
+  else
+    export OPERATING_VERSION=$(lsb_release -r | sed "s.Release:.." | sed "s:\.::" | sed "s:\t::" )
+    export OPERATING_ID_LIKE=$(cat /etc/os-release | grep 'ID_LIKE=' | sed 's:ID_LIKE=::')
+  fi
 elif [[ "$OSTYPE" == "cygwin" ]]; then
   export OPERATING=DISCUS_CYGWIN
   export OPERATING_TYPE="CYGWIN"
