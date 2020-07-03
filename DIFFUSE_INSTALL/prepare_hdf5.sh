@@ -46,6 +46,8 @@ if [[ $HDF_DONE == 1 ]]; then
         source prepare_hdf5_complete.sh
         export DISCUS_HDF_PRE=0
       fi
+    else
+      export DISCUS_HDF_PRE=1
     fi
     if [[ "$DISCUS_HDF_PRE" == "1" ]]; then
 #
@@ -55,21 +57,21 @@ if [[ $HDF_DONE == 1 ]]; then
     if [[ "$DISCUS_INSTALL" == "$DISCUS_GLOBAL" ]]; then
       sudo cp -r HDF_Group ${DISCUS_BIN_PREFIX}
       cd $DISCUS_BIN_PREFIX/HDF_Group/HDF5/${HDF5_Version}/lib
-      sudo rm -f libz.so*
-      sudo ln -s /lib/x86_64-linux-gnu/libz.so.1      libz.so
-      sudo ln -s /lib/x86_64-linux-gnu/libz.so.1.2.11 libz.so.1
-      sudo ln -s /lib/x86_64-linux-gnu/libz.so.1.2.11 libz.so.1.2.11
+      sudo rm -f "libz${DISCUS_SHARED}*"
+      sudo ln -sf /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1      libz${DISCUS_SHARED}
+      sudo ln -sf /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1.2.11 libz${DISCUS_SHARED}.1
+      sudo ln -sf /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1.2.11 libz${DISCUS_SHARED}.1.2.11
     else
       cp -r HDF_Group ${DISCUS_BIN_PREFIX}
       cd $DISCUS_BIN_PREFIX/HDF_Group/HDF5/${HDF5_Version}/lib
-      rm -f libz.so*
-      ln -s /lib/x86_64-linux-gnu/libz.so.1      libz.so
-      ln -s /lib/x86_64-linux-gnu/libz.so.1.2.11 libz.so.1
-      ln -s /lib/x86_64-linux-gnu/libz.so.1.2.11 libz.so.1.2.11
+      rm -f libz${DISCUS_SHARED}*
+      ln -sf /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1      libz${DISCUS_SHARED}
+      ln -sf /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1.2.11 libz${DISCUS_SHARED}.1
+      ln -sf /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1.2.11 libz${DISCUS_SHARED}.1.2.11
     fi
     fi
   export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5
-  export HDF5_LIB=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/lib/libhdf5_fortran.so
+  export HDF5_LIB=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/lib/libhdf5_fortran${DISCUS_SHARED}
   export HDF5_INC=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/include/shared/
 #
   elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
@@ -105,21 +107,21 @@ else
   if [[ "$OPERATING" == "DISCUS_LINUX" || "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
     cd $DISCUS_BIN_PREFIX/HDF_Group/HDF5/${HDF5_Version}/lib
     if [[ "$DISCUS_INSTALL" == "$DISCUS_GLOBAL" ]]; then
-      sudo rm -f libz.so*
-      sudo ln -s /lib/x86_64-linux-gnu/libz.so.1      libz.so
-      sudo ln -s /lib/x86_64-linux-gnu/libz.so.1.2.11 libz.so.1
-      sudo ln -s /lib/x86_64-linux-gnu/libz.so.1.2.11 libz.so.1.2.11
+      sudo rm -f libz${DISCUS_SHARED}*
+      sudo ln -s /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1      libz${DISCUS_SHARED}
+      sudo ln -s /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1.2.11 libz${DISCUS_SHARED}.1
+      sudo ln -s /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1.2.11 libz${DISCUS_SHARED}.1.2.11
     else
-      rm -f libz.so*
-      ln -s /lib/x86_64-linux-gnu/libz.so.1      libz.so
-      ln -s /lib/x86_64-linux-gnu/libz.so.1.2.11 libz.so.1
-      ln -s /lib/x86_64-linux-gnu/libz.so.1.2.11 libz.so.1.2.11
+      rm -f libz${DISCUS_SHARED}*
+      ln -s /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1      libz${DISCUS_SHARED}
+      ln -s /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1.2.11 libz${DISCUS_SHARED}.1
+      ln -s /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1.2.11 libz${DISCUS_SHARED}.1.2.11
     fi
 #   cd $DISCUS_INST_DIR
     cd ${HOME}/DIFFUSE_INSTALL/
   fi
   export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5
-  export HDF5_LIB=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/lib/libhdf5_fortran.so
+  export HDF5_LIB=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/lib/libhdf5_fortran${DISCUS_SHARED}
   export HDF5_INC=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/include/shared/
 fi
 fi
