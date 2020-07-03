@@ -26,6 +26,11 @@ export DISCUS_INST_DIR=$(pwd)
 export DISCUS_GLOBAL=0
 export DISCUS_LOCAL=1
 export DISCUS_WAS_COMPILED="NO"   # Assume precompiled version
+if [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
+  export DISCUS_SHARED=".dylib"     # Assume MacOS style
+else
+  export DISCUS_SHARED=".so"        # Assume Unix style
+fi
 #
 # For Linux and MACOS ask for installation type, 
 # for WSL_Linux and Cygwin do a global installation
@@ -101,6 +106,8 @@ elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then          # WINDOWS WSL #####
 #
   fi
 #
+  cd $DISCUS_INST_DIR
+  source prepare_wsl_cfg.sh
   sudo cp wsl.cfg /etc/wsl.cfg
   if [[ "${OPERATING_VERSION}" == "2004" ]]; then
     sudo strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5 
@@ -142,6 +149,7 @@ if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]] && [[ ! "$OPERATING" == "DISCUS_CYGWIN
   fi
 fi
 #
+cd $DISCUS_INST_DIR
 if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
   if [[ "$OPERATING_VERSION" == "1804" ]]; then
     cp SHELLS/discus_suite1804.bat DiscusWSL/discus_suite.bat
