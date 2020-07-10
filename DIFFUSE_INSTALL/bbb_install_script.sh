@@ -9,6 +9,7 @@
 DISCUS_TAR_SOURCE="GITHUB"
 DISCUS_DO_COMPILE="PRE"
 DISCUS_STARTED="native"
+DISCUS_INSTALLER="FETCH"
 for var in "$@"
 do
   current=$(echo $var | sed 's:=.*::')
@@ -17,6 +18,8 @@ do
     DISCUS_DO_COMPILE="COMPILE"
   elif [[ "${current}" == "started" ]]; then
     DISCUS_STARTED=$(echo ${var} | sed 's:^.*=::')
+  elif [[ "${current}" == "install" ]]; then
+    DISCUS_INSTALLER=$(echo ${var} | sed 's:^.*=::')
   fi
 done
 #
@@ -33,15 +36,19 @@ export DISCUS_SUPPLEMENT=$(curl --silent "https://github.com/rneder/DiffuseSuple
 export DISCUS_INSTALL_URL='https://github.com/rneder/DiffuseSuplement/releases/download/'${DISCUS_SUPPLEMENT}'/DIFFUSE_INSTALL.tar.gz'
 export PGPLOT_CODE_URL='https://github.com/rneder/DiffuseSuplement/releases/download/'${DISCUS_SUPPLEMENT}'/DIFFUSE_CODE_pgplot.tar.gz'
 #
-echo Starting to download the DISCUS_SUITE installation parts
-echo This may take a moment, please be patient
-curl -o DIFFUSE_INSTALL_local.tar.gz -fsSL ${DISCUS_INSTALL_URL}
-echo Initial download is complete, starting the installation
+if [[ "${DISCUS_INSTALLER}"  ==  "FETCH" ]]; then
+  echo Starting to download the DISCUS_SUITE installation parts
+  echo This may take a moment, please be patient
+  curl -o DIFFUSE_INSTALL_local.tar.gz -fsSL ${DISCUS_INSTALL_URL}
+  echo Initial download is complete, starting the installation
 #
-tar -zxf DIFFUSE_INSTALL_local.tar.gz
+  tar -zxf DIFFUSE_INSTALL_local.tar.gz
+fi
 #
 if [[ "${DISCUS_DO_COMPILE}" == "COMPILE" ]]; then
-  cp ${DISCUS_TAR_SOURCE} DIFFUSE_INSTALL
+  if [[ ! "${DISCUS_TAR_SOURCE}" == "CURRENT" ]]; then
+    cp ${DISCUS_TAR_SOURCE} DIFFUSE_INSTALL
+  fi
 fi
 #
 cd DIFFUSE_INSTALL
