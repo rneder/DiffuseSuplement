@@ -7,7 +7,11 @@ if [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then          # WINDOWS WSL
 #  Both nonparallel and parallel versions are needed
 #
   export DIFFEV_MPI_FLAG=OFF
-  source   ./compile_discus.sh clean
+  if [[ "${DISCUS_TAR_SOURCE}" == "CURRENT" ]]; then
+    source   ./compile_discus.sh noclean
+  else
+    source   ./compile_discus.sh clean
+  fi
   if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]]; then
     cp /usr/local/bin/discus_suite /usr/local/bin/discus_suite_noparallel
   else
