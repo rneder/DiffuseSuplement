@@ -37,7 +37,6 @@ export DISCUS_DEVELOP=${DISCUS_INST_DIR}/develop
 #export DISCUS_TAR_SOURCE
 #
 #
-#
 cd $DISCUS_INST_DIR
 #
 #echo DIRECTORIES
