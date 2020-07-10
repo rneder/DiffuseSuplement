@@ -61,6 +61,30 @@ fi
 #
 source prepare_os.sh
 #
+# Test for fortran compiler
+# 
+if [[ ${DISCUS_DO_COMPILE} == "COMPILE" ]]; then    
+#
+  if [[ -z ${FC} ]]; then
+#
+#   Fortran compiler is not defined
+#
+    FC=$(which gfortran)
+    if [[ -z ${FC} ]]; then
+      FC=$(which ifort)
+      if [[ -z ${FC} ]]; then
+        echo
+        echo "The environment variable FC is not set"
+        echo "and neither gfortan nor ifort was found"
+        echo 
+        echo  "Please set FC to the full path to you fortran compiler before running CMake/ccmake"
+        echo  "For example use: export FC=\$(which your_fortran_compiler) "
+        exit 1
+      fi
+    fi
+    export FC
+  fi
+fi
 # 
 echo
 echo " DISCUS_SUITE INSTALLATION"
@@ -79,10 +103,13 @@ if [[ "$OPERATING" == "DISCUS_LINUX" ]]; then                # Native Linux  ###
   if [[ "$OPERATING_NAME" == "Ubuntu" ]]; then  # Ubuntu ; use script for installation
 #
     source ./install_linux.sh
-elif [[ "$OPERATING_ID_LIKE" == "arch" ]]; then  # arch Linux (arch/ manjaro) ; use script for installation
+  elif [[ "$OPERATING_ID_LIKE" == "arch" ]]; then  # arch Linux (arch/ manjaro) ; use script for installation
 #
     source ./install_linux.sh
+# 
+  elif [[ "$OPERATING" == "CentOSLinux" ]]; then
 #
+    source ./install_redhat.sh
 #
   else                                          # Unknown Linux; try to compile
 #
@@ -91,6 +118,7 @@ elif [[ "$OPERATING_ID_LIKE" == "arch" ]]; then  # arch Linux (arch/ manjaro) ; 
     source do_discus_complete.sh
 #
   fi
+#
 #
 elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then          # WINDOWS WSL ######
 #
@@ -145,7 +173,9 @@ fi
 #
 if [[ $DISCUS_INSTALL == $DISCUS_LOCAL ]] && [[ ! "$OPERATING" == "DISCUS_CYGWIN" ]]; then
   if [[ "$(cat $HOME/.profile.local | grep 'PATH=' | grep $HOME'/bin' | grep \$PATH)" == "" ]]; then
-    echo "PATH=$DISCUS_BIN_PREFIX/bin:\$PATH" >> $HOME/.profile.local
+    echo "export PATH=$DISCUS_BIN_PREFIX/bin:\$PATH" >> $HOME/.profile.local
+  else
+    source process_path.sh $HOME/.profile.local
   fi
 fi
 #
