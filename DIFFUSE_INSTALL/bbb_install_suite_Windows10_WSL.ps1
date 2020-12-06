@@ -33,14 +33,25 @@ If (-Not (Test-Path $IS_UBUNTU2004 -PathType leaf))
 {
   If (-Not (Test-Path $IS_UBUNTU1804 -PathType leaf))
   {
-    curl.exe -L -o ubuntu-1804.appx https://aka.ms/wsl-ubuntu-1804
+    curl.exe -L -o ubuntu-2004.appx https://aka.ms/wslubuntu2004
 #
-    Add-AppxPackage .\ubuntu-1804.appx
-    ubuntu1804.exe -c "sudo apt-get update; sudo apt-get upgrade; exit"
+    Add-AppxPackage .\ubuntu-2004.appx
+    ubuntu2004.exe -c "sudo apt-get update; sudo apt-get upgrade; exit"
   }
   Else
   {
     Write-host "Ubuntu1804 is already installed"
+    Write-host "Best consider an upgrade to Ubuntu2004"
+    Write-host "Both distributions can be used in parallel"
+    Write-host "Best make a backup of user data from Ubuntu1804 first"
+    Write-host "As usual, the first installation of Ubuntu2004 takes time"
+    do { $UbuntuUpgrade = (Read-Host 'Upgrade to Ubuntu2004? (Y/N)').ToLower() } while ($UbuntuUpgrade -notin @('y','n'))
+    if ($UbuntuUpgrade -eq 'y') {
+      curl.exe -L -o ubuntu-2004.appx https://aka.ms/wslubuntu2004
+#
+      Add-AppxPackage .\ubuntu-2004.appx
+      ubuntu2004.exe -c "sudo apt-get update; sudo apt-get upgrade; exit"
+    }
   }
   $UBUNTU_EXE = "ubuntu1804.exe"
 }
@@ -99,10 +110,12 @@ $Shortcut.Save()
 $IS_VCXSRV = "C:\Program Files\VcXsrv\xlaunch.exe"
 If (-Not (Test-Path $IS_VCXSRV -PathType leaf))
 {
-  $VCXSRV_INST_SOURCE = "https://github.com/tproffen/DiffuseCode/releases/download/" + $DISCUS_VERSION + "/vcxsrv-64.1.20.8.1.installer.exe"
-Write-Host $VCXSRV_INST_SOURCE
-  curl.exe -L -o vcxsrv-64.1.20.8.1.installer.exe $VCXSRV_INST_SOURCE
-  .\vcxsrv-64.1.20.8.1.installer.exe 
+  curl.exe -o vcxsrv_installer.exe -L 'https://sourceforge.net/projects/vcxsrv/files/latest/download/vcxsrv-*.installer.exe'
+  .\vcxsrv_installer.exe 
+#  $VCXSRV_INST_SOURCE = "https://github.com/tproffen/DiffuseCode/releases/download/" + $DISCUS_VERSION + "/vcxsrv-64.1.20.8.1.installer.exe"
+#Write-Host $VCXSRV_INST_SOURCE
+#  curl.exe -L -o vcxsrv-64.1.20.8.1.installer.exe $VCXSRV_INST_SOURCE
+#  .\vcxsrv-64.1.20.8.1.installer.exe 
   Write-host "Please wait for the vcxsrv installer to finish"
   Write-Host -NoNewLine 'Once the VcXsrv Installation is finished, press any key to continue...';
   $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
