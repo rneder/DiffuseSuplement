@@ -6,7 +6,7 @@
 ################################################################################
 #
 if [[ "$OSTYPE" == *"linux"* ]]; then
-  export IS_WINDOWS=$(env | grep "PATH=" | grep "/mnt/c/WINDOWS" )
+  export IS_WINDOWS=$(echo ${PATH^^} | grep "/MNT/C/WINDOWS" )
 #  echo $IS_WINDOWS
   if [[ "$IS_WINDOWS" == "" ]]; then
     export OPERATING=DISCUS_LINUX
