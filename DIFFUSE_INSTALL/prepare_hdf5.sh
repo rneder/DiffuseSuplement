@@ -1,127 +1,46 @@
 #!/bin/bash
 #
-if [[ "${OPERATING_ID_LIKE}"  == "arch" ]]; then
-  export HDF5_LIB="/usr/lib/libhdf5_fortran.so"
-  export HDF5_INC="/usr/include/"
-else
-#  Unpack and install HDF5
+if [[ "${OPERATING}" == "DISCUS_LINUX" ]]; then
 #
-#curl -o q.tar.gz -fL https://www.hdfgroup.org/package/cmake-hdf5-1-12-0-tar-gz
-export HDF5_Version="1.12.0"
+  if [[ "${OPERATING_ID_LIKE}"  == "arch" ]]; then      # Arch-Liunx; Manjaro
 #
-#  Test if old HDF5 version exists
+    export HDF5_LIB_DIR="/usr/lib/"
+    export HDF5_LIB_VER="libhdf5_fortran.so"
+    export HDF5_INC_DIR="/usr/include/"
 #
-if [ -e $DISCUS_BIN_PREFIX/HDF_Group ]; then
-   export HDF5_OldVersion=$(ls ${DISCUS_BIN_PREFIX}/HDF_Group/HDF5)
-   export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_OldVersion}/share/cmake/hdf5
-   echo "HDF Version ${DISCUS_BIN_PREFIX}/HDF_Group/${HDF5_OldVersion} exists"
-   while true; do
-          read -p " Do you want to: Use this libray / Replace with  $HDF5_Version : [U/R] " yn
-    case $yn in
-      [Uu]* ) HDF_DONE=0; export HDF_DONE; break;;
-      [Rr]* ) HDF_DONE=1; export HDF_DONE; break;;
-      * ) echo "Please answer:  Use / Replace . ";;
-    esac
-  done
-else
-  HDF_DONE=1; export HDF_DONE
-fi
+  elif [[ "${OPERATING_ID_LIKE}"  == "debian" ]]; then  # Debian; Ubuntu
 #
-################################################################################
+echo " IN DEBIAN"
+    export HDF5_LIB_DIR="/usr/lib/x86_64-linux-gnu/hdf5/serial/"
+    export HDF5_LIB_VER="libhdf5_fortran.so"
+    export HDF5_INC_DIR="/usr/include/hdf5/serial/"
 #
-if [[ $HDF_DONE == 1 ]]; then
-  export HDF_PRE='HDF_'${HDF5_Version}_${OPERATING_NAME}_${OPERATING_VERSION}
-  if [[ "$OPERATING" == "DISCUS_LINUX" || "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
+  elif [[ "$OPERATING_ID_LIKE" == "fedora" ]]; then     # Redhat; Fedora; CentOs (needs work in find_user.sh)
 #
-    if [ ! -e ${HDF_PRE}.tar.gz ]; then
+    export HDF5_LIB_DIR="/usr/lib64/"
+    export HDF5_LIB_VER="libhdf5_fortran.so"
+    export HDF5_INC_DIR="/usr/lib64/gfortran/modules/"
 #
-#     File does not exist, obtain
-#
-      export DISCUS_SUPPLEMENT=$(curl --silent "https://github.com/rneder/DiffuseSuplement/releases/latest" | grep -Poe 'v.[0-9]*.[0-9]*.[0-9]*')
-      export DISCUS_HDF_URL='https://github.com/rneder/DiffuseSuplement/releases/download/'${DISCUS_SUPPLEMENT}'/'${HDF_PRE}'.tar.gz'
-      if curl --output /dev/null --silent --head --fail "${DISCUS_HDF_URL}"; then
-        curl -o ${HDF_PRE}.tar.gz -SL ${DISCUS_HDF_URL}
-        export DISCUS_HDF_PRE=1
-      else
-        source prepare_hdf5_complete.sh
-        export DISCUS_HDF_PRE=0
-      fi
-    else
-      export DISCUS_HDF_PRE=1
-    fi
-    if [[ "$DISCUS_HDF_PRE" == "1" ]]; then
-#
-# unpack precompiled HDF5 version
-#
-    tar -zxf ${HDF_PRE}.tar.gz
-    if [[ "$DISCUS_INSTALL" == "$DISCUS_GLOBAL" ]]; then
-      sudo cp -r HDF_Group ${DISCUS_BIN_PREFIX}
-      cd $DISCUS_BIN_PREFIX/HDF_Group/HDF5/${HDF5_Version}/lib
-      sudo rm -f "libz${DISCUS_SHARED}*"
-      sudo ln -sf /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1      libz${DISCUS_SHARED}
-      sudo ln -sf /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1.2.11 libz${DISCUS_SHARED}.1
-      sudo ln -sf /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1.2.11 libz${DISCUS_SHARED}.1.2.11
-    else
-      cp -r HDF_Group ${DISCUS_BIN_PREFIX}
-      cd $DISCUS_BIN_PREFIX/HDF_Group/HDF5/${HDF5_Version}/lib
-      rm -f libz${DISCUS_SHARED}*
-      ln -sf /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1      libz${DISCUS_SHARED}
-      ln -sf /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1.2.11 libz${DISCUS_SHARED}.1
-      ln -sf /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1.2.11 libz${DISCUS_SHARED}.1.2.11
-    fi
-    fi
-  export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5
-  export HDF5_LIB=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/lib/libhdf5_fortran${DISCUS_SHARED}
-  export HDF5_INC=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/include/shared/
-#
-  elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
-#
-    if [ ! -e ${HDF_PRE}.tar.gz ]; then
-#
-#     File does not exist, obtain
-#
-      export DISCUS_SUPPLEMENT=$(curl --silent "https://github.com/rneder/DiffuseSuplement/releases/latest" | grep -oe 'v.[0-9]*.[0-9]*.[0-9]*')
-      export DISCUS_HDF_URL='https://github.com/rneder/DiffuseSuplement/releases/download/'${DISCUS_SUPPLEMENT}'/'${HDF_PRE}'.tar.gz'
-      if curl --output /dev/null --silent --head --fail "${DISCUS_HDF_URL}"; then
-        curl -o ${HDF_PRE}.tar.gz -SL ${DISCUS_HDF_URL}
-        export DISCUS_HDF_PRE=1
-      else
-        source prepare_hdf5_complete.sh
-        export DISCUS_HDF_PRE=0
-      fi
-    fi
-    if [[ "$DISCUS_HDF_PRE" == "1" ]]; then
-#
-# unpack precompiled HDF5 version
-#
-      tar -zxf ${HDF_PRE}.tar.gz
-      if [[ "$DISCUS_INSTALL" == "$DISCUS_GLOBAL" ]]; then
-        sudo cp -r HDF_Group ${DISCUS_BIN_PREFIX}
-      else
-        cp -r HDF_Group ${DISCUS_BIN_PREFIX}
-      fi
-    fi
   fi
 #
-else
-  if [[ "$OPERATING" == "DISCUS_LINUX" || "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
-    cd $DISCUS_BIN_PREFIX/HDF_Group/HDF5/${HDF5_Version}/lib
-    if [[ "$DISCUS_INSTALL" == "$DISCUS_GLOBAL" ]]; then
-      sudo rm -f libz${DISCUS_SHARED}*
-      sudo ln -s /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1      libz${DISCUS_SHARED}
-      sudo ln -s /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1.2.11 libz${DISCUS_SHARED}.1
-      sudo ln -s /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1.2.11 libz${DISCUS_SHARED}.1.2.11
-    else
-      rm -f libz${DISCUS_SHARED}*
-      ln -s /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1      libz${DISCUS_SHARED}
-      ln -s /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1.2.11 libz${DISCUS_SHARED}.1
-      ln -s /lib/x86_64-linux-gnu/libz${DISCUS_SHARED}.1.2.11 libz${DISCUS_SHARED}.1.2.11
-    fi
-#   cd $DISCUS_INST_DIR
-    cd ${HOME}/DIFFUSE_INSTALL/
-  fi
-  export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5
-  export HDF5_LIB=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/lib/libhdf5_fortran${DISCUS_SHARED}
-  export HDF5_INC=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/include/shared/
+elif [[ "${OPERATING}" == "DISCUS_WSL_LINUX" ]]; then
+#
+    export HDF5_LIB_DIR="/usr/lib/x86_64-linux-gnu/hdf5/serial/"
+    export HDF5_LIB_VER="libhdf5_fortran.so"
+    export HDF5_INC_DIR="/usr/include/hdf5/serial/"
+
+elif [[ "${OPERATING}"  == "DISCUS_MACOS" ]]; then
+#
+  export HDF5_LIB_BAS="/usr/local/Cellar/hdf5/"
+  export HDF5_LIB_NUM=$(ls /usr/local/Cellar/hdf5)
+  export HDF5_LIB_DIR=${HDF5_LIB_BAS}${HDF5_LIB_NUM}/lib/
+  export HDF5_LIB_VER="libhdf5_fortran.dylib"
+  export HDF5_INC_DIR=${HDF5_LIB_BAS}${HDF5_LIB_NUM}/include/
+#
 fi
-fi
+echo " BAS " ${HDF5_LIB_BAS}
+echo " PTH " ${HDF5_LIB_NUM}
+echo " DIR " ${HDF5_LIB_DIR}
+echo " VER " ${HDF5_LIB_VER}
+echo " INC " ${HDF5_INC_DIR}
+#

@@ -44,6 +44,11 @@ if [[ ! -e /usr/local/lib/libpng.a ]] ; then
   brew install libpng
 fi
 #
+# Install hdf5
+if [[ ! -e /usr/local/Cellar/hdf5 ]] ; then
+  brew install libhdf5
+fi
+#
 # Install GHOSTSCRIPT
 #
 which -s ps2pdf14
