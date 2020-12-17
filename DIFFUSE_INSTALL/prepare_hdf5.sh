@@ -38,9 +38,11 @@ elif [[ "${OPERATING}"  == "DISCUS_MACOS" ]]; then
   export HDF5_INC_DIR=${HDF5_LIB_BAS}${HDF5_LIB_NUM}/include/
 #
 fi
-echo " BAS " ${HDF5_LIB_BAS}
-echo " PTH " ${HDF5_LIB_NUM}
-echo " DIR " ${HDF5_LIB_DIR}
-echo " VER " ${HDF5_LIB_VER}
-echo " INC " ${HDF5_INC_DIR}
+#echo " BAS " ${HDF5_LIB_BAS}
+#echo " PTH " ${HDF5_LIB_NUM}
+#echo " DIR " ${HDF5_LIB_DIR}
+#echo " VER " ${HDF5_LIB_VER}
+#echo " INC " ${HDF5_INC_DIR}
+export HDF5_FORTRAN_SHARED_LIBRARY=${HDF5_LIB_DIR}${HDF5_LIB_VER}
+export HDF5_FORTRAN_INCLUDE_DIR=${HDF5_INC_DIR}
 #
