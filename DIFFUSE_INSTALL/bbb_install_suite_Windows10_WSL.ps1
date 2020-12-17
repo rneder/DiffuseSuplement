@@ -1,6 +1,6 @@
 #
 #  bbb_install_suite_Windows10_WSL.ps1
-#
+#  2020_12_17
 #  Installation script for DISCUS_SUITE as WSL within Windows 10
 #
 #  To enable the Windows Sub System for Linux, open a powder shell 
@@ -40,6 +40,7 @@ If (-Not (Test-Path $IS_UBUNTU2004 -PathType leaf))
   }
   Else
   {
+    $UBUNTU_EXE = "ubuntu1804.exe"
     Write-host "Ubuntu1804 is already installed"
     Write-host "Best consider an upgrade to Ubuntu2004"
     Write-host "Both distributions can be used in parallel"
@@ -51,9 +52,9 @@ If (-Not (Test-Path $IS_UBUNTU2004 -PathType leaf))
 #
       Add-AppxPackage .\ubuntu-2004.appx
       ubuntu2004.exe -c "sudo apt-get update; sudo apt-get upgrade; exit"
+      $UBUNTU_EXE = "ubuntu2004.exe"
     }
   }
-  $UBUNTU_EXE = "ubuntu1804.exe"
 }
 Else
 {
