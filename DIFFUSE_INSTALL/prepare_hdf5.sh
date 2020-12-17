@@ -10,7 +10,6 @@ if [[ "${OPERATING}" == "DISCUS_LINUX" ]]; then
 #
   elif [[ "${OPERATING_ID_LIKE}"  == "debian" ]]; then  # Debian; Ubuntu
 #
-echo " IN DEBIAN"
     export HDF5_LIB_DIR="/usr/lib/x86_64-linux-gnu/hdf5/serial/"
     export HDF5_LIB_VER="libhdf5_fortran.so"
     export HDF5_INC_DIR="/usr/include/hdf5/serial/"
