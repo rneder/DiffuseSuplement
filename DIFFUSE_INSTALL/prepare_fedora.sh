@@ -22,7 +22,7 @@ do_install gcc-g++
 do_install gcc-gfortran
 do_install libpng
 do_install libpng-devel
-#do_install hdf5
+do_install hdf5
 do_install cmake
 do_install openmpi
 do_install curl

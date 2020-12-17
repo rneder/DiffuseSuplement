@@ -20,6 +20,7 @@ sudo apt-get -y install  libopenmpi-dev
 sudo apt-get -y install  openmpi-bin
 sudo apt-get -y install  g++
 sudo apt-get -y install  gfortran
+sudo apt-get -y install  libhdf5-dev
 sudo apt-get -y install  cmake
 sudo apt-get -y install  cmake-curses-gui
 sudo apt-get -y install  curl
