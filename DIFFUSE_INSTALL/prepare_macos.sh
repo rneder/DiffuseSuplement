@@ -58,7 +58,7 @@ fi
 #
 # Install OPENMPI
 #
-if [[ $(brew list | grep open-mpi) != 'open-mpi' ]]; then
+if [[ $(brew list --formula | grep open-mpi) != 'open-mpi' ]]; then
   brew install openmpi
 fi
 #
@@ -69,3 +69,4 @@ if [[ $? != 0 ]] ; then
   brew install pstree
 fi
 #
+set -e
