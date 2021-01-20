@@ -51,6 +51,18 @@ do
     fi
   fi
 done
+IS_CURL="$(which curl)"
+if [[ -z "${IS_CURL}" ]]; then
+#  Check Linux operating system as we have to install curl...
+  export OPERATING_NAME=$(cat /etc/os-release | grep '^NAME=' | sed 's:NAME=::' | sed 's:"::g' | sed 's: ::g')
+  if [[ "${OPERATING_NAME}" == "Ubuntu" ]]; then
+    sudo apt-get install -y curl
+  elif [[ "${OPERATING_NAME}" == "Fedora" ]]; then
+    sudo dnf install --assumeyes curl
+  elif [[ "${OPERATING_NAME}" == "Manjaro" ]]; then
+    sudo pacman --sync --noconfirm curl
+  fi
+fi
 #
 cd $HOME
 #
