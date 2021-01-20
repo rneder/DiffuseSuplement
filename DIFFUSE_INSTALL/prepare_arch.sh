@@ -1,7 +1,8 @@
 #!/bin/bash
 #
-sudo pacman -Sy
+sudo pacman -Syu
 #
+set +e
 function do_install {
    check="$(sudo pacman -Qs --color always "$1" | grep "local" | grep "$1" )"
    if [ -n "${check}" ]; then
@@ -12,6 +13,7 @@ function do_install {
    fi
 }
 #
+do_install base-devel
 do_install readline
 do_install libx11
 do_install libxmu
@@ -26,3 +28,5 @@ do_install psmisc
 do_install ghostscript
 do_install qpdfview
 do_install jmol
+#
+set -e
