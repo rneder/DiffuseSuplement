@@ -59,7 +59,9 @@ fi
 #
 #  Prepare operating system
 #
-source prepare_os.sh
+if [[ ${DISCUS_PREPARE} == "LIBRARIES" ]]; then    
+  source prepare_os.sh
+fi
 #
 # Test for fortran compiler
 # 

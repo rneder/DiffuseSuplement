@@ -16,10 +16,15 @@
 #   install=fetch                  ! Get current installer from GIHUB at supplements DEFAULT
 #   install=local                  ! Use current install archive
 #   install=a_local_archive.tar.gz    ! where "a_local_archive" is a local file at $HOME
+#
+#   prepare=libraries              ! Install / update operating system libraries
+#   prepare=none                   ! Do not install / update operating system libraries
+#
 DISCUS_TAR_SOURCE="GITHUB"
 DISCUS_DO_COMPILE="PRE"
 DISCUS_STARTED="native"
 DISCUS_INSTALLER="FETCH"
+DISCUS_PREPARE="LIBRARIES"
 for var in "$@"
 do
   current=$(echo $var | sed 's:=.*::')
@@ -48,6 +53,13 @@ do
       DISCUS_INSTALLER="LOCAL"
     else
       DISCUS_INSTALLER=$(echo ${var} | sed 's:^.*=::')
+    fi
+  elif [[ "${current}" == "prepare" ]]; then
+    PREP_ARG=$(echo ${var} | sed 's:^.*=::')
+    if [[ "${PREP_ARG}" == "libraries" ]]; then
+      DISCUS_PREPARE="LIBRARIES"
+    elif [[ "${PREP_ARG}" == "none" ]]; then
+      DISCUS_PREPARE="NONE"
     fi
   fi
 done
