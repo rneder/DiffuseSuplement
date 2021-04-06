@@ -10,6 +10,8 @@ if [[ "$OPERATING" == "DISCUS_LINUX" ]]; then
     source prepare_arch.sh
   elif [[ "$OPERATING_ID_LIKE" == "debian" ]]; then  # Debian; Ubuntu
     source prepare_debian.sh
+  elif [[ "$OPERATING_ID_LIKE" == "ubuntu" ]]; then  # Mint
+    source prepare_debian.sh
   elif [[ "$OPERATING_ID_LIKE" == "fedora" ]]; then  # Redhat; Fedora; CentOs (needs work in find_user.sh)
     source prepare_fedora.sh
   else

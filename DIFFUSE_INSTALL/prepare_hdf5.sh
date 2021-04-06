@@ -14,6 +14,12 @@ if [[ "${OPERATING}" == "DISCUS_LINUX" ]]; then
     export HDF5_LIB_VER="libhdf5_fortran.so"
     export HDF5_INC_DIR="/usr/include/hdf5/serial/"
 #
+  elif [[ "${OPERATING_ID_LIKE}"  == "ubuntu" ]]; then  # mint
+#
+    export HDF5_LIB_DIR="/lib/x86_64-linux-gnu/hdf5/serial/"
+    export HDF5_LIB_VER="libhdf5_fortran.so"
+    export HDF5_INC_DIR="/usr/include/hdf5/serial/"
+#
   elif [[ "$OPERATING_ID_LIKE" == "fedora" ]]; then     # Redhat; Fedora; CentOs (needs work in find_user.sh)
 #
     export HDF5_LIB_DIR="/usr/lib64/"
