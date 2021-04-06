@@ -37,6 +37,7 @@ If (-Not (Test-Path $IS_UBUNTU2004 -PathType leaf))
 #
     Add-AppxPackage .\ubuntu-2004.appx
     ubuntu2004.exe -c "sudo apt-get update; sudo apt-get upgrade; exit"
+    $UBUNTU_EXE = "ubuntu2004.exe"
   }
   Else
   {
