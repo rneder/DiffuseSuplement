@@ -46,7 +46,7 @@ fi
 #
 # Install hdf5
 if [[ ! -e /usr/local/Cellar/hdf5 ]] ; then
-  brew install libhdf5
+  brew install hdf5
 fi
 #
 # Install GHOSTSCRIPT
