@@ -1,6 +1,16 @@
 #!/bin/bash
 #
-export DISPLAY=:0
+#echo "ARGUMENT x> $1 <"
+#export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0
+if [[ "$1" == "1" ]]; then
+# FIRST is WSL 1
+  export DISPLAY=:0
+else
+# Second is WSL 2
+  export DISPLAY=$(awk '/nameserver / { print $2; exit}' /etc/resolv.conf 2>/dev/null):0
+fi
+#echo $DISPLAY
+
 PGXSRV_ACT=$(ps aux | fgrep -v grep | fgrep pgxwin_server | grep -oE '[^ ]+$')
 if [[ "$PGXSRV_ACT" == "pgxwin_server" ]]; then
   echo
@@ -12,3 +22,4 @@ cd /mnt/c/Users
 #konsole --profile $HOME/.DISCUS/DISCUS.profile --hold -e discus_suite_noparallel
 #gnome-terminal -- terminal_wrapper.sh discus_suite_noparallel
 terminator --execute terminal_wrapper.sh discus_suite_noparallel
+#read ENTER
