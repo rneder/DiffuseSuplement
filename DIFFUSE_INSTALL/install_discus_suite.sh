@@ -184,10 +184,17 @@ fi
 cd $DISCUS_INST_DIR
 if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
   if [[ "$OPERATING_VERSION" == "1804" ]]; then
-    cp SHELLS/discus_suite1804.bat DiscusWSL/discus_suite.bat
+    cp SHELLS/discus_suite_1804.ps1    DiscusWSL/discus_suite.ps1
   elif [[ "$OPERATING_VERSION" == "2004" ]]; then
-    cp SHELLS/discus_suite2004.bat DiscusWSL/discus_suite.bat
+    cp SHELLS/discus_suite_2004.ps1    DiscusWSL/discus_suite.ps1
   fi
+  cp SHELLS/discus_suite_ps1.bat  DiscusWSL/
+  cp $DISCUS_BIN_PREFIX/share/suite_man.pdf DiscusWSL/doc
+  cp $DISCUS_BIN_PREFIX/share/discus_man.pdf DiscusWSL/doc
+  cp $DISCUS_BIN_PREFIX/share/diffev_man.pdf DiscusWSL/doc
+  cp $DISCUS_BIN_PREFIX/share/kuplot_man.pdf DiscusWSL/doc
+  cp $DISCUS_BIN_PREFIX/share/refine_man.pdf DiscusWSL/doc
+  cp $DISCUS_BIN_PREFIX/share/package_man.pdf DiscusWSL/doc
   cd $DISCUS_INST_DIR
   mkdir -p $HOME/.config/terminator
   cp SHELLS/terminator.config $HOME/.config/terminator/config
