@@ -11,5 +11,5 @@ REM ubuntu1804 -c "export DISPLAY=:0;xterm"
 REM wsl  "pwd; echo $HOME; echo $PATH"
 REM wsl  "bash -c source $HOME/.profile.local; echo $PATH; discus_suite_ubuntu.sh"
 
-start /MIN ubuntu1804 -c "source $HOME/.profile.local; discus_suite_ubuntu.sh"
+start /MIN ubuntu2004 -c "source $HOME/.profile.local; discus_suite_ubuntu.sh 1"
 
