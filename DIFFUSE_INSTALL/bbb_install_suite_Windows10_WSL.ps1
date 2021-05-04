@@ -95,7 +95,7 @@ $DISCUS_INST_PATH = "/mnt/c/Users/" + $DISCUS_INST_NAME +"/bbb_install_script.sh
 Write-host " COPY DiscusWsl"
 Copy-item -Recurse -Force DiscusWSL\ -Destination "C:\Program Files (x86)\"
 #
-$SourceFileLocation = "C:\Program Files (x86)\DiscusWSL\discus_suite.bat"
+$SourceFileLocation = "C:\Program Files (x86)\DiscusWSL\discus_suite_ps1.bat"
 $ShortcutLocation = "C:\Users\" + $W_USER + "\Desktop\DiscusSUITE_WSL.lnk"
 write-host "W_USER             " $W_USER
 write-host "SourceFileLocation " $SourceFileLocation
@@ -128,4 +128,4 @@ Else
   write "VcXsrv is already installed"
 }
 #
-& "C:\Program Files (x86)\DiscusWSL\discus_suite.bat"
+& "C:\Program Files (x86)\DiscusWSL\discus_suite_ps1.bat"
