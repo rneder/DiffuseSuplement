@@ -61,7 +61,6 @@ fi
 which -s gmt
 if [[ $? != 0 ]] ; then
   brew install gmt
-  brew install gmt-common
 fi
 #
 # Install OPENMPI
