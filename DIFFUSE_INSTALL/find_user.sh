@@ -27,6 +27,11 @@ if [[ "$OSTYPE" == *"linux"* ]]; then
     export OPERATING_VERSION=$(lsb_release -r | sed "s.Release:.." | sed "s:\.::" | sed "s:\t::" )
     export OPERATING_ID_LIKE=$(cat /etc/os-release | grep 'ID_LIKE=' | sed 's:ID_LIKE=::')
   fi
+  if [[ "$(groups $DISCUS_USER | grep ' sudo ')" ]]; then
+    export DISCUS_SUDO="TRUE"
+  else
+    export DISCUS_SUDO="FALSE"
+  fi
 elif [[ "$OSTYPE" == "cygwin" ]]; then
   export OPERATING=DISCUS_CYGWIN
   export OPERATING_TYPE="CYGWIN"
@@ -42,6 +47,11 @@ elif [[ "$OSTYPE" == *"darwin"* ]]; then
   export DISCUS_USER=$USER
   export WINDOWS_USER=""
   export OPERATING_ID_LIKE="darwin"
+  if [[ "$(groups $DISCUS_USER | grep ' admin ')" ]]; then
+    export DISCUS_SUDO="TRUE"
+  else
+    export DISCUS_SUDO="FALSE"
+  fi
 fi
 export MY_SHELL=$(echo $SHELL | sed 's/\/bin\///')
 export MY_SHELL_RC=$(echo ${MY_SHELL} | sed "s:${MY_SHELL}:.${MY_SHELL}rc:")
@@ -55,4 +65,5 @@ echo 'My_Shell  is  : ' $MY_SHELL
 echo 'My_ShellRC    : ' $MY_SHELL_RC
 echo 'USER      is  : ' $DISCUS_USER
 echo 'WINDOW USER   : ' $WINDOWS_USER
+echo 'User has sudo : ' $DISCUS_SUDO
 #
