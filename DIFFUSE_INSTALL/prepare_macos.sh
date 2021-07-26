@@ -56,6 +56,14 @@ if [[ $? != 0 ]] ; then
   brew install ghostscript
 fi
 #
+# Install GMT
+#
+which -s gmt
+if [[ $? != 0 ]] ; then
+  brew install gmt
+  brew install gmt-common
+fi
+#
 # Install OPENMPI
 #
 if [[ $(brew list --formula | grep open-mpi) != 'open-mpi' ]]; then

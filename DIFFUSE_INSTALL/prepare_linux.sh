@@ -37,6 +37,8 @@ do_install ' curl '
 do_install ' chrpath '
 do_install ' psmisc '
 do_install ' ghostscript '
+do_install ' gmt '
+do_install ' gmt-common '
 do_install ' qpdfview '
 do_install ' jmol '
 #
