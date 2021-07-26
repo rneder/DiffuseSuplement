@@ -60,7 +60,12 @@ fi
 #  Prepare operating system
 #
 if [[ ${DISCUS_PREPARE} == "LIBRARIES" ]]; then    
-  source prepare_os.sh
+  if [[ ${DISCUS_SUDO} == "TRUE" ]]; then
+    source prepare_os.sh
+  else
+    echo "Please ask your admin to update the libraries at his/her convenience"
+    read -p " Continue with Enter"
+  fi
 fi
 #
 # Test for fortran compiler
