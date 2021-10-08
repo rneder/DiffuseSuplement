@@ -56,7 +56,7 @@ if [[ $? != 0 ]] ; then
   brew install ghostscript
 fi
 #
-# Install GMT
+# Install IMAGEMAGICK
 #
 which -s convert
 if [[ $? != 0 ]] ; then

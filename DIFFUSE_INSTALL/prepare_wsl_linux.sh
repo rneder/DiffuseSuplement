@@ -27,7 +27,7 @@ sudo apt-get -y install  curl
 sudo apt-get -y install  chrpath
 sudo apt-get -y install  psmisc
 sudo apt-get -y install  ghostscript
-sudo apt-get -y install  gmt
+sudo apt-get -y install  imagemagick
 sudo apt-get -y install  qpdfview
 sudo apt-get -y install  dbus-x11
 #sudo apt-get -y install  gnome-terminal
