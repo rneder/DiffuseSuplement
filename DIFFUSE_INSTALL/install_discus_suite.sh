@@ -66,6 +66,36 @@ if [[ ${DISCUS_PREPARE} == "LIBRARIES" ]]; then
     source prepare_os.sh
   else
     echo "Please ask your admin to update the libraries at his/her convenience"
+    echo "See the installation guides AAA_INSTALL_DISCUS*.pdf at github:"
+    echo "https://github.com/tproffen/DiffuseCode/releases"
+    echo "for further information "
+    echo "The libraries can be installed with the shell script: "
+#
+    if [[ "$OPERATING" == "DISCUS_LINUX" ]]; then
+#
+      if [[ "$OPERATING_ID_LIKE" == "arch" ]]; then      # Arch-Liunx; Manjaro
+        echo " prepare_arch.sh"
+      elif [[ "$OPERATING_ID_LIKE" == "debian" ]]; then  # Debian; Ubuntu
+        echo " prepare_debian.sh"
+      elif [[ "$OPERATING_ID_LIKE" == "ubuntu" ]]; then  # Mint
+        echo " prepare_debian.sh"
+      elif [[ "$OPERATING_ID_LIKE" == "fedora" ]]; then  # Redhat; Fedora; CentOs (needs work in find_user.sh)
+        echo " prepare_fedora.sh"
+      else
+        echo " prepare_linux.sh"
+      fi
+#
+    elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
+      echo " prepare_wsl_linux.sh"
+#
+#   elif [[ "$OPERATING" == "DISCUS_CYGWIN" ]]; then
+#
+#     echo " prepare_cygwin.sh"
+#
+    elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
+      echo "  prepare_macos.sh"
+#
+    fi
     read -p " Continue with Enter"
   fi
 fi
