@@ -58,9 +58,9 @@ fi
 #
 # Install GMT
 #
-which -s gmt
+which -s convert
 if [[ $? != 0 ]] ; then
-  brew install gmt
+  brew install imagemagick
 fi
 #
 # Install OPENMPI
