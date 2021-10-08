@@ -43,11 +43,33 @@ echo "export PGPLOT_FONT=$PGPLOT_ROOT_DIR/pgplot/grfont.dat" >> discus.profile.l
 echo "export PGPLOT_DEV=/XSERVE"                             >> discus.profile.local
 if [[ "$OPERATING" == "DISCUS_LINUX"  || "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
    echo "export DISCUS_NCPU=$(grep --count ^processor /proc/cpuinfo)" >> discus.profile.local
-   echo "export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5"  >> discus.profile.local
+#  echo "export HDF5_DIR=${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/${HDF5_Version}/share/cmake/hdf5"  >> discus.profile.local
 elif [[ "$OPERATING" == "DISCUS_CYGWIN" ]]; then
    echo "export DISCUS_NCPU=$(grep --count ^processor /proc/cpuinfo)" >> discus.profile.local
 elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
    echo "export DISCUS_NCPU=$(sysctl -n hw.ncpu)"                     >> discus.profile.local
+fi
+echo "export MAGICK_CONFIGURE_PATH=${HOME}/.config/ImageMagick" >> discus.profile.local
+#
+#if [[ ! $DISCUS_INSTALL == $DISCUS_GLOBAL ]]; then
+   export MAGICK_CONFIGURE_PATH=${HOME}/.config/ImageMagick
+   mkdir -p ${HOME}/.config/ImageMagick
+#
+#  Test if policy.xml exists; if it exists, test for read/write lines
+if [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
+   source test_imagemagick_macos.sh PS
+   source test_imagemagick_macos.sh PDF
+   source test_imagemagick_macos.sh PNG
+   source test_imagemagick_macos.sh JPEG
+   source test_imagemagick_macos.sh GIF
+   source test_imagemagick_macos.sh EPS
+else
+   source test_imagemagick_linux.sh PS
+   source test_imagemagick_linux.sh PDF
+   source test_imagemagick_linux.sh PNG
+   source test_imagemagick_linux.sh JPEG
+   source test_imagemagick_linux.sh GIF
+   source test_imagemagick_linux.sh EPS
 fi
 #
 echo "source $HOME/.profile.local" > PROFILE.txt 
