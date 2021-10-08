@@ -2,7 +2,7 @@
 #
 #  Copies File $1 into $2 while ignoring lines that contain entries in "IGNORES"
 #
-IGNORES=( "PGPLOT_DIR" "PGPLOT_DEV" "PGPLOT_FONT" "DISCUS_NCPU" "HDF5_DIR" "JAVA_HOME" "JMOL_HOME" )
+IGNORES=( "PGPLOT_DIR" "PGPLOT_DEV" "PGPLOT_FONT" "DISCUS_NCPU" "HDF5_DIR" "JAVA_HOME" "JMOL_HOME" "MAGICK_CONFIGURE_PATH")
 FIXED=( '#')
 while IFS='' read -r LINE || [ -n "${LINE}" ]; do
 #   echo "processing line: ${LINE}"
