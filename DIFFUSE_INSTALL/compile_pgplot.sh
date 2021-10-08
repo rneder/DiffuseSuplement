@@ -70,6 +70,6 @@ cd $DISCUS_INST_DIR
 #echo $PGPLOT_SRC_DIR
 #pwd
 #echo
-source set_pgplot_bash.sh
+#source set_pgplot_bash.sh
 #echo did set_pgplot_bash.sh
 #
