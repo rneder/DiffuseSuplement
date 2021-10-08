@@ -59,6 +59,8 @@ fi
 #
 #  Prepare operating system
 #
+#echo ${DISCUS_PREPARE}
+#echo ${DISCUS_SUDO}
 if [[ ${DISCUS_PREPARE} == "LIBRARIES" ]]; then    
   if [[ ${DISCUS_SUDO} == "TRUE" ]]; then
     source prepare_os.sh
@@ -116,10 +118,12 @@ if [[ "$OPERATING" == "DISCUS_LINUX" ]]; then                # Native Linux  ###
 # 
   elif [[ "$OPERATING" == "CentOSLinux" ]]; then
 #
-    source ./install_redhat.sh
+    source ./install_linux.sh                   #  TEMPORARY SOLUTION NEED TO LOCATE redhat
+    #source ./install_redhat.sh
 #
   else                                          # Unknown Linux; try to compile
 #
+    source  ./set_pgplot_bash.sh
     source set_source.sh
     source  ./compile_pgplot.sh
     source do_discus_complete.sh
@@ -135,6 +139,7 @@ elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then          # WINDOWS WSL #####
 #
   else                                          # Unknown Linux; try to compile
 #
+    source  ./set_pgplot_bash.sh
     source set_source.sh
     source  ./compile_pgplot.sh
     source do_discus_complete.sh
