@@ -96,6 +96,7 @@ fi
 #
 if [[ "${DISCUS_DO_COMPILE}" == "COMPILE" ]]; then
   if [[ ! "${DISCUS_TAR_SOURCE}" == "CURRENT" ]]; then
+    rm -rf DIFFUSE_INSTALL/develop
     cp ${DISCUS_TAR_SOURCE} DIFFUSE_INSTALL
   fi
 fi
