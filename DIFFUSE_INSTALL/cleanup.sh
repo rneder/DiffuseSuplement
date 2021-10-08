@@ -22,6 +22,10 @@ rm -f  DIFFUSE_INSTALL/CMake-hdf5-1.12.0.tar.gz
 rm -f  DIFFUSE_INSTALL/OpenJava.pkg
 rm -f  DIFFUSE_INSTALL/JmolLatest.zip
 rm -f  DIFFUSE_INSTALL/vcxsrv_installer.exe
+rm -f  DIFFUSE_INSTALL/profile.local
+rm -f  DIFFUSE_INSTALL/discus.profile.local
+rm -f  DIFFUSE_INSTALL/user.profile.local
+rm -f  DIFFUSE_INSTALL/system.profile.local
 #
 tar -zcf DIFFUSE_INSTALL.tar.gz DIFFUSE_INSTALL
 #
