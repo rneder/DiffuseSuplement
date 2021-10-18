@@ -13,12 +13,12 @@
 #  In the powershell type:
 #
 #     Set-executionPolicy Unrestricted
-#     cd $HOME\Downloads
+#     cd "$HOME"\Downloads
 #     .\bbb_install_suite_Windows10_WSL.ps1
 #
 ################################################################################
 #  
-cd $HOME
+cd "$HOME"
 cd Downloads
 #
 $DISCUS_INST_FOLDER = "C:\Users\DISCUS_INSTALLATION"
@@ -26,12 +26,12 @@ $DISCUS_INST_NAME = "DISCUS_INSTALLATION"
 mkdir -Force $DISCUS_INST_FOLDER
 cd $DISCUS_INST_FOLDER
 #
-$IS_UBUNTU1804 = $HOME + "\AppData\Local\Microsoft\WindowsApps\Ubuntu1804.exe"
-$IS_UBUNTU2004 = $HOME + "\AppData\Local\Microsoft\WindowsApps\Ubuntu2004.exe"
+$IS_UBUNTU1804 = "$HOME" + "\AppData\Local\Microsoft\WindowsApps\Ubuntu1804.exe"
+$IS_UBUNTU2004 = "$HOME" + "\AppData\Local\Microsoft\WindowsApps\Ubuntu2004.exe"
 #Write-host $IS_UBUNTU1804
-If (-Not (Test-Path $IS_UBUNTU2004 -PathType leaf))
+If (-Not (Test-Path "$IS_UBUNTU2004" -PathType leaf))
 {
-  If (-Not (Test-Path $IS_UBUNTU1804 -PathType leaf))
+  If (-Not (Test-Path "$IS_UBUNTU1804" -PathType leaf))
   {
     curl.exe -L -o ubuntu-2004.appx https://aka.ms/wslubuntu2004
 #
@@ -88,7 +88,7 @@ $DISCUS_INST_PATH = "/mnt/c/Users/" + $DISCUS_INST_NAME +"/bbb_install_script.sh
 #ls
 #write-host "+++++++++++++++++++++++"
 
-& $UBUNTU_EXE     -c $DISCUS_INST_PATH
+& "$UBUNTU_EXE"     -c $DISCUS_INST_PATH
 #
 # Copy DiscusWSL 
 #
