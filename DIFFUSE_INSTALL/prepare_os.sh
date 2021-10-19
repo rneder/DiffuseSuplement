@@ -4,6 +4,7 @@
 #
 #  Currently avaliable for UBUNTU, CYGWIN, MACOS
 #
+set +e
 if [[ "$OPERATING" == "DISCUS_LINUX" ]]; then
 #
   if [[ "$OPERATING_ID_LIKE" == "arch" ]]; then      # Arch-Liunx; Manjaro
@@ -31,3 +32,4 @@ elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
   source  prepare_macos.sh
 #
 fi
+set -e
