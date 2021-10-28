@@ -22,7 +22,7 @@ fi
 #
 which -s xquartz
 if [[ $? != 0 ]] ; then
-  brew cask install xquartz
+  brew install --cask xquartz
 fi
 #
 # Install GCC
