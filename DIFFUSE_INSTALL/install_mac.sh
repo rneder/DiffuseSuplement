@@ -34,5 +34,8 @@ else
 #
 fi
 #
+# Ignore JAVA installation errors
+set +e
 source ./install_jre_jmol.sh
+set -e
 #
