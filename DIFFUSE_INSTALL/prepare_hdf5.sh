@@ -36,11 +36,13 @@ elif [[ "${OPERATING}" == "DISCUS_WSL_LINUX" ]]; then
 
 elif [[ "${OPERATING}"  == "DISCUS_MACOS" ]]; then
 #
-  export HDF5_LIB_BAS="/usr/local/Cellar/hdf5/"
-  export HDF5_LIB_NUM=$(ls /usr/local/Cellar/hdf5)
-  export HDF5_LIB_DIR=${HDF5_LIB_BAS}${HDF5_LIB_NUM}/lib/
+  export HDF5_LIB_BAS=$(brew --cellar hdf5)
+# export HDF5_LIB_BAS="/usr/local/Cellar/hdf5/"
+# export HDF5_LIB_NUM=$(ls /usr/local/Cellar/hdf5)
+  export HDF5_LIB_NUM=$(ls $HDF5_LIB_BAS/)
+  export HDF5_LIB_DIR=${HDF5_LIB_BAS}/${HDF5_LIB_NUM}/lib/
   export HDF5_LIB_VER="libhdf5_fortran.dylib"
-  export HDF5_INC_DIR=${HDF5_LIB_BAS}${HDF5_LIB_NUM}/include/
+  export HDF5_INC_DIR=${HDF5_LIB_BAS}/${HDF5_LIB_NUM}/include/
 #
 fi
 #echo " BAS " ${HDF5_LIB_BAS}
