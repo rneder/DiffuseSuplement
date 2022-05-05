@@ -45,7 +45,7 @@ if [[ ! -e /usr/local/lib/libpng.a ]] ; then
 fi
 #
 # Install hdf5
-if [[ ! -e /usr/local/Cellar/hdf5 ]] ; then
+if [[ -z $(brew list | fgrep hdf5) ]]; then
   brew install hdf5
 fi
 #
