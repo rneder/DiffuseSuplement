@@ -82,12 +82,15 @@ export DISCUS_WEB=0
 export DISCUS_LOCAL=1
 #
 export DISCUS_INST_TYPE=$DISCUS_WEB
-export DISCUS_VERSION=$(curl --silent "https://github.com/tproffen/DiffuseCode/releases/latest" | grep -Poe 'v.[0-9]*.[0-9]*.[0-9]*')
+export DISCUS_VERSION=$(curl --silent --location "https://github.com/tproffen/DiffuseCode/releases/latest" | grep "Release " | grep -m 1 -Poe 'v\.[0-9]*\.[0-9]*\.[0-9]*')
 export DISCUS_CODE_URL='https://github.com/tproffen/DiffuseCode/archive/'${DISCUS_VERSION}'.tar.gz'
 #
-export DISCUS_SUPPLEMENT=$(curl --silent "https://github.com/rneder/DiffuseSuplement/releases/latest" | grep -Poe 'v.[0-9]*.[0-9]*.[0-9]*')
+export DISCUS_SUPPLEMENT=$(curl --silent --location "https://github.com/rneder/DiffuseSuplement/releases/latest" | grep "Release " | grep -m 1 -Poe 'v\.[0-9]*\.[0-9]*\.[0-9]*')
 export DISCUS_INSTALL_URL='https://github.com/rneder/DiffuseSuplement/releases/download/'${DISCUS_SUPPLEMENT}'/DIFFUSE_INSTALL.tar.gz'
 export PGPLOT_CODE_URL='https://github.com/rneder/DiffuseSuplement/releases/download/'${DISCUS_SUPPLEMENT}'/DIFFUSE_CODE_pgplot.tar.gz'
+#
+echo $DISCUS_VERSION
+echo $DISCUS_SUPPLEMENT
 #
 if [[ "${DISCUS_INSTALLER}"  ==  "FETCH" ]]; then
   echo Starting to download the DISCUS_SUITE installation parts

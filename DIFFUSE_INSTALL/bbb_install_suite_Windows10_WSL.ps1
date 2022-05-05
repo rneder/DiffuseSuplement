@@ -1,6 +1,6 @@
 #
 #  bbb_install_suite_Windows10_WSL.ps1
-#  2020_12_17
+#  2022_05_05
 #  Installation script for DISCUS_SUITE as WSL within Windows 10
 #
 #  To enable the Windows Sub System for Linux, open a powder shell 
@@ -13,12 +13,12 @@
 #  In the powershell type:
 #
 #     Set-executionPolicy Unrestricted
-#     cd "$HOME"\Downloads
+#     cd $HOME\Downloads
 #     .\bbb_install_suite_Windows10_WSL.ps1
 #
 ################################################################################
 #  
-cd "$HOME"
+cd $HOME
 cd Downloads
 #
 $DISCUS_INST_FOLDER = "C:\Users\DISCUS_INSTALLATION"
@@ -26,12 +26,12 @@ $DISCUS_INST_NAME = "DISCUS_INSTALLATION"
 mkdir -Force $DISCUS_INST_FOLDER
 cd $DISCUS_INST_FOLDER
 #
-$IS_UBUNTU1804 = "$HOME" + "\AppData\Local\Microsoft\WindowsApps\Ubuntu1804.exe"
-$IS_UBUNTU2004 = "$HOME" + "\AppData\Local\Microsoft\WindowsApps\Ubuntu2004.exe"
+$IS_UBUNTU1804 = $HOME + "\AppData\Local\Microsoft\WindowsApps\Ubuntu1804.exe"
+$IS_UBUNTU2004 = $HOME + "\AppData\Local\Microsoft\WindowsApps\Ubuntu2004.exe"
 #Write-host $IS_UBUNTU1804
-If (-Not (Test-Path "$IS_UBUNTU2004" -PathType leaf))
+If (-Not (Test-Path $IS_UBUNTU2004 -PathType leaf))
 {
-  If (-Not (Test-Path "$IS_UBUNTU1804" -PathType leaf))
+  If (-Not (Test-Path $IS_UBUNTU1804 -PathType leaf))
   {
     curl.exe -L -o ubuntu-2004.appx https://aka.ms/wslubuntu2004
 #
@@ -70,25 +70,26 @@ $W_USER = $W_TEMP[2]
 # Determine current DISCUS Version on GIThub
 #
 #write-host "+++++++++++++++++++++++"
-$DISCUS_RAW_VERSION = curl.exe "https://github.com/tproffen/DiffuseCode/releases/latest"
-$POS = $DISCUS_RAW_VERSION.IndexOf("tag")
-$RightPart =$DISCUS_RAW_VERSION.Substring($POS+4)
+$DISCUS_RAW_VERSION = curl.exe --silent --location "https://github.com/tproffen/DiffuseCode/releases/latest" | Select-String "Release"
+$DISCUS_VERSION = ($DISCUS_RAW_VERSION -split ' ')[3]
+#$POS = $DISCUS_RAW_VERSION.IndexOf("tag")
+#$RightPart =$DISCUS_RAW_VERSION.Substring($POS+4)
 #write-host " RIGHT PART is : "$RightPart
-$POS = $RightPart.IndexOf("""")
-$DISCUS_VERSION = $RightPart.Substring(0, $POS)
-#write-host "DISCUS_VERSION IS : "$DISCUS_VERSION
+#$POS = $RightPart.IndexOf("""")
+#$DISCUS_VERSION = $RightPart.Substring(0, $POS)
+write-host "DISCUS_VERSION IS : "$DISCUS_VERSION
 $DISCUS_INST_SCRIPT = "https://github.com/tproffen/DiffuseCode/releases/download/" + $DISCUS_VERSION + "/bbb_install_script.sh"
-#write-host "DISCUS_INST_SCRIPT URL : " $DISCUS_INST_SCRIPT
+write-host "DISCUS_INST_SCRIPT URL : " $DISCUS_INST_SCRIPT
 
 curl.exe -L -o bbb_install_script.sh $DISCUS_INST_SCRIPT
 
 $DISCUS_INST_PATH = "/mnt/c/Users/" + $DISCUS_INST_NAME +"/bbb_install_script.sh started=powershell"
 
-#Write-host " DISCUS_INST_PATH "  $DISCUS_INST_PATH
-#ls
-#write-host "+++++++++++++++++++++++"
+Write-host " DISCUS_INST_PATH "  $DISCUS_INST_PATH
+ls
+write-host "+++++++++++++++++++++++"
 
-& "$UBUNTU_EXE"     -c $DISCUS_INST_PATH
+& $UBUNTU_EXE     -c $DISCUS_INST_PATH
 #
 # Copy DiscusWSL 
 #
