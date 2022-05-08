@@ -89,8 +89,8 @@ export DISCUS_SUPPLEMENT=$(curl --silent --location "https://github.com/rneder/D
 export DISCUS_INSTALL_URL='https://github.com/rneder/DiffuseSuplement/releases/download/'${DISCUS_SUPPLEMENT}'/DIFFUSE_INSTALL.tar.gz'
 export PGPLOT_CODE_URL='https://github.com/rneder/DiffuseSuplement/releases/download/'${DISCUS_SUPPLEMENT}'/DIFFUSE_CODE_pgplot.tar.gz'
 #
-echo $DISCUS_VERSION
-echo $DISCUS_SUPPLEMENT
+#echo $DISCUS_VERSION
+#echo $DISCUS_SUPPLEMENT
 #
 if [[ "${DISCUS_INSTALLER}"  ==  "FETCH" ]]; then
   echo Starting to download the DISCUS_SUITE installation parts

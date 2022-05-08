@@ -77,17 +77,17 @@ $DISCUS_VERSION = ($DISCUS_RAW_VERSION -split ' ')[3]
 #write-host " RIGHT PART is : "$RightPart
 #$POS = $RightPart.IndexOf("""")
 #$DISCUS_VERSION = $RightPart.Substring(0, $POS)
-write-host "DISCUS_VERSION IS : "$DISCUS_VERSION
+#write-host "DISCUS_VERSION IS : "$DISCUS_VERSION
 $DISCUS_INST_SCRIPT = "https://github.com/tproffen/DiffuseCode/releases/download/" + $DISCUS_VERSION + "/bbb_install_script.sh"
-write-host "DISCUS_INST_SCRIPT URL : " $DISCUS_INST_SCRIPT
+#write-host "DISCUS_INST_SCRIPT URL : " $DISCUS_INST_SCRIPT
 
 curl.exe -L -o bbb_install_script.sh $DISCUS_INST_SCRIPT
 
 $DISCUS_INST_PATH = "/mnt/c/Users/" + $DISCUS_INST_NAME +"/bbb_install_script.sh started=powershell"
 
-Write-host " DISCUS_INST_PATH "  $DISCUS_INST_PATH
-ls
-write-host "+++++++++++++++++++++++"
+#Write-host " DISCUS_INST_PATH "  $DISCUS_INST_PATH
+#ls
+#write-host "+++++++++++++++++++++++"
 
 & $UBUNTU_EXE     -c $DISCUS_INST_PATH
 #
