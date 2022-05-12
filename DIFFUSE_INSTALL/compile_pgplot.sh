@@ -24,7 +24,7 @@ if [[ $PGPLOT_DONE == 1 ]]; then
   rm    -rf $PGPLOT_INST_DIR
   rm    -rf $PGPLOT_SRC_DIR
 #
-  if [[ ! -e DIFFUSE_CODE_pgplot.tar.gz ]]; then
+# if [[ ! -e DIFFUSE_CODE_pgplot.tar.gz ]]; then
   echo
   echo " Installation of PGPLOT from code at github"
   echo " Download may take a moment, please be patient "
@@ -33,7 +33,7 @@ if [[ $PGPLOT_DONE == 1 ]]; then
   echo
   echo " Download of ${PGPLOT_CODE_URL} finished "
   echo
-  fi
+# fi
   tar -zxf DIFFUSE_CODE_pgplot.tar.gz
 # mv pgplot $PGPLOT_INST_DIR
 # mkdir -p $PGPLOT_SRC_DIR
