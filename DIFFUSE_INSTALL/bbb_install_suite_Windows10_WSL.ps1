@@ -1,6 +1,6 @@
 #
 #  bbb_install_suite_Windows10_WSL.ps1
-#  2022_05_05
+#  2022_05_12
 #  Installation script for DISCUS_SUITE as WSL within Windows 10
 #
 #  To enable the Windows Sub System for Linux, open a powder shell 

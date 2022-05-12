@@ -1,5 +1,5 @@
 #!/bin/bash
-# 2020_12_07
+# 2022_05_12
 # top level DISCUS installation script.
 # Downloads the installation archive, expands this and
 # starts the actual installation script
