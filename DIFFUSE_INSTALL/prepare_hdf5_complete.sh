@@ -2,7 +2,7 @@
 #
 #  Unpack and install HDF5
 #
-#curl -o q.tar.gz -fL https://www.hdfgroup.org/package/cmake-hdf5-1-12-0-tar-gz
+#curl -k -o q.tar.gz -fL https://www.hdfgroup.org/package/cmake-hdf5-1-12-0-tar-gz
 export HDF5_Version="1.12.0"
 #
 #  Test if old HDF5 version exists
@@ -29,7 +29,7 @@ if [[ $HDF_DONE == 1 ]]; then
 
   echo "DOING HDF INSTALLATION, please be extra patient this is a large package "   
   source prepare_cmake.sh
-  curl -o "CMake-hdf5-"${HDF5_Version}.tar.gz -fL "https://www.hdfgroup.org/package/cmake-hdf5-1-12-0-tar-gz/?wpdmdl=14580&refresh=5ecb7f43e73841590394691"
+  curl -k -o "CMake-hdf5-"${HDF5_Version}.tar.gz -fL "https://www.hdfgroup.org/package/cmake-hdf5-1-12-0-tar-gz/?wpdmdl=14580&refresh=5ecb7f43e73841590394691"
   export HDF5_gz="CMake-hdf5-"${HDF5_Version}".tar.gz"
   export HDF5_top="CMake-hdf5-"${HDF5_Version}
   cd $DISCUS_INST_DIR

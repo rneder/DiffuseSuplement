@@ -39,7 +39,8 @@ else
 fi
 
 if [[ $JMOL_INST == 1 ]]; then
-  curl -o OpenJava.pkg -fSL https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jre_x64_mac_hotspot_11.0.7_10.pkg 
+  curl -k --location -o OpenJava.pkg -fSL https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/latest
+#  curl -k --location -o OpenJava.pkg -fSL https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jre_x64_mac_hotspot_11.0.7_10.pkg 
   echo
   sudo installer -pkg OpenJava.pkg -target /
   export JRE_DONE=1
@@ -47,7 +48,7 @@ fi
 #
 if [[ $JRE_DONE == 1 ]]; then
   if [ ! -e JmolLatest.zip ]; then
-    curl -o JmolLatest.zip -fSL https://sourceforge.net/projects/jmol/files/latest/download
+    curl -k --location -o JmolLatest.zip -fSL https://sourceforge.net/projects/jmol/files/latest/download
   fi
   unzip -oq JmolLatest.zip
   export VERSION=$(ls | grep "jmol-")

@@ -29,7 +29,7 @@ if [[ $PGPLOT_DONE == 1 ]]; then
   echo " Installation of PGPLOT from code at github"
   echo " Download may take a moment, please be patient "
   echo
-  curl -o  DIFFUSE_CODE_pgplot.tar.gz -fSL ${PGPLOT_CODE_URL}
+  curl -k -o  DIFFUSE_CODE_pgplot.tar.gz -fSL ${PGPLOT_CODE_URL}
   echo
   echo " Download of ${PGPLOT_CODE_URL} finished "
   echo

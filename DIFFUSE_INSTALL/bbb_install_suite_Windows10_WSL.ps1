@@ -1,12 +1,19 @@
 #
 #  bbb_install_suite_Windows10_WSL.ps1
-#  2022_05_12
-#  Installation script for DISCUS_SUITE as WSL within Windows 10
+#  2022_06_02
+#  Installation script for DISCUS_SUITE as WSL within Windows 10 / 11
 #
-#  To enable the Windows Sub System for Linux, open a powder shell 
-#  as administrator and type the followin lines:
+#  To enable the Windows Sub System for Linux, open a power shell 
+#  as administrator and type the following lines:
 #
-#  dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+#  wsl -l -v
+#  If you get a lengthy help text, WSL is not installed
+#  If WSL is installed you get something like:
+#  NAME		STATE	VERSION
+# *Ubuntu-20.04	Stopped	2
+#
+#  If WSL is not installed , please install with:
+#  wsl --install -d Ubuntu-20.04
 #  You will need to reboot your Computer. 
 #
 #  After reboot, open the power shell as administrator and run this script.
@@ -33,7 +40,7 @@ If (-Not (Test-Path $IS_UBUNTU2004 -PathType leaf))
 {
   If (-Not (Test-Path $IS_UBUNTU1804 -PathType leaf))
   {
-    curl.exe -L -o ubuntu-2004.appx https://aka.ms/wslubuntu2004
+    curl.exe -k -L -o ubuntu-2004.appx https://aka.ms/wslubuntu2004
 #
     Add-AppxPackage .\ubuntu-2004.appx
     ubuntu2004.exe -c "sudo apt-get update; sudo apt-get upgrade; exit"
@@ -70,18 +77,16 @@ $W_USER = $W_TEMP[2]
 # Determine current DISCUS Version on GIThub
 #
 #write-host "+++++++++++++++++++++++"
-$DISCUS_RAW_VERSION = curl.exe --silent --location "https://github.com/tproffen/DiffuseCode/releases/latest" | Select-String "Release"
-$DISCUS_VERSION = ($DISCUS_RAW_VERSION -split ' ')[3]
-#$POS = $DISCUS_RAW_VERSION.IndexOf("tag")
-#$RightPart =$DISCUS_RAW_VERSION.Substring($POS+4)
-#write-host " RIGHT PART is : "$RightPart
-#$POS = $RightPart.IndexOf("""")
-#$DISCUS_VERSION = $RightPart.Substring(0, $POS)
+$DISCUS_RAW_VERSION = curl.exe -k --silent --location "https://github.com/tproffen/DiffuseCode/releases/latest" | Select-String "Release" | Out-String
+$pos_v = $DISCUS_RAW_VERSION.IndexOf("v.6")
+$cut_v = $DISCUS_RAW_VERSION.Substring($pos_v)
+$pos_s = $cut_v.IndexOf(" ")
+$DISCUS_VERSION = $cut_v.Substring(0, $pos_s)
 #write-host "DISCUS_VERSION IS : "$DISCUS_VERSION
 $DISCUS_INST_SCRIPT = "https://github.com/tproffen/DiffuseCode/releases/download/" + $DISCUS_VERSION + "/bbb_install_script.sh"
 #write-host "DISCUS_INST_SCRIPT URL : " $DISCUS_INST_SCRIPT
 
-curl.exe -L -o bbb_install_script.sh $DISCUS_INST_SCRIPT
+curl.exe -k -L -o bbb_install_script.sh $DISCUS_INST_SCRIPT
 
 $DISCUS_INST_PATH = "/mnt/c/Users/" + $DISCUS_INST_NAME +"/bbb_install_script.sh started=powershell"
 
@@ -113,7 +118,7 @@ $Shortcut.Save()
 $IS_VCXSRV = "C:\Program Files\VcXsrv\xlaunch.exe"
 If (-Not (Test-Path $IS_VCXSRV -PathType leaf))
 {
-  curl.exe -o vcxsrv_installer.exe -L 'https://sourceforge.net/projects/vcxsrv/files/latest/download/vcxsrv-*.installer.exe'
+  curl.exe -k -o vcxsrv_installer.exe -L 'https://sourceforge.net/projects/vcxsrv/files/latest/download/vcxsrv-*.installer.exe'
   .\vcxsrv_installer.exe 
 #  $VCXSRV_INST_SOURCE = "https://github.com/tproffen/DiffuseCode/releases/download/" + $DISCUS_VERSION + "/vcxsrv-64.1.20.8.1.installer.exe"
 #Write-Host $VCXSRV_INST_SOURCE

@@ -8,7 +8,7 @@ if [[ "${DISCUS_TAR_SOURCE}" == "GITHUB"  ]]; then
   echo " Installation of DISCUS_SUITE from code at github"
   echo " Download may take a moment, please be patient "
   echo
-  curl -o DIFFUSE_CODE.tar.gz -fSL ${DISCUS_CODE_URL}
+  curl -k -o DIFFUSE_CODE.tar.gz -fSL ${DISCUS_CODE_URL}
   export DISCUS_TAR_SOURCE=DIFFUSE_CODE.tar.gz
   echo
   echo " Download of ${DISCUS_TAR_SOURCE} Version ${DISCUS_VERSION} is complete "

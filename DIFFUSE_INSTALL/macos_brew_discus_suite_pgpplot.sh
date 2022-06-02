@@ -6,7 +6,7 @@ xcode-select --install
 #
 # Install homebrew
 #
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+ruby -e "$(curl -k -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 #
 # Install XQuartz
 brew cask install xquartz
