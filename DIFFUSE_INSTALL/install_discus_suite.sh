@@ -223,12 +223,26 @@ fi
 #
 cd $DISCUS_INST_DIR
 if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
+  cp ICONS/discus_suite_128.ico        DiscusWSL/
+  cp SHELLS/config.xlaunch             DiscusWSL/
   if [[ "$OPERATING_VERSION" == "1804" ]]; then
-    cp SHELLS/discus_suite_1804.ps1    DiscusWSL/discus_suite.ps1
+#   cp SHELLS/discus_suite_1804.ps1    DiscusWSL/discus_suite.ps1
+    cp SHELLS/discus_suite.ps1         DiscusWSL/discus_suite.ps1
   elif [[ "$OPERATING_VERSION" == "2004" ]]; then
-    cp SHELLS/discus_suite_2004.ps1    DiscusWSL/discus_suite.ps1
+#   cp SHELLS/discus_suite_2004.ps1    DiscusWSL/discus_suite.ps1
+    cp SHELLS/discus_suite.ps1         DiscusWSL/discus_suite.ps1
   fi
-  cp SHELLS/discus_suite_ps1.bat  DiscusWSL/
+# cp SHELLS/discus_suite_ps1.bat  DiscusWSL/
+  export WSL_USER_PROFILE=$(/mnt/c/WINDOWS/system32/cmd.exe /c echo %userprofile% | sed -nr 's///p')
+  export WSL_USER_NAME=$(/mnt/c/WINDOWS/system32/cmd.exe /c echo %username% | sed -nr 's///p' )
+# echo "WSL_USER_NAME MASKED " "$WSL_USER_NAME"
+  WSL_BAT='powershell.exe -File "'
+  WSL_BAT+=${WSL_USER_PROFILE}
+  WSL_BAT+='\DISCUS_INSTALLATION\DiscusWSL\discus_suite.ps1"'
+  echo ${WSL_BAT}> DiscusWSL/discus_suite_ps1.bat
+  chmod u+x DiscusWSL/discus_suite_ps1.bat
+  chmod u+x DiscusWSL/discus_suite.ps1
+#
   cp $DISCUS_BIN_PREFIX/share/suite_man.pdf DiscusWSL/doc
   cp $DISCUS_BIN_PREFIX/share/discus_man.pdf DiscusWSL/doc
   cp $DISCUS_BIN_PREFIX/share/diffev_man.pdf DiscusWSL/doc
@@ -238,7 +252,12 @@ if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
   cd $DISCUS_INST_DIR
   mkdir -p $HOME/.config/terminator
   cp SHELLS/terminator.config $HOME/.config/terminator/config
-  export WSL_DIR='/mnt/c/Users/DISCUS_INSTALLATION/'
+# export WSL_DIR='/mnt/c/Users/$WINDOWS_USER/DISCUS_INSTALLATION/'
+# export WSL_PATH=$(echo $WSL_USER_PROFILE | sed -nr '0,/.*Users\\(\w+).*/ s//\1/p')
+  export WSL_DIR='/mnt/c/Users/'${WSL_USER_NAME}'/DISCUS_INSTALLATION/'
+# echo "WSL_PRO " $WSL_USER_PROFILE
+# echo "WSL_PAT " ${WSL_PATH}    
+# echo "WSL_DIR " $WSL_DIR
 #
 # Test if old 'bbb_install_suite.ps1" was used without "started=powershell"
   if [[ "${DISCUS_STARTED}"  == "native" ]]; then
@@ -248,8 +267,10 @@ if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
     fi
   fi
   if [[ "${DISCUS_STARTED}"  == "powershell" ]]; then
-    sudo rm -rf /mnt/c/Users/DISCUS_INSTALLATION/DiscusWSL
-    sudo cp -r DiscusWSL $WSL_DIR
+#   echo "REMOVING OLD DIRECTORY DiscusWSL > " "${WSL_DIR}" "<<"
+    sudo rm -rf "${WSL_DIR}/DiscusWSL"
+#   echo "COPYING NEW  DIRECTORY DiscusWSL > " "${WSL_DIR}" "<<"
+    sudo cp -r DiscusWSL "${WSL_DIR}"
   fi
   cd SHELLS
   cp -r ./.DISCUS $HOME
