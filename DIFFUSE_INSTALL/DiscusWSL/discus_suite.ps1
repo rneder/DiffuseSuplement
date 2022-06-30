@@ -1,14 +1,16 @@
 #REM DISCUS_SUITE VIA UBUNTU; Powershell version
 cd "C:\Program Files (X86)\DiscusWSL"
 $vcxsrv_active = Get-Process vcxsrv -ErrorAction SilentlyContinue
-if ($vcxsrv_active)
+$xming_active = Get-Process Xming -ErrorAction SilentlyContinue
+if ($vcxsrv_active -or $xming_active)
 {
   Write-Host "XLaunch.exe IS ALREADY  RUNNING"
 }
 else
 {
   Write-Host "XLaunch.exe will be started"
-  Start-Process "C:\Program Files\vcxsrv\xlaunch.exe" -ArgumentList " -run `"C:\Program Files (X86)\DiscusWSL\config.xlaunch`""
+  $W_TEMP = $env:USERPROFILE + "\DISCUS_INSTALLATION\DiscusWSL\config.xlaunch"
+  Start-Process "C:\Program Files\vcxsrv\xlaunch.exe" -ArgumentList " -run `"$W_TEMP`""
 }
 #
 cd $HOME
@@ -33,8 +35,33 @@ else
   'This is Version 1'
   $wsl_use = 1
 }
-Start-Process ubuntu2004 -WindowStyle Hidden -ArgumentList "-c `"cd ; source .profile.local; discus_suite_ubuntu.sh $wsl_use`""
 
-#$done = (Read-Host 'Type enter to finish POWERSHELL')
+$is_wsl_file="$HOME\AppData\Local\Temp\is_wsl.txt"
+$is_wsl = wsl -l -v 2>&1 |out-file  -encoding ASCII "$is_wsl_file"
+
+foreach($line in Get-Content "$is_wsl_file") {
+  $comp = $line -replace '\0'
+  If($comp.contains("Ubuntu ")) {
+    $IS_UBUNTU     = "$HOME" + "\AppData\Local\Microsoft\WindowsApps\ubuntu.exe"
+    If (Test-Path $IS_UBUNTU -PathType leaf) {
+      $UBUNTU_EXE = "$IS_UBUNTU"
+    }
+  }
+  Elseif($comp.contains("Ubuntu-20.04 ")) {
+    $IS_UBUNTU2004 = "$HOME" + "\AppData\Local\Microsoft\WindowsApps\ubuntu2004.exe"
+    if (Test-Path $IS_UBUNTU2004 -PathType leaf) {
+      $UBUNTU_EXE = "$IS_UBUNTU2004"
+    }
+  }
+  Elseif($comp.contains("Ubuntu-18.04 ")) {
+    $IS_UBUNTU1804 = "$HOME" + "\AppData\Local\Microsoft\WindowsApps\ubuntu1804.exe"
+    If (Test-Path $IS_UBUNTU1804 -PathType leaf) {
+      $UBUNTU_EXE = "$IS_UBUNTU1804"
+    }
+  }
+}
+Start-Process "$UBUNTU_EXE" -WindowStyle Hidden -ArgumentList "-c `"cd ; source .profile.local; discus_suite_ubuntu.sh $wsl_use`""
+
+$done = (Read-Host 'Type enter to finish POWERSHELL')
 #exit
 #
