@@ -18,6 +18,8 @@ if [[ "$OSTYPE" == *"linux"* ]]; then
     export OPERATING_TYPE="WSL"
     export DISCUS_USER=$USER
     export WINDOWS_USER=$(env | grep "PATH=" | sed -nr '0,/.*Users\/(\w+).*/ s//\1/p' )
+#   export WINDOWS_USER=$(/mnt/c/WINDOWS/system32/cmd.exe /c echo %username%)
+#   export WINDOWS_USER_DIR=$(/mnt/c/WINDOWS/system32/cmd.exe /c echo %userprofile%)
   fi
   export OPERATING_NAME=$(cat /etc/os-release | grep '^NAME=' | sed 's:NAME=::' | sed 's:"::g' | sed 's: ::g')
   if [[ "${OPERATING_NAME}" == "Fedora" ]]; then
@@ -27,7 +29,7 @@ if [[ "$OSTYPE" == *"linux"* ]]; then
     export OPERATING_VERSION=$(lsb_release -r | sed "s.Release:.." | sed "s:\.::" | sed "s:\t::" )
     export OPERATING_ID_LIKE=$(cat /etc/os-release | grep 'ID_LIKE=' | sed 's:ID_LIKE=::')
   fi
-  if [[ "$(groups $DISCUS_USER | grep ' sudo ')" ]]; then
+  if [[ "$(groups $DISCUS_USER | grep ' sudo ')" || "$DISCUS_USER" == "root" ]]; then
     export DISCUS_SUDO="TRUE"
   else
     export DISCUS_SUDO="FALSE"
