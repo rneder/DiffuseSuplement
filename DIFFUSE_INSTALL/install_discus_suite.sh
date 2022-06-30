@@ -243,6 +243,7 @@ if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
   chmod u+x DiscusWSL/discus_suite_ps1.bat
   chmod u+x DiscusWSL/discus_suite.ps1
 #
+  mkdir -p DiscusWSL/doc
   cp $DISCUS_BIN_PREFIX/share/suite_man.pdf DiscusWSL/doc
   cp $DISCUS_BIN_PREFIX/share/discus_man.pdf DiscusWSL/doc
   cp $DISCUS_BIN_PREFIX/share/diffev_man.pdf DiscusWSL/doc
