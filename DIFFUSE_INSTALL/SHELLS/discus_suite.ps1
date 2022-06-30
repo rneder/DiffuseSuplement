@@ -1,14 +1,24 @@
 #REM DISCUS_SUITE VIA UBUNTU; Powershell version
 cd "C:\Program Files (X86)\DiscusWSL"
 $vcxsrv_active = Get-Process vcxsrv -ErrorAction SilentlyContinue
-if ($vcxsrv_active)
+$xming_active = Get-Process Xming -ErrorAction SilentlyContinue
+if($xming_active) {
+  Write-Host " "
+  Write-Host "DISCUS uses the VcXsrv X-Window server"
+  Write-Host "Presently the xming server is running."
+  Write-Host "Please stop xming process and start DISCUS again"
+  $done = (Read-Host 'Type enter to finish POWERSHELL')
+  Exit
+}
+if ($vcxsrv_active )
 {
   Write-Host "XLaunch.exe IS ALREADY  RUNNING"
 }
 else
 {
   Write-Host "XLaunch.exe will be started"
-  Start-Process "C:\Program Files\vcxsrv\xlaunch.exe" -ArgumentList " -run `"C:\Program Files (X86)\DiscusWSL\config.xlaunch`""
+  $W_TEMP = $env:USERPROFILE + "\DISCUS_INSTALLATION\DiscusWSL\config.xlaunch"
+  Start-Process "C:\Program Files\vcxsrv\xlaunch.exe" -ArgumentList " -run `"$W_TEMP`""
 }
 #
 cd $HOME
@@ -60,6 +70,6 @@ foreach($line in Get-Content "$is_wsl_file") {
 }
 Start-Process "$UBUNTU_EXE" -WindowStyle Hidden -ArgumentList "-c `"cd ; source .profile.local; discus_suite_ubuntu.sh $wsl_use`""
 
-$done = (Read-Host 'Type enter to finish POWERSHELL')
+#$done = (Read-Host 'Type enter to finish POWERSHELL')
 #exit
 #
