@@ -223,6 +223,9 @@ fi
 #
 cd $DISCUS_INST_DIR
 if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
+  rm -rf   DiscusWSL
+  mkdir -p DiscusWSL
+  mkdir -p DiscusWSL/doc
   cp ICONS/discus_suite_128.ico        DiscusWSL/
   cp SHELLS/config.xlaunch             DiscusWSL/
   if [[ "$OPERATING_VERSION" == "1804" ]]; then
@@ -243,7 +246,6 @@ if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
   chmod u+x DiscusWSL/discus_suite_ps1.bat
   chmod u+x DiscusWSL/discus_suite.ps1
 #
-  mkdir -p DiscusWSL/doc
   cp $DISCUS_BIN_PREFIX/share/suite_man.pdf DiscusWSL/doc
   cp $DISCUS_BIN_PREFIX/share/discus_man.pdf DiscusWSL/doc
   cp $DISCUS_BIN_PREFIX/share/diffev_man.pdf DiscusWSL/doc
