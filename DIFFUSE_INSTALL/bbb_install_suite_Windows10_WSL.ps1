@@ -133,11 +133,11 @@ if(-not $wsl_installed) {
         Write-Host "Please provide a user name and a password."
         Write-Host "Exit the Ubuntu terminal and reboot computer."
         Write-Host "Go back to the Downloads folder "
-        Write-Host "and run the installation script >bbb_install_suite_Windows10_WSL.bat< again"
+        Write-Host "and run the installation script: bbb_install_suite_Windows10_WSL.bat  again"
         wsl --install -d Ubuntu
-		Write-Host " "
-		Write-Host "Once the initial Ubuntu setup is done, admin rights are no longer neede"
-		Write-Host " "
+	Write-Host " "
+	Write-Host "Once the initial Ubuntu setup is done, admin rights are no longer needed"
+	Write-Host " "
         Exit
        }
       1{
@@ -155,7 +155,7 @@ if(-not $wsl_installed) {
        Write-Host "DISCUS needs wsl"
        Write-Host "Install wsl manually: wsl --install -d Ubuntu"
        Write-Host "or start powershell with admin rights and "
-       Write-Host "run this script >>>bbb_install_suite_Windows10_WSL.bat<<< again ""
+       Write-Host "run this script :  bbb_install_suite_Windows10_WSL.bat    again "
        Write-Host "from the users Download folder"
        Exit
     }
@@ -167,7 +167,7 @@ if(-not $wsl_installed) {
 	   Write-Host "While in this elevated state your admin should please:"
        Write-Host "Install wsl manually: wsl --install -d Ubuntu"
        Write-Host "or start powershell with admin rights and "
-       Write-Host "run this script >>>bbb_install_suite_Windows10_WSL.bat<<< again"
+       Write-Host "run this script :  bbb_install_suite_Windows10_WSL.bat    again"
        Write-Host "from the users Download folder"
 	   Write-Host "Once the wsl installation is complete admin rights are no longer needed"
 	   Write-Host " "
