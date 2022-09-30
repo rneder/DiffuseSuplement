@@ -1,5 +1,5 @@
 #!/bin/bash
-# 2022_05_12
+# 2022_09_30
 # top level DISCUS installation script.
 # Downloads the installation archive, expands this and
 # starts the actual installation script
@@ -63,6 +63,35 @@ do
     fi
   fi
 done
+#
+if [[ "$DISCUS_STARTED" == "powershell" ]]; then
+  echo "POWERSHELL"
+
+  ping -c 1 -q 1.1.1.1 > /dev/null
+
+  if [ $? -ne 0 ]; then
+    echo 
+    echo " Ubuntu does not have access to the internet"
+    echo " Check your network setting and make sure that"
+    echo " the firewall allows internet access for Ubuntu"
+    echo 
+    exit 1
+  else
+    echo ""
+    ping -c 1 -q github.com > /dev/null
+    if [ $? -ne 0 ]; then
+      echo 
+      echo " Ubuntu has access to the internet"
+      echo " but cannot resolve the name: github.com"
+      echo " Check your network setting and make sure that"
+      echo " the firewall allows internet access for Ubuntu"
+      echo 
+      exit 1
+    fi
+  fi
+  echo "SUCCESS"
+fi
+#
 IS_CURL="$(which curl)"
 if [[ -z "${IS_CURL}" ]]; then
 #  Check Linux operating system as we have to install curl...
