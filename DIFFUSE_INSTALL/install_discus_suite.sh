@@ -228,17 +228,22 @@ if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
   mkdir -p DiscusWSL/doc
   cp ICONS/discus_suite_128.ico        DiscusWSL/
   cp SHELLS/config.xlaunch             DiscusWSL/
-  if [[ "$OPERATING_VERSION" == "1804" ]]; then
+# if [[ "$OPERATING_VERSION" == "1804" ]]; then
 #   cp SHELLS/discus_suite_1804.ps1    DiscusWSL/discus_suite.ps1
     cp SHELLS/discus_suite.ps1         DiscusWSL/discus_suite.ps1
-  elif [[ "$OPERATING_VERSION" == "2004" ]]; then
+# elif [[ "$OPERATING_VERSION" == "2004" ]]; then
 #   cp SHELLS/discus_suite_2004.ps1    DiscusWSL/discus_suite.ps1
-    cp SHELLS/discus_suite.ps1         DiscusWSL/discus_suite.ps1
-  fi
-# cp SHELLS/discus_suite_ps1.bat  DiscusWSL/
-  export WSL_USER_PROFILE=$(/mnt/c/WINDOWS/system32/cmd.exe /c echo %userprofile% | sed -nr 's///p')
-  export WSL_USER_NAME=$(/mnt/c/WINDOWS/system32/cmd.exe /c echo %username% | sed -nr 's///p' )
+#   cp SHELLS/discus_suite.ps1         DiscusWSL/discus_suite.ps1
+# fi
+  cp SHELLS/discus_suite_ps1.bat  DiscusWSL/
+  cd /mnt/c/Users
+  export WSL_USER_PROFILE=$(cmd.exe /c echo %userprofile% | sed -nr 's///p')
+  export WSL_USER_NAME=${WSL_USER_PROFILE##*\\}
+# echo "START EXPORT 2"
+# export WSL_USER_NAME=$(cmd.exe /c echo %username% | sed -nr 's///p' )
+# echo "WSL USER NAME ????###############################################"
 # echo "WSL_USER_NAME MASKED " "$WSL_USER_NAME"
+  cd $DISCUS_INST_DIR
   WSL_BAT='powershell.exe -File "'
   WSL_BAT+=${WSL_USER_PROFILE}
   WSL_BAT+='\DISCUS_INSTALLATION\DiscusWSL\discus_suite.ps1"'
