@@ -1,6 +1,6 @@
 #
 #  bbb_install_suite_Windows10_WSL.ps1
-#  2022_06_30
+#  2022_09_30
 #  Installation script for DISCUS_SUITE as WSL within Windows 10 / 11
 #
 #  To enable the Windows Sub System for Linux, open a powershelA or
@@ -61,7 +61,46 @@ Else {
  }
 }
 #
+# Test Internet coonnection function
+function TestNet {
+  $IP_ACCESS = $false
+  $GIT_ACCESS = $false
+  if ( Test-Connection   1.1.1.1 -Quiet -Count 1) {
+    $IP_ACCESS = $true
+    if ( Test-Connection  github.com -Quiet -Count 1) {
+      $GIT_ACCESS = $true
+    }
+    else {
+      $GIT_ACCESS = $false
+      Write-Host " "
+      Write-Host "The internet connection works for 1.1.1.1"
+      Write-Host "but fails for github.com"
+      Write-Host "Please check your network settings and ensure"
+      Write-Host "that your computer can access web pages like"
+      Write-Host "github.com"
+      Write-Host " "
+    }
+  }
+  else {
+    $IP_ACCESS = $false
+    Write-Host " "
+    Write-Host "The internet connection does not seem to work"
+    Write-Host "Please check your network settings and ensure"
+    Write-Host "that your computer can access web pages like"
+    Write-Host "github.com"
+    Write-Host " "
+  }
 #
+#  Write-Host " IP ACCESS  is $IP_ACCESS"
+#  Write-Host " GIT ACCESS is $GIT_ACCESS"
+  return $GIT_ACCESS
+}
+#
+$NETOK = TestNet
+if(-Not $NETOK) {
+   $done = (Read-Host 'Type enter to finish POWERSHELL')
+   exit 
+}
 # Test if this powershell instance has Admin rights
 #
 $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
@@ -135,9 +174,9 @@ if(-not $wsl_installed) {
         Write-Host "Go back to the Downloads folder "
         Write-Host "and run the installation script: bbb_install_suite_Windows10_WSL.bat  again"
         wsl --install -d Ubuntu
-	Write-Host " "
-	Write-Host "Once the initial Ubuntu setup is done, admin rights are no longer needed"
-	Write-Host " "
+        Write-Host " "
+        Write-Host "Once the initial Ubuntu setup is done, admin rights are no longer needed"
+        Write-Host " "
         Exit
        }
       1{
@@ -187,6 +226,7 @@ else {
 # Check for Ubuntu version 
 #
 $is_wsl_file="$HOME\AppData\Local\Temp\is_wsl.txt"
+$is_ubu_file="$HOME\AppData\Local\Temp\is_ubuntu.txt"
 $is_wsl = wsl -l -v 2>&1 |out-file  -encoding ASCII "$is_wsl_file" 
 if($wsl_ubuntu) {
   foreach($line in Get-Content "$is_wsl_file") {
@@ -195,18 +235,79 @@ if($wsl_ubuntu) {
       $IS_UBUNTU     = "$HOME" + "\AppData\Local\Microsoft\WindowsApps\ubuntu.exe"
       If (Test-Path $IS_UBUNTU -PathType leaf) {
         $UBUNTU_EXE = "$IS_UBUNTU"
+        "0000" | out-file  -encoding ASCII "$is_ubu_file"
+      }
+    }
+    Elseif($comp.contains("Ubuntu-22.04 ")) {
+      $IS_UBUNTU2204 = "$HOME" + "\AppData\Local\Microsoft\WindowsApps\ubuntu2204.exe"
+      If (Test-Path $IS_UBUNTU2204 -PathType leaf) {
+        $UBUNTU_EXE = "$IS_UBUNTU2204"
+        "2204" | out-file  -encoding ASCII "$is_ubu_file"
       }
     }
     Elseif($comp.contains("Ubuntu-20.04 ")) {
       $IS_UBUNTU2004 = "$HOME" + "\AppData\Local\Microsoft\WindowsApps\ubuntu2004.exe"
       If (Test-Path $IS_UBUNTU2004 -PathType leaf) {
         $UBUNTU_EXE = "$IS_UBUNTU2004"
+        "2004" | out-file  -encoding ASCII "$is_ubu_file"
+        Write-Host " "
+        Write-Host "You have explicitely installed Ubuntu-2004 "
+        Write-Host "Usually this cannot be upgraded to the latest version 2204"
+        Write-Host "If you do not use WSL for anything besides DISCUS I reccomend to: "
+        Write-Host "Uninstall (all) Ubuntu versions in Windows Settings/ Apps / Apps and features"
+        Write-Host "Thereafter run this script again or install Ubuntu from the Windows Store "
+        Write-Host " "
+        Write-Host " "
+        $title = "You use an old Ubuntu version " 
+        $message = "Proceed with DISCUS installation nevertheless ?"
+        $result = $host.ui.PromptForChoice($title, $message, $YN_options, 1)
+        switch ($result) {
+          0{
+            Write-Host "Yes"
+            Write-Host "DISCUS Installation will proceed with Ubuntu-2004"
+            Write-Host " "
+		   }
+          1{
+            Write-Host "No"
+            Write-Host "DISCUS Installation has been cancelled"
+            Write-Host "Run this script again once the Ubuntu installation is ready"
+            Write-Host " "
+            Exit
+           }
+        }
       }
     }
     Elseif($comp.contains("Ubuntu-18.04 ")) {
       $IS_UBUNTU1804 = "$HOME" + "\AppData\Local\Microsoft\WindowsApps\ubuntu1804.exe"
       If (Test-Path $IS_UBUNTU1804 -PathType leaf) {
         $UBUNTU_EXE = "$IS_UBUNTU1804"
+        "1804" | out-file  -encoding ASCII "$is_ubu_file"
+        Write-Host " "
+        Write-Host "You have explicitely installed Ubuntu-1804 "
+        Write-Host "Usually this cannot be upgraded to the latest version 2204"
+        Write-Host "Support for this version will end in 2023!"
+        Write-Host "If you do not use WSL for anything besides DISCUS I reccomend to: "
+        Write-Host "Uninstall (all) Ubuntu versions in Windows Settings/ Apps / Apps and features"
+        Write-Host "Thereafter run this script again or install Ubuntu from the Windows Store "
+        Write-Host " "
+        Write-Host " "
+        $title = "You use a very old Ubuntu version " 
+        $message = "Proceed with DISCUS installation nevertheless ?"
+        $result = $host.ui.PromptForChoice($title, $message, $YN_options, 1)
+        switch ($result) {
+          0{
+            Write-Host "Yes"
+            Write-Host "DISCUS Installation will proceed with Ubuntu-1804"
+            Write-Host " "
+		   }
+          1{
+            Write-Host "No"
+            Write-Host "DISCUS Installation has been cancelled"
+            Write-Host "Run this script again once the Ubuntu installation is ready"
+            Write-Host " "
+            Exit
+           }
+        }
       }
     }
   }
@@ -220,6 +321,7 @@ Else{
 }
 Write-Host " UBUNTU EXE : " $UBUNTU_EXE
 #
+
 #
 $W_TEMP = $env:USERPROFILE -split "\\"
 $W_USER = $W_TEMP[2]
@@ -252,7 +354,6 @@ $DISCUS_INST_SCRIPT = "https://github.com/tproffen/DiffuseCode/releases/download
 curl.exe -k -L -o bbb_install_script.sh $DISCUS_INST_SCRIPT
 
 $DISCUS_INST_PATH = "`"'/mnt/c/Users/" + "$W_USER" + "/$DISCUS_INST_NAME/bbb_install_script.sh' started=powershell `""
-
 #Write-Host " DISCUS_INST_PATH "  $DISCUS_INST_PATH
 #ls
 #Write-Host "+++++++++++++++++++++++"
@@ -260,6 +361,14 @@ $DISCUS_INST_PATH = "`"'/mnt/c/Users/" + "$W_USER" + "/$DISCUS_INST_NAME/bbb_ins
 
 & $UBUNTU_EXE     -c $DISCUS_INST_PATH
 #
+if (-not $?) {
+  Write-Host ""
+  Write-Host " The DISCUS installation failed"
+  Write-Host " Check the error messages and try to correct"
+  Write-Host ""
+  $done = (Read-Host 'Type enter to finish POWERSHELL')
+  exit
+}
 #
 Write-Host " A desktop icon will be placed."
 #
@@ -272,7 +381,18 @@ Write-Host "ShortcutLocation   " $ShortcutLocation
 $WScriptShell = New-Object -ComObject Wscript.Shell
 $Shortcut = $WScriptShell.CreateShortcut($ShortcutLocation)
 $Shortcut.TargetPath = $SourceFileLocation
-$Shortcut.IconLocation = "C:\Program Files (x86)\DiscusWSL\discus_suite_128.ico"
+$Shortcut.IconLocation = "$DISCUS_INST_FOLDER" + "\DiscusWSL\discus_suite_128.ico"
 $Shortcut.Save()
+if (-not $?) {
+  Write-Host ""
+  Write-Host " The desktop icon was not placed successfully "
+  Write-Host " Check the error messages and try to correct"
+  Write-Host ""
+  $done = (Read-Host 'Type enter to finish POWERSHELL')
+  exit
+}
+#
 #
 & "$SourceFileLocation"
+#
+$done = (Read-Host 'Type enter to finish POWERSHELL')
