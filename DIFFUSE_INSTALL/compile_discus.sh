@@ -3,6 +3,7 @@
 set -e
 #
 cd $DISCUS_DEVELOP/DiffuseBuild
+export FC=$(which gfortran)
 #
 if [[ "$OPERATING" == "DISCUS_LINUX" || "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
 #
