@@ -37,12 +37,20 @@ else
   esac
   done
 fi
-
 if [[ $JMOL_INST == 1 ]]; then
-  curl -k --location -o OpenJava.pkg -fSL https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/latest
-#  curl -k --location -o OpenJava.pkg -fSL https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jre_x64_mac_hotspot_11.0.7_10.pkg 
+  export JDK_VERSION=$(curl -k --silent --location "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/latest" | grep "Release" | grep -m 1 -oe '11.[0-9].[0-9].[0-9]+[0-9]')
+#  echo " JDK VERS $JDK_VERSION" 
+  export JDK_BASE="$(cut -d'+' -f1 <<<"$JDK_VERSION")"
+  export JDK_EXTE="$(cut -d'+' -f2 <<<"$JDK_VERSION")"
+#  echo " JDK BASE $JDK_BASE"
+#  echo " JDK EXTE $JDK_EXTE"
+  export JDK_URL='https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/tag/jdk-'${JDK_BASE}'%2B'${JDK_EXTE}/'OpenJDK11U-jdk_x64_mac_hotspot_'${JDK_BASE}'_'${JDK_EXTE}'.pkg'
+#  echo " JDK URL  $JDK_URL "
+  curl -k -o OpenJDK.pkg -fsSL ${JDK_URL}
+#  curl -k --location -o ./OpenJava.pkg -fSL https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/latest/OpenJDK11U-jdk_x64_mac_hotspot_11.09.1_1.pkg
+#  curl -k --location -o OpenJava.pkg -fSL https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.9.1%2B1/OpenJDK11U-jre_x64_mac_hotspot_11.0.9.1_1.pkg 
   echo
-  sudo installer -pkg OpenJava.pkg -target /
+  sudo installer -package ./OpenJava.pkg -target /
   export JRE_DONE=1
 fi
 #
