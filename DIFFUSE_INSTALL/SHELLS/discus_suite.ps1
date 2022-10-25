@@ -130,7 +130,7 @@ cd $HOME
 #
 # Test for WSL version 1 / 2
 #
-wsl -l -v  | Out-File "$HOME\AppData\Local\Temp\wsl.neu"
+C:\Windows\System32\wsl.exe -l -v  | Out-File "$HOME\AppData\Local\Temp\wsl.neu"
 (Get-Content "$HOME\AppData\Local\Temp\wsl.neu") -replace "`0", "" | Set-Content "$HOME\AppData\Local\Temp\wsl.neu" 
 #wsl -l -v  | Out-File "$HOME\AppData\Local\Temp\wsl.version" -Encoding ASCII
 $wsl_ver = Select-String -Path "$HOME\AppData\Local\Temp\wsl.neu" -Pattern ' 2'
@@ -150,7 +150,7 @@ else
 }
 
 $is_wsl_file="$HOME\AppData\Local\Temp\is_wsl.txt"
-$is_wsl = wsl -l -v 2>&1 |out-file  -encoding ASCII "$is_wsl_file"
+$is_wsl = C:\Windows\System32\wsl.exe -l -v 2>&1 |out-file  -encoding ASCII "$is_wsl_file"
 
 foreach($line in Get-Content "$is_wsl_file") {
   $comp = $line -replace '\0'
