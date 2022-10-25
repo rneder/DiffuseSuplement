@@ -178,7 +178,7 @@ elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then          # WINDOWS WSL #####
 #
   cd $DISCUS_INST_DIR
   source prepare_wsl_cfg.sh
-  sudo cp wsl.cfg /etc/wsl.cfg
+  sudo cp wsl.conf /etc/wsl.conf
   if [[ "${OPERATING_VERSION}" == "2004" ]]; then
     sudo strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5 
   fi
@@ -227,29 +227,22 @@ if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
   mkdir -p DiscusWSL
   mkdir -p DiscusWSL/doc
   cp ICONS/discus_suite_128.ico        DiscusWSL/
+  cp ICONS/discus_terminal_128.ico     DiscusWSL/
   cp SHELLS/config.xlaunch             DiscusWSL/
-# if [[ "$OPERATING_VERSION" == "1804" ]]; then
-#   cp SHELLS/discus_suite_1804.ps1    DiscusWSL/discus_suite.ps1
-    cp SHELLS/discus_suite.ps1         DiscusWSL/discus_suite.ps1
-# elif [[ "$OPERATING_VERSION" == "2004" ]]; then
-#   cp SHELLS/discus_suite_2004.ps1    DiscusWSL/discus_suite.ps1
-#   cp SHELLS/discus_suite.ps1         DiscusWSL/discus_suite.ps1
-# fi
-  cp SHELLS/discus_suite_ps1.bat  DiscusWSL/
+  cp SHELLS/discus_suite.ps1           DiscusWSL/discus_suite.ps1
+  cp SHELLS/discus_terminal.ps1        DiscusWSL/discus_terminal.ps1
+#
   cd /mnt/c/Users
   export WSL_USER_PROFILE=$(cmd.exe /c echo %userprofile% | sed -nr 's///p')
   export WSL_USER_NAME=${WSL_USER_PROFILE##*\\}
-# echo "START EXPORT 2"
-# export WSL_USER_NAME=$(cmd.exe /c echo %username% | sed -nr 's///p' )
-# echo "WSL USER NAME ????###############################################"
-# echo "WSL_USER_NAME MASKED " "$WSL_USER_NAME"
+#
   cd $DISCUS_INST_DIR
-  WSL_BAT='powershell.exe -File "'
-  WSL_BAT+=${WSL_USER_PROFILE}
-  WSL_BAT+='\DISCUS_INSTALLATION\DiscusWSL\discus_suite.ps1"'
-  echo ${WSL_BAT}> DiscusWSL/discus_suite_ps1.bat
+  source ./prepare_suite_bat.sh
+  source ./prepare_terminal_bat.sh
   chmod u+x DiscusWSL/discus_suite_ps1.bat
   chmod u+x DiscusWSL/discus_suite.ps1
+  chmod u+x DiscusWSL/discus_terminal_ps1.bat
+  chmod u+x DiscusWSL/discus_terminal.ps1
 #
   cp $DISCUS_BIN_PREFIX/share/suite_man.pdf DiscusWSL/doc
   cp $DISCUS_BIN_PREFIX/share/discus_man.pdf DiscusWSL/doc
