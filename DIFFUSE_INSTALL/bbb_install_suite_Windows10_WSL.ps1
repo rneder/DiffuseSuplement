@@ -1,19 +1,19 @@
 #
 #  bbb_install_suite_Windows10_WSL.ps1
-#  2022_09_30
+#  2022_10_24
 #  Installation script for DISCUS_SUITE as WSL within Windows 10 / 11
 #
 #  To enable the Windows Sub System for Linux, open a powershelA or
 #  Windows terminal as administrator and type the following lines:
 #
-#  wsl -l -v
+#  C:\Windows\System32\wsl -l -v
 #  If you get a lengthy help text, WSL is not installed
 #  If WSL is installed you get something like:
 #  NAME		    STATE   VERSION
 # *Ubuntu-20.04 Stopped 2
 #
 #  If WSL is not installed , please install with:
-#  wsl --install -d Ubuntu
+#  C:\Windows\System32\wsl --install -d Ubuntu
 #  You will need to reboot your Computer. 
 #
 #  After reboot, open the powershell and run this script.
@@ -39,12 +39,99 @@ $no  = New-Object System.Management.Automation.Host.ChoiceDescription `
 $YN_options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
 #$DISCUS_ICN = [System.Management.Automation.Host.ChoiceDescription[]]($all, $cur)
 #
+###########################################################################################
+#
+# Colors
+#
+###########################################################################################
+$BackgroundColors = (get-host).ui.rawui.BackgroundColor
+$ForegroundColors = (get-host).ui.rawui.ForegroundColor
+$ColorHigh = $ForegroundColors
+$ColorWarn = $ForegroundColors
+if( $BackgroundColors -eq "Black") {
+  $ColorHigh = "Yellow"
+  $ColorWarn = "Red"
+}
+elseif( $BackgroundColors -eq "White") {
+  $ColorHigh = "DarkBlue"
+  $ColorWarn = "Red"
+}
+elseif( $BackgroundColors -eq "Blue") {
+  $ColorHigh = "DarkYellow"
+  $ColorWarn = "Red"
+}
+elseif( $BackgroundColors -eq "DarkMagenta") {
+  $ColorHigh = "DarkYellow"
+  $ColorWarn = "Red"
+}
+#
+###########################################################################################
+#
+# Test firewall profile settings
+#
+###########################################################################################
+#
+function Fw_profile {
+  $FW_LISTEN = $false
+  $FW_MODIFIED = $false
+  $FW_CATEGORY = (Get-NetConnectionProfile).NetworkCategory
+#  echo " Category $FWCATEGORY"
+  $fw_pr_file="$HOME\AppData\Local\Temp\fw_profile.txt"
+  Get-NetFirewallProfile -Profile $FW_CATEGORY  |out-file  -encoding ASCII "$fw_pr_file"
+  foreach($line in Get-Content "$fw_pr_file") {
+    $comp = $line -replace '\0'
+    if($comp.contains("NotifyOnListen")) {
+      if($comp.contains("True")) {
+      $FW_LISTEN = $true
+      }
+      Break
+     }
+  }
+  if( -not $FW_LISTEN) {
+    Write-Host " " -ForegroundColor $ColorHigh
+    Write-Host "Your firewall settings for network type >>$FW_CATEGORY<< will not notify you" -ForegroundColor $ColorHigh
+    Write-Host "that the firewall will block a new App" -ForegroundColor $ColorHigh
+    Write-Host "VcXsrv and DISCUS will likely be blocked without notification"  -ForegroundColor $ColorHigh
+    Write-Host " "
+    $title = "This installation script can change the setting to notify you if new Apps are blocked"
+    $message = "Shall this script change your firewall settings to notify? "
+    $result = $host.ui.PromptForChoice($title, $message, $YN_options, 1)
+    switch ($result) {
+      0{
+        Set-NetFirewallProfile -Profile $FW_CATEGORY -NotifyOnListen True
+        $FW_LISTEN = $true
+        Write-Host " " -ForegroundColor $ColorHigh
+        Write-Host "Your firewall settings for network type >>$FW_CATEGORY<< will now inform you" -ForegroundColor $ColorHigh
+        Write-Host "that the firewall will block a new App" -ForegroundColor $ColorHigh
+        Write-Host "Once prompted, please make sure that you allow VcXsrv; Ubuntu and DISCUS to run" -ForegroundColor $ColorHigh
+        Write-Host "Check Settings and restrictions imposed by any Virus scanner or malware check." -ForegroundColor $ColorHigh
+        Write-Host " " -ForegroundColor $ColorHigh
+        Write-Host " "
+      }
+      1{
+        Write-Host " " -ForegroundColor $ColorWarn
+        Write-Host "VcXsrv and DISCUS will likely be blocked without notification" -ForegroundColor $ColorWarn
+        Write-Host "If DISCUS is not started sucessfully at the end of this script" -ForegroundColor $ColorWarn
+        Write-Host "Check your firewall settings and restrictions imposed by any " -ForegroundColor $ColorWarn
+        Write-Host "Virus scanner or malware check." -ForegroundColor $ColorWarn
+        Write-Host " " -ForegroundColor $ColorWarn
+        Write-Host " "
+      }
+    }
+  }
+#  return $FW_LISTEN, $FW_CATEGORY
+}
+#
+###########################################################################################
+#
 # Install vcxsrv function 
+#
+###########################################################################################
 #
 function Vcxsrv-Installation {
 $IS_VCXSRV = "C:\Program Files\VcXsrv\xlaunch.exe"
 If (-Not (Test-Path $IS_VCXSRV -PathType leaf)) {
-  curl.exe -k -o vcxsrv_installer.exe -L 'https://sourceforge.net/projects/vcxsrv/files/latest/download/vcxsrv-*.installer.exe'
+  & C:\Windows\System32\curl.exe -k -o vcxsrv_installer.exe -L 'https://sourceforge.net/projects/vcxsrv/files/latest/download/vcxsrv-*.installer.exe'
   Write-Host "Please follow VcXSrv installation instructions "
   Write-Host " "
   .\vcxsrv_installer.exe 
@@ -61,7 +148,12 @@ Else {
  }
 }
 #
+###########################################################################################
+#
 # Test Internet coonnection function
+#
+###########################################################################################
+#
 function TestNet {
   $IP_ACCESS = $false
   $GIT_ACCESS = $false
@@ -101,21 +193,32 @@ if(-Not $NETOK) {
    $done = (Read-Host 'Type enter to finish POWERSHELL')
    exit 
 }
+#
+###########################################################################################
+#
 # Test if this powershell instance has Admin rights
+#
+###########################################################################################
 #
 $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if($currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
   Write-Host "This powershell has administrator rights"
   $IS_ELEVATED_SHELL = $true
+  Fw_profile
   Vcxsrv-Installation
  }
 else {
   Write-Host "This powershell has no admin rights"
   $IS_ELEVATED_SHELL = $false
  }
+exit
+#
+###########################################################################################
 #
 # Test if User has Admin rights
+#
+###########################################################################################
 #
 $id = [System.Security.Principal.WindowsIdentity]::GetCurrent()
 $p  = New-Object System.Security.Principal.WindowsPrincipal($id)
@@ -128,14 +231,18 @@ else {
   $IS_ELEVATED_USER = $false
  }
 #
+###########################################################################################
+#
 #  Test if wsl -l -v contains words "NAME VERSION STATE"
 #  If yes assume wsl is installed
 #  If wsl is installed, check the following lines for "Ubuntu"
 #
+###########################################################################################
+#
 $is_wsl_file="$HOME\AppData\Local\Temp\is_wsl.txt"
 $wsl_installed = $false
 $wsl_ubuntu    = $false
-$is_wsl = wsl -l -v 2>&1 |out-file  -encoding ASCII "$is_wsl_file" 
+$is_wsl = C:\Windows\System32\wsl -l -v 2>&1 |out-file  -encoding ASCII "$is_wsl_file" 
 foreach($line in Get-Content "$is_wsl_file") {
   $comp = $line -replace '\0'
   if($comp.contains("NAME") -and $comp.contains("VERSION") -and $comp.contains("STATE")) {
@@ -152,9 +259,13 @@ foreach($line in Get-Content "$is_wsl_file") {
    }
  }
 #
+###########################################################################################
+#
 #  At this point we know:
 #    if wsl is installed or not ($wsl_installed)
 #    if an ubuntu is installed  ($wsl_ubuntu)
+#
+###########################################################################################
 #
 Write-Host "WSL_INSTALLED " $wsl_installed " " $wsl_ubuntu
 if(-not $wsl_installed) {
@@ -173,7 +284,7 @@ if(-not $wsl_installed) {
         Write-Host "Exit the Ubuntu terminal and reboot computer."
         Write-Host "Go back to the Downloads folder "
         Write-Host "and run the installation script: bbb_install_suite_Windows10_WSL.bat  again"
-        wsl --install -d Ubuntu
+        C:\Windows\System32\wsl --install -d Ubuntu
         Write-Host " "
         Write-Host "Once the initial Ubuntu setup is done, admin rights are no longer needed"
         Write-Host " "
@@ -192,7 +303,7 @@ if(-not $wsl_installed) {
     if($IS_ELEVATED_USER) {
        Write-Host "Elevated USER " $IS_ELEVATED_USER
        Write-Host "DISCUS needs wsl"
-       Write-Host "Install wsl manually: wsl --install -d Ubuntu"
+       Write-Host "Install wsl manually: C:\Windows\System32\wsl --install -d Ubuntu"
        Write-Host "or start powershell with admin rights and "
        Write-Host "run this script :  bbb_install_suite_Windows10_WSL.bat    again "
        Write-Host "from the users Download folder"
@@ -201,15 +312,15 @@ if(-not $wsl_installed) {
     else {
     Write-Host "Normal USER " $IS_ELEVATED_USER
        Write-Host "DISCUS needs wsl"
-       Write-Host "Please ask your admin to install wsl for your account:"
+       Write-Host "Please ask your admin to install C:\Windows\System32\wsl for your account:"
        Write-Host "Your Admin should temporarily make your user account an admin"
-	   Write-Host "While in this elevated state your admin should please:"
-       Write-Host "Install wsl manually: wsl --install -d Ubuntu"
+       Write-Host "While in this elevated state your admin should please:"
+       Write-Host "Install wsl manually: C:\Windows\System32\wsl --install -d Ubuntu"
        Write-Host "or start powershell with admin rights and "
        Write-Host "run this script :  bbb_install_suite_Windows10_WSL.bat    again"
        Write-Host "from the users Download folder"
-	   Write-Host "Once the wsl installation is complete admin rights are no longer needed"
-	   Write-Host " "
+       Write-Host "Once the wsl installation is complete admin rights are no longer needed"
+       Write-Host " "
        Exit
     }
   }
@@ -222,12 +333,16 @@ else {
 }
 #Write-Host "After test for WSL "
 #
+###########################################################################################
+#
 # At this point wsl will have been installed
 # Check for Ubuntu version 
 #
+###########################################################################################
+#
 $is_wsl_file="$HOME\AppData\Local\Temp\is_wsl.txt"
 $is_ubu_file="$HOME\AppData\Local\Temp\is_ubuntu.txt"
-$is_wsl = wsl -l -v 2>&1 |out-file  -encoding ASCII "$is_wsl_file" 
+$is_wsl = C:\Windows\System32\wsl -l -v 2>&1 |out-file  -encoding ASCII "$is_wsl_file" 
 if($wsl_ubuntu) {
   foreach($line in Get-Content "$is_wsl_file") {
     $comp = $line -replace '\0'
@@ -342,7 +457,7 @@ cd "$DISCUS_INST_FOLDER"
 # Determine current DISCUS Version on GIThub
 #
 #Write-Host "+++++++++++++++++++++++"
-$DISCUS_RAW_VERSION = curl.exe -k --silent --location "https://github.com/tproffen/DiffuseCode/releases/latest" | Select-String "Release" | Out-String
+$DISCUS_RAW_VERSION = C:\Windows\System32\curl.exe -k --silent --location "https://github.com/tproffen/DiffuseCode/releases/latest" | Select-String "Release" | Out-String
 $pos_v = $DISCUS_RAW_VERSION.IndexOf("v.6")
 $cut_v = $DISCUS_RAW_VERSION.Substring($pos_v)
 $pos_s = $cut_v.IndexOf(" ")
@@ -351,7 +466,7 @@ $DISCUS_VERSION = $cut_v.Substring(0, $pos_s)
 $DISCUS_INST_SCRIPT = "https://github.com/tproffen/DiffuseCode/releases/download/" + $DISCUS_VERSION + "/bbb_install_script.sh"
 #Write-Host "DISCUS_INST_SCRIPT URL : " $DISCUS_INST_SCRIPT
 
-curl.exe -k -L -o bbb_install_script.sh $DISCUS_INST_SCRIPT
+C:\Windows\System32\curl.exe -k -L -o bbb_install_script.sh $DISCUS_INST_SCRIPT
 
 $DISCUS_INST_PATH = "`"'/mnt/c/Users/" + "$W_USER" + "/$DISCUS_INST_NAME/bbb_install_script.sh' started=powershell `""
 #Write-Host " DISCUS_INST_PATH "  $DISCUS_INST_PATH
@@ -363,8 +478,8 @@ $DISCUS_INST_PATH = "`"'/mnt/c/Users/" + "$W_USER" + "/$DISCUS_INST_NAME/bbb_ins
 #
 if (-not $?) {
   Write-Host ""
-  Write-Host " The DISCUS installation failed"
-  Write-Host " Check the error messages and try to correct"
+  Write-Host " The DISCUS installation failed"                -ForegroundColor $ColorWarn
+  Write-Host " Check the error messages and try to correct"   -ForegroundColor $ColorWarn
   Write-Host ""
   $done = (Read-Host 'Type enter to finish POWERSHELL')
   exit
@@ -385,13 +500,34 @@ $Shortcut.IconLocation = "$DISCUS_INST_FOLDER" + "\DiscusWSL\discus_suite_128.ic
 $Shortcut.Save()
 if (-not $?) {
   Write-Host ""
-  Write-Host " The desktop icon was not placed successfully "
-  Write-Host " Check the error messages and try to correct"
+  Write-Host " The desktop icon was not placed successfully " -ForegroundColor $ColorWarn
+  Write-Host " Check the error messages and try to correct"   -ForegroundColor $ColorWarn
   Write-Host ""
   $done = (Read-Host 'Type enter to finish POWERSHELL')
   exit
 }
 #
+#
+#$ShortcutLocation=[Environment]::GetFolderPath('DesktopDirectory')+"\DiscusTERMINAL_WSL.lnk"
+#$SourceFileLocation = "$DISCUS_INST_FOLDER" + "\DiscusWSL\discus_terminal_ps1.bat"
+##
+#Write-Host "W_USER             " $W_USER
+#Write-Host "SourceFileLocation " $SourceFileLocation
+#Write-Host "ShortcutLocation   " $ShortcutLocation
+#$WScriptShell = New-Object -ComObject Wscript.Shell
+#$Shortcut = $WScriptShell.CreateShortcut($ShortcutLocation)
+#$Shortcut.TargetPath = $SourceFileLocation
+#$Shortcut.IconLocation = "$DISCUS_INST_FOLDER" + "\DiscusWSL\discus_terminal.ico"
+#$Shortcut.Save()
+#if (-not $?) {
+#  Write-Host ""
+#  Write-Host " The desktop icon was not placed successfully "
+#  Write-Host " Check the error messages and try to correct"
+#  Write-Host ""
+#  $done = (Read-Host 'Type enter to finish POWERSHELL')
+#  exit
+#}
+##
 #
 & "$SourceFileLocation"
 #
