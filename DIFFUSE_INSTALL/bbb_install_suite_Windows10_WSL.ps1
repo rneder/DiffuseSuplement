@@ -212,7 +212,6 @@ else {
   Write-Host "This powershell has no admin rights"
   $IS_ELEVATED_SHELL = $false
  }
-exit
 #
 ###########################################################################################
 #
