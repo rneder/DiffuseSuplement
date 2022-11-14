@@ -1,4 +1,3 @@
-WSL_USER_PROFILE='C:\Users\reinhard'
 echo 'REM  Search for latest powershell; run with explicit path and exit' > DiscusWSL/discus_suite_ps1.bat
 echo 'REM  Some DISCUS users do not have the PATH set up all that well'  >> DiscusWSL/discus_suite_ps1.bat
 echo 'REM  BAT does not have an "elseif"'                   >> DiscusWSL/discus_suite_ps1.bat
