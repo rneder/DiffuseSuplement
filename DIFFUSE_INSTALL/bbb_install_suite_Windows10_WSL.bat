@@ -12,7 +12,7 @@ if exist "C:\Program Files\Powershell\7" (
   "C:\Program Files\Powershell\7\pwsh.exe" -File "bbb_install_suite_Windows10_WSL.ps1"
   exit
 )
-if exist "C:\Program Files\Powershell\6 (
+if exist "C:\Program Files\Powershell\6" (
   REM May still exist on older computer ???
   "C:\Program Files\Powershell\6\pwsh.exe" -File "bbb_install_suite_Windows10_WSL.ps1"
   exit
