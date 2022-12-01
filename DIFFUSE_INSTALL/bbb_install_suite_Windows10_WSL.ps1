@@ -1,9 +1,9 @@
 #
 #  bbb_install_suite_Windows10_WSL.ps1
-#  2022_10_24
+#  2022_11_30
 #  Installation script for DISCUS_SUITE as WSL within Windows 10 / 11
 #
-#  To enable the Windows Sub System for Linux, open a powershelA or
+#  To enable the Windows Sub System for Linux, open a powershell or
 #  Windows terminal as administrator and type the following lines:
 #
 #  C:\Windows\System32\wsl -l -v
@@ -150,27 +150,43 @@ Else {
 #
 ###########################################################################################
 #
-# Test Internet coonnection function
+# Test Internet connection function
 #
 ###########################################################################################
 #
 function TestNet {
   $IP_ACCESS = $false
   $GIT_ACCESS = $false
+  $GIT_SITE = "github.com"
   if ( Test-Connection   1.1.1.1 -Quiet -Count 1) {
     $IP_ACCESS = $true
-    if ( Test-Connection  github.com -Quiet -Count 1) {
+    if ( Test-Connection  $GIT_SITE -Quiet -Count 1) {
       $GIT_ACCESS = $true
     }
     else {
-      $GIT_ACCESS = $false
-      Write-Host " "
-      Write-Host "The internet connection works for 1.1.1.1"
-      Write-Host "but fails for github.com"
-      Write-Host "Please check your network settings and ensure"
-      Write-Host "that your computer can access web pages like"
-      Write-Host "github.com"
-      Write-Host " "
+      if ( Test-Connection  140.82.121.4 -Quiet -Count 1) {
+        $GIT_ACCESS = $true
+        $GIT_SITE = "140.82.121.4"
+        Write-Host " "
+        Write-Host "The internet connection works for 1.1.1.1"
+        Write-Host "but fails for github.com"
+        Write-Host "Please check your network settings and ensure"
+        Write-Host "that your computer can access web pages like"
+        Write-Host "github.com"
+        Write-Host "The installation will proceed with the IP address"
+        Write-Host "140.82.121.4 for github.com"
+        Write-Host " "
+        $done = (Read-Host 'Type enter to continue the DISCUS installation')
+      }
+      else {
+        $GIT_ACCESS = $false
+        Write-Host " "
+        Write-Host "The internet connection does not seem to work"
+        Write-Host "Please check your network settings and ensure"
+        Write-Host "that your computer can access web pages like"
+        Write-Host "github.com"
+        Write-Host " "
+      }
     }
   }
   else {
@@ -185,14 +201,16 @@ function TestNet {
 #
 #  Write-Host " IP ACCESS  is $IP_ACCESS"
 #  Write-Host " GIT ACCESS is $GIT_ACCESS"
-  return $GIT_ACCESS
+  $GIT_ACCESS
+  $GIT_SITE
 }
 #
 $NETOK = TestNet
-if(-Not $NETOK) {
+if(-Not $NETOK[0]) {
    $done = (Read-Host 'Type enter to finish POWERSHELL')
    exit 
 }
+$GIT_SITE = $NETOK[1]
 #
 ###########################################################################################
 #
@@ -330,7 +348,7 @@ elseif($wsl_installed) {
 else {
   Write-Host "ELSE BLOCK " $wsl_installed
 }
-#Write-Host "After test for WSL "
+Write-Host "After test for WSL "
 #
 ###########################################################################################
 #
@@ -456,22 +474,28 @@ cd "$DISCUS_INST_FOLDER"
 # Determine current DISCUS Version on GIThub
 #
 #Write-Host "+++++++++++++++++++++++"
-$DISCUS_RAW_VERSION = C:\Windows\System32\curl.exe -k --silent --location "https://github.com/tproffen/DiffuseCode/releases/latest" | Select-String "Release" | Out-String
+$DISCUS_RAW_SITE = "https://" + $GIT_SITE + "/tproffen/DiffuseCode/releases/latest"
+Write-Host "DISCUS_RAW_SITE " $DISCUS_RAW_SITE
+$DISCUS_RAW_VERSION = C:\Windows\System32\curl.exe -k --silent --location  $DISCUS_RAW_SITE | Select-String "Release" | Out-String
+#Write-Host "DISCUS_RAW_SITE " $DISCUS_RAW_VERSION
+#
 $pos_v = $DISCUS_RAW_VERSION.IndexOf("v.6")
 $cut_v = $DISCUS_RAW_VERSION.Substring($pos_v)
 $pos_s = $cut_v.IndexOf(" ")
 $DISCUS_VERSION = $cut_v.Substring(0, $pos_s)
 #Write-Host "DISCUS_VERSION IS : "$DISCUS_VERSION
-$DISCUS_INST_SCRIPT = "https://github.com/tproffen/DiffuseCode/releases/download/" + $DISCUS_VERSION + "/bbb_install_script.sh"
-#Write-Host "DISCUS_INST_SCRIPT URL : " $DISCUS_INST_SCRIPT
-
+$DISCUS_INST_SCRIPT = "https://" + $GIT_SITE + "/tproffen/DiffuseCode/releases/download/" + $DISCUS_VERSION + "/bbb_install_script.sh"
+Write-Host "Downloading DISCUS_INST_SCRIPT URL : " $DISCUS_INST_SCRIPT
+IF(Test-Path .\bbb_install_script -PathType leaf ) {
+  Remove-Item .\bbb_install_script
+}
 C:\Windows\System32\curl.exe -k -L -o bbb_install_script.sh $DISCUS_INST_SCRIPT
 
 $DISCUS_INST_PATH = "`"'/mnt/c/Users/" + "$W_USER" + "/$DISCUS_INST_NAME/bbb_install_script.sh' started=powershell `""
 #Write-Host " DISCUS_INST_PATH "  $DISCUS_INST_PATH
 #ls
 #Write-Host "+++++++++++++++++++++++"
-
+Write-Host "Starting Ubuntu part of the installation"
 
 & $UBUNTU_EXE     -c $DISCUS_INST_PATH
 #
