@@ -40,7 +40,7 @@ if [[ $PGPLOT_DONE == 1 ]]; then
 # mv src/pgplot $PGPLOT_SRC_DIR
 #
   cd $PGPLOT_INST_DIR
-  make
+  make lib
 #  make cpg
   make clean
 #
