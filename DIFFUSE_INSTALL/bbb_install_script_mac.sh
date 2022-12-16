@@ -1,5 +1,5 @@
 #!/bin/bash
-# 2022_12_01
+# 2022_12_16
 # top level DISCUS installation script.
 # Downloads the installation archive, expands this and
 # starts the actual installation script
@@ -21,7 +21,7 @@
 #   prepare=none                   ! Do not install / update operating system libraries
 #
 DISCUS_TAR_SOURCE="GITHUB"
-DISCUS_DO_COMPILE="PRE"
+DISCUS_DO_COMPILE="COMPILE"        ! 2022_12_16 Changed to COMPILE, as png library path varies a lot
 DISCUS_STARTED="native"
 DISCUS_INSTALLER="FETCH"
 DISCUS_PREPARE="LIBRARIES"
