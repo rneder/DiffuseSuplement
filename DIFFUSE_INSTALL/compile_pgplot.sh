@@ -2,8 +2,13 @@
 #
 # Prepare directories, check for old PGPLOT installations
 #
+# 2022_12 Forced compilation on MAC, as gcc is changing, and png library location is changing
+#
 #set -v
 #
+if [[ "$OPERATING" == "DISCUS_MACOS" ]]; then              # MAC OS ######
+  export PGPLOT_DONE=1
+else
 if [ -e $PGPLOT_ROOT_DIR/pgplot/libpgplot.a ]; then
 #
   echo " PGPLOT LIBRARY: $PGPLOT_ROOT_DIR/pgplot/libpgplot.a exists"
@@ -17,6 +22,7 @@ if [ -e $PGPLOT_ROOT_DIR/pgplot/libpgplot.a ]; then
   done
 else
   export PGPLOT_DONE=1
+fi
 fi
 #
 if [[ $PGPLOT_DONE == 1 ]]; then
