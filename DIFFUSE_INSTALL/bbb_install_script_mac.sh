@@ -20,11 +20,15 @@
 #   prepare=libraries              ! Install / update operating system libraries
 #   prepare=none                   ! Do not install / update operating system libraries
 #
+#   pgplot=compile                 ! Force compilation of PGPLOT library
+#   pgplot=current                 ! Use current PGPLOT library
+#
 DISCUS_TAR_SOURCE="GITHUB"
-DISCUS_DO_COMPILE="COMPILE"        ! 2022_12_16 Changed to COMPILE, as png library path varies a lot
+DISCUS_DO_COMPILE="COMPILE"        # 2022_12_16 Changed to COMPILE, as png library path varies a lot
 DISCUS_STARTED="native"
 DISCUS_INSTALLER="FETCH"
 DISCUS_PREPARE="LIBRARIES"
+PGPLOT_COMPILE="COMPILE"
 export GITHUB_SITE="github.com"
 for var in "$@"
 do
@@ -61,6 +65,13 @@ do
       DISCUS_PREPARE="LIBRARIES"
     elif [[ "${PREP_ARG}" == "none" ]]; then
       DISCUS_PREPARE="NONE"
+    fi
+  elif [[ "${current}" == "pgplot" ]]; then
+    PGPLOT_ARG=$(echo ${var} | sed 's:^.*=::')
+    if [[ "${PGPLOT_ARG}" == "compile" ]]; then
+      PGPLOT_COMPILE="COMPILE"
+    elif [[ "${PGPLOT_ARG}" == "current" ]]; then
+      PGPLOT_COMPILE="CURRENT"
     fi
   fi
 done
