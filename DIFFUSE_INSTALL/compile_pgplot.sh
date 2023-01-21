@@ -46,7 +46,7 @@ if [[ $PGPLOT_DONE == 1 ]]; then
 # mv src/pgplot $PGPLOT_SRC_DIR
 #
   cd $PGPLOT_INST_DIR
-  make 
+  make lib grfont.dat pgxwin_server
 #  make cpg
   make clean
 #
