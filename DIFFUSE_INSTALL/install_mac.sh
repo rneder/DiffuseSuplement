@@ -2,6 +2,7 @@
 #
 # Installation for native MACOSX
 #
+source ./install_finufft.sh
 source ./set_pgplot_bash.sh
 source ./get_diffuse_mac.sh
 if [[ -e ${DIFFUSE_PRE}.tar.gz && ! ${DISCUS_DO_COMPILE} == "COMPILE" ]]; then
