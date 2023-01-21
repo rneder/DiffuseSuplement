@@ -20,6 +20,7 @@ if [[ "${OPERATING}" == "DISCUS_LINUX" || "${OPERATING}" == "DISCUS_WSL" ]]; the
 #
 elif [[ "${OPERATING}" == "DISCUS_MACOS" ]]; then
 #
+  echo " "
 #  install_name_tool -change @rpath/libhdf5_cpp.200.dylib ${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/1.12.0/lib/libhdf5_cpp.200.dylib bin/discus_suite
 #  install_name_tool -change @rpath/libhdf5_fortran.200.dylib ${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/1.12.0/lib/libhdf5_fortran.200.dylib bin/discus_suite
 #  install_name_tool -change @rpath/libhdf5_f90cstub.200.dylib ${DISCUS_BIN_PREFIX}/HDF_Group/HDF5/1.12.0/lib/libhdf5_f90cstub.200.dylib bin/discus_suite
