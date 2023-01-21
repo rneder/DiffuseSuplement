@@ -153,6 +153,7 @@ if [[ "$OPERATING" == "DISCUS_LINUX" ]]; then                # Native Linux  ###
 #
   else                                          # Unknown Linux; try to compile
 #
+    source ./install_finufft.sh
     source  ./set_pgplot_bash.sh
     source set_source.sh
     source  ./compile_pgplot.sh
@@ -169,6 +170,7 @@ elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then          # WINDOWS WSL #####
 #
   else                                          # Unknown Linux; try to compile
 #
+    source ./install_finufft.sh
     source  ./set_pgplot_bash.sh
     source set_source.sh
     source  ./compile_pgplot.sh
