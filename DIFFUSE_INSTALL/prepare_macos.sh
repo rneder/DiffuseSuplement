@@ -69,6 +69,12 @@ if [[ $(brew list --formula | grep open-mpi) != 'open-mpi' ]]; then
   brew install openmpi
 fi
 #
+# Install FFTW3
+#
+if [[ $(brew list --formula | grep fftw) != 'fftw' ]]; then
+  brew install fftw
+fi
+#
 # Install PSTREE
 #
 which -s pstree
