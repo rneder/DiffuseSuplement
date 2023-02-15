@@ -289,12 +289,15 @@ fi
 #
 # Do cleanup
 #
+source set_conda_on.sh
+#
 cd $DISCUS_INST_DIR
 rm -f PROFILE.txt
 #rm -rf src/
 rm -rf develop/DiffuseBuild
 #rm -rf $PGPLOT_SRC_DIR/pgplot
 cd $DISCUS_INST_DIR/..
+#
 echo
 echo "DISCUS SUITE is installed into " ${DISCUS_BIN_PREFIX}/bin
 echo

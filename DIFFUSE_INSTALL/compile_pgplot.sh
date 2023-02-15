@@ -27,6 +27,8 @@ fi
 #
 if [[ $PGPLOT_DONE == 1 ]]; then
 #
+  source set_conda_off.sh
+#
   rm    -rf $PGPLOT_INST_DIR
   rm    -rf $PGPLOT_SRC_DIR
 #

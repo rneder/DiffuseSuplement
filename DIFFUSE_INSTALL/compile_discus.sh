@@ -2,6 +2,8 @@
 #
 set -e
 #
+source set_conda_off.sh
+#
 cd $DISCUS_DEVELOP/DiffuseBuild
 export FC=$(which gfortran)
 #
