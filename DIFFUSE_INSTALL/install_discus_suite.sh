@@ -289,9 +289,9 @@ fi
 #
 # Do cleanup
 #
-source set_conda_on.sh
 #
 cd $DISCUS_INST_DIR
+source set_conda_on.sh
 rm -f PROFILE.txt
 #rm -rf src/
 rm -rf develop/DiffuseBuild
