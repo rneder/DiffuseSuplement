@@ -34,4 +34,5 @@ sudo apt-get -y install  dbus-x11
 #sudo apt-get -y install  konsole
 sudo apt-get -y install  terminator
 sudo apt-get -y install  jmol
+sudo apt-get -y install  fftw3-dev
 #

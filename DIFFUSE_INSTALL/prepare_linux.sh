@@ -40,4 +40,5 @@ do_install ' ghostscript '
 do_install ' imagemagick '
 do_install ' qpdfview '
 do_install ' jmol '
+do_install ' libfftw3-dev '
 #
