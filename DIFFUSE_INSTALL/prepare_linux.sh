@@ -3,7 +3,7 @@
 #  For linux we simply run a sudo apt install
 #
 function do_install {
-    if [[ $(dpkg -l $1  | grep $1 ) == "" ]]; then
+    if [[ $(apt list --installed 2>/dev/null | grep $1 ) == "" ]]; then
       sudo apt-get install -y $1
     else
       echo Already installed: $1
