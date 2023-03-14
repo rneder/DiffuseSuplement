@@ -40,10 +40,12 @@ if [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then          # WINDOWS WSL
     cp SHELLS/discus_suite_ubuntu.sh     /usr/local/bin
     cp SHELLS/discus_suite_run_ubuntu.sh /usr/local/bin
     cp SHELLS/terminal_wrapper.sh        /usr/local/bin
+    cp SHELLS/discus_terminator.sh       /usr/local/bin
   else
     sudo cp SHELLS/discus_suite_ubuntu.sh     /usr/local/bin
     sudo cp SHELLS/discus_suite_run_ubuntu.sh /usr/local/bin
     sudo cp SHELLS/terminal_wrapper.sh        /usr/local/bin
+    sudo cp SHELLS/discus_terminator.sh       /usr/local/bin
   fi
 fi
 export DISCUS_WAS_COMPILED="YES"
