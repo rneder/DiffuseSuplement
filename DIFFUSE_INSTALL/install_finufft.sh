@@ -3,6 +3,7 @@
 #  Install finufft library
 #
 #
+source ./get_omp_version.sh
 mkdir -p develop
 cd develop
 rm -rf finufft
