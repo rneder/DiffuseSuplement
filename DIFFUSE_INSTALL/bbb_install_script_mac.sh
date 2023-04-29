@@ -79,27 +79,35 @@ done
 ################################################################################
 #  Test internet connection 
 ################################################################################
-  ping -c 1 -q 1.1.1.1 > /dev/null
-
+# ping -c 1 -q 1.1.1.1 > /dev/null
+  curl -k --silent 1.1.1.1 > /dev/null
   if [ $? -ne 0 ]; then
     echo 
-    echo " MacOS does not have access to the internet"
+    echo " MacOS does not have access to the internet via curl"
     echo " Check your network setting and make sure that"
-    echo " the firewall allows internet access for MacOS"
+    echo " the firewall allows internet access for MacOS from this terminal"
+    echo " Test a command like:"
+    echo " curl -k 1.1.1.1"
+    echo " It should not get an error: curl: (7) Couldn't connect to server"
     echo 
     exit 1
   else
     echo ""
-    ping -c 1 -q $GITHUB_SITE > /dev/null
+#   ping -c 1 -q $GITHUB_SITE > /dev/null
+    curl -k --silent $GITHUB_SITE > /dev/null
     if [ $? -ne 0 ]; then
       export GITHUB_SITE=140.82.121.4
-      ping -c 1 -q $GITHUB_SITE > /dev/null
+#     ping -c 1 -q $GITHUB_SITE > /dev/null
+      curl -k --silent $GITHUB_SITE > /dev/null
       if [ $? -ne 0 ]; then
         echo 
-        echo " MacOS has access to the internet"
+        echo " MacOS has access to the internet via curl"
         echo " but cannot open the IP address 140.82.121.4 for github.com"
         echo " Check your network setting and make sure that"
         echo " the firewall allows internet access for MacOS"
+        echo " Test a command like:"
+        echo " curl -k 140.82.121.4"
+        echo " It should not get an error: curl: (7) Couldn't connect to server"
         echo 
         exit 1
       else

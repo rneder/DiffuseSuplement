@@ -158,21 +158,26 @@ function TestNet {
   $IP_ACCESS = $false
   $GIT_ACCESS = $false
   $GIT_SITE = "github.com"
-  if ( Test-Connection   1.1.1.1 -Quiet -Count 1) {
+  C:\Windows\System32\curl.exe --silent -s -f 1.1.1.1
+  if ($?) {
     $IP_ACCESS = $true
-    if ( Test-Connection  $GIT_SITE -Quiet -Count 1) {
+      C:\Windows\System32\curl.exe --silent -s -f $GIT_SITE
+      if ($?) {
       $GIT_ACCESS = $true
     }
     else {
-      if ( Test-Connection  140.82.121.4 -Quiet -Count 1) {
+        C:\Windows\System32\curl.exe --silent -s -f 140.82.121.4
+		if ($?) {
         $GIT_ACCESS = $true
         $GIT_SITE = "140.82.121.4"
         Write-Host " "
-        Write-Host "The internet connection works for 1.1.1.1"
+        Write-Host "The internet connection with curl works for 1.1.1.1"
         Write-Host "but fails for github.com"
         Write-Host "Please check your network settings and ensure"
-        Write-Host "that your computer can access web pages like"
+        Write-Host "that your powershell can access web pages like"
         Write-Host "github.com"
+		Write-Host "Check Firewall setting for powershell"
+		Write-Host "Check the DomainNameServer setting"
         Write-Host "The installation will proceed with the IP address"
         Write-Host "140.82.121.4 for github.com"
         Write-Host " "
@@ -181,10 +186,12 @@ function TestNet {
       else {
         $GIT_ACCESS = $false
         Write-Host " "
-        Write-Host "The internet connection does not seem to work"
+        Write-Host "The internet connection with curl does not seem to work"
         Write-Host "Please check your network settings and ensure"
-        Write-Host "that your computer can access web pages like"
+        Write-Host "that your powershell can access web pages like"
         Write-Host "github.com"
+        Write-Host "Use a test like:"
+        Write-Host "C:\Windows\System32\curl.exe 1.1.1.1"
         Write-Host " "
       }
     }
@@ -192,15 +199,18 @@ function TestNet {
   else {
     $IP_ACCESS = $false
     Write-Host " "
-    Write-Host "The internet connection does not seem to work"
+    Write-Host "The internet connection with curl does not seem to work"
     Write-Host "Please check your network settings and ensure"
-    Write-Host "that your computer can access web pages like"
+    Write-Host "that your powershell can access web pages like"
     Write-Host "github.com"
-    Write-Host " "
+    Write-Host "Use a test like:"
+	Write-Host "C:\Windows\System32\curl.exe 1.1.1.1"
+	Write-Host " "
   }
 #
 #  Write-Host " IP ACCESS  is $IP_ACCESS"
 #  Write-Host " GIT ACCESS is $GIT_ACCESS"
+#  Write-Host " GIT SITE is $GIT_SITE"
   $GIT_ACCESS
   $GIT_SITE
 }
