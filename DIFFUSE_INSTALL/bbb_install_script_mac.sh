@@ -79,16 +79,16 @@ done
 ################################################################################
 #  Test internet connection 
 ################################################################################
-# ping -c 1 -q 1.1.1.1 > /dev/null
-  curl -k --silent 1.1.1.1 > /dev/null
+  ping -c 1 -q 8.8.8.8 > /dev/null
+# curl -k --silent 1.1.1.1 > /dev/null
   if [ $? -ne 0 ]; then
     echo 
-    echo " MacOS does not have access to the internet via curl"
+    echo " MacOS does not have access to the internet via ping to 8.8.8.8"
     echo " Check your network setting and make sure that"
     echo " the firewall allows internet access for MacOS from this terminal"
     echo " Test a command like:"
-    echo " curl -k 1.1.1.1"
-    echo " It should not get an error: curl: (7) Couldn't connect to server"
+    echo " ping    8.8.8.8"
+#   echo " It should not get an error: curl: (7) Couldn't connect to server"
     echo 
     exit 1
   else

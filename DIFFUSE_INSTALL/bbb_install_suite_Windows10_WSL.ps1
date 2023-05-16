@@ -158,7 +158,7 @@ function TestNet {
   $IP_ACCESS = $false
   $GIT_ACCESS = $false
   $GIT_SITE = "github.com"
-  C:\Windows\System32\curl.exe --silent -s -f 1.1.1.1
+  C:\Windows\System32\curl.exe --silent -s -f $GIT_SITE
   if ($?) {
     $IP_ACCESS = $true
       C:\Windows\System32\curl.exe --silent -s -f $GIT_SITE
@@ -171,13 +171,13 @@ function TestNet {
         $GIT_ACCESS = $true
         $GIT_SITE = "140.82.121.4"
         Write-Host " "
-        Write-Host "The internet connection with curl works for 1.1.1.1"
+        Write-Host "The internet connection with curl works for 140.82.121.4"
         Write-Host "but fails for github.com"
         Write-Host "Please check your network settings and ensure"
         Write-Host "that your powershell can access web pages like"
         Write-Host "github.com"
-		Write-Host "Check Firewall setting for powershell"
-		Write-Host "Check the DomainNameServer setting"
+        Write-Host "Check Firewall setting for powershell"
+        Write-Host "Check the DomainNameServer setting"
         Write-Host "The installation will proceed with the IP address"
         Write-Host "140.82.121.4 for github.com"
         Write-Host " "
@@ -190,8 +190,9 @@ function TestNet {
         Write-Host "Please check your network settings and ensure"
         Write-Host "that your powershell can access web pages like"
         Write-Host "github.com"
-        Write-Host "Use a test like:"
-        Write-Host "C:\Windows\System32\curl.exe 1.1.1.1"
+        Write-Host "Use tests like:"
+        Write-Host "C:\Windows\System32\curl.exe 140.82.121.4"
+        Write-Host "C:\Windows\System32\curl.exe github.com  "
         Write-Host " "
       }
     }
@@ -203,9 +204,10 @@ function TestNet {
     Write-Host "Please check your network settings and ensure"
     Write-Host "that your powershell can access web pages like"
     Write-Host "github.com"
-    Write-Host "Use a test like:"
-	Write-Host "C:\Windows\System32\curl.exe 1.1.1.1"
-	Write-Host " "
+    Write-Host "Use tests like:"
+    Write-Host "C:\Windows\System32\curl.exe 140.82.121.4"
+    Write-Host "C:\Windows\System32\curl.exe github.com  "
+    Write-Host " "
   }
 #
 #  Write-Host " IP ACCESS  is $IP_ACCESS"

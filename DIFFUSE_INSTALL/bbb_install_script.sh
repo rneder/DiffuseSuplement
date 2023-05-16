@@ -68,7 +68,7 @@ done
 #if [[ "$DISCUS_STARTED" == "powershell" ]]; then
 #  echo "POWERSHELL"
 
-  ping -c 1 -q 1.1.1.1 > /dev/null
+  ping -c 1 -q 8.8.8.8 > /dev/null
 
   if [ $? -ne 0 ]; then
     echo 
