@@ -9,7 +9,11 @@ if [[ "$1" == "1" ]]; then
   export DISPLAY=:0
 else
 # Second is WSL 2
-  export DISPLAY=$(awk '/nameserver / { print $2; exit}' /etc/resolv.conf 2>/dev/null):0
+  if [[ "$2" == "11" ]]; then
+    export DISPLAY=:0
+  else
+    export DISPLAY=$(awk '/nameserver / { print $2; exit}' /etc/resolv.conf 2>/dev/null):0
+  fi
 fi
 #echo $DISPLAY
 
