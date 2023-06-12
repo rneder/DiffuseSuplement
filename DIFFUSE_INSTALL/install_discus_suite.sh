@@ -262,7 +262,7 @@ if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
   sudo cp SHELLS/discus_start_pgxwin.sh /usr/local/bin
   sudo chmod ugo+x /usr/local/bin/discus_start_pgxwin.sh
 #
-  rm -rf   DiscusWSL
+  rm -rf   DiscusWSL/*
   mkdir -p DiscusWSL
   mkdir -p DiscusWSL/doc
   cp ICONS/discus_suite_128.ico        DiscusWSL/
