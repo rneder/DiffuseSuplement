@@ -13,4 +13,4 @@ Else {
   echo 1  | Out-File "$HOME\DISCUS_INSTALLATION\discus_wsl_ver.txt" -Encoding ASCII
   $wsl_ver = 1
 }
-$wsl_ver
+return $wsl_ver

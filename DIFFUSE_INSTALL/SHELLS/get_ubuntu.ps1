@@ -28,4 +28,4 @@ foreach($line in Get-Content "$is_wsl_file") {
     }
   }
 }
-$UBUNTU_EXE
+return $UBUNTU_EXE

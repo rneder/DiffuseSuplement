@@ -9,7 +9,6 @@ $is_win_file="$HOME\DISCUS_INSTALLATION\discus_win_ver.txt"
 If(Test-Path "$is_win_file"){
   foreach($line in Get-Content "$is_win_file") {
     $win_ver = $line -replace '\0'
-    write-host " COMP $comp  $win_ver"
   }
 }
 Else{
@@ -23,4 +22,4 @@ Else{
   Echo $win_ver | Out-File -Encoding ASCII -File $is_win_file
 }
 #
-$win_ver
+return $win_ver
