@@ -51,15 +51,16 @@ $win_ver = & "$DISCUS_INST_FOLDER\get_win_ver.ps1"
 #
 Write-Host "                                                                                "  -ForegroundColor $ColorHigh
 Write-Host "                                                                                "  -ForegroundColor $ColorHigh
-Write-Host "On some windows system the very first start of DISCUS can be extremly small after" -ForegroundColor $ColorHigh
+Write-Host "On some windows system the very first start of DISCUS can be extremly slow after" -ForegroundColor $ColorHigh
 Write-Host "a reboot of the computer. To avoid this long wait, a startup script is available"  -ForegroundColor $ColorHigh
 Write-Host "that will start DISCUS during the login procedure on your computer and basically"  -ForegroundColor $ColorHigh
-Write-Host "Run in the background. A first DISCUS window will appear and automatically be closed."  -ForegroundColor $ColorHigh
+Write-Host "run in the background. A first DISCUS window will appear and will automatically "  -ForegroundColor $ColorHigh
+Write-Host "be closed.                                                                      "  -ForegroundColor $ColorHigh
 Write-Host "Thereafter new DISCUS windows will start much faster.                           "  -ForegroundColor $ColorHigh
-Write-Host "At Windows 10 or WSL version 1 the DISCUS X-window server (VcXserver) will collide with the "  -ForegroundColor $ColorHigh
-Write-Host "RMCprofile X-Window server (xming). If you use RMCprofile the startup procedure         "  -ForegroundColor $ColorHigh
-Write-Host "should only be installed for Windows 11 in combination with WSL 2, as DISCUS    "  -ForegroundColor $ColorHigh
-Write-Host "does not need a separate X-window server for this combination                   "  -ForegroundColor $ColorHigh
+Write-Host "At Windows 10 or WSL version 1 the DISCUS X-window server (VcXserver) will      "  -ForegroundColor $ColorHigh
+Write-Host "collide with the RMCprofile X-Window server (xming). If you use RMCprofile the  "  -ForegroundColor $ColorHigh
+Write-Host "startup procedure should only be installed for Windows 11 in combination with   "  -ForegroundColor $ColorHigh
+Write-Host "WSL 2, as DISCUS does not need a separate X-window server for this combination  "  -ForegroundColor $ColorHigh
 Write-Host "Your operation system / WSL version is Windows: " $win_ver " WSL Version: " $wsl_use -ForegroundColor $ColorHigh
 Write-Host "                                                                                "  -ForegroundColor $ColorHigh
 Write-Host "                                                                                "  -ForegroundColor $ColorHigh
