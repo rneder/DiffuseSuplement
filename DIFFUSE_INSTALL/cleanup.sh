@@ -26,6 +26,7 @@ rm -f  DIFFUSE_INSTALL/profile.local
 rm -f  DIFFUSE_INSTALL/discus.profile.local
 rm -f  DIFFUSE_INSTALL/user.profile.local
 rm -f  DIFFUSE_INSTALL/system.profile.local
+rm -rf DIFFUSE_INSTALL/DiscusWSL
 #
 tar -zcf DIFFUSE_INSTALL.tar.gz DIFFUSE_INSTALL
 #
