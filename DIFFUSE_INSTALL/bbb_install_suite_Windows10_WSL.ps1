@@ -226,6 +226,31 @@ $GIT_SITE = $NETOK[1]
 #
 ###########################################################################################
 #
+# Test Windows version
+#
+###########################################################################################
+#
+$is_win_file="$HOME\DISCUS_INSTALLATION\discus_win_ver.txt"
+If(Test-Path "$is_win_file"){
+  foreach($line in Get-Content "$is_win_file") {
+    $win_ver = $line -replace '\0'
+    write-host " COMP $comp  $win_ver"
+  }
+}
+Else{
+  $comp = (get-ComputerInfo | Select-Object -expand OsName) -match 11
+  If($comp) {
+    $win_ver = 11
+  }
+  Else {
+    $win_ver = 10
+  }
+  Echo $win_ver | Out-File -Encoding ASCII -File $is_win_file
+}
+#
+#
+###########################################################################################
+#
 # Test if this powershell instance has Admin rights
 #
 ###########################################################################################
@@ -235,8 +260,8 @@ $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrato
 if($currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
   Write-Host "This powershell has administrator rights"
   $IS_ELEVATED_SHELL = $true
-  Fw_profile
-  Vcxsrv-Installation
+#  Fw_profile
+#  Vcxsrv-Installation
  }
 else {
   Write-Host "This powershell has no admin rights"
@@ -465,7 +490,32 @@ Else{
 }
 Write-Host " UBUNTU EXE : " $UBUNTU_EXE
 #
-
+#
+# Test for WSL version 1 / 2
+#
+C:\Windows\System32\wsl.exe -l -v  | Out-File "$HOME\AppData\Local\Temp\wsl.neu"
+(Get-Content "$HOME\AppData\Local\Temp\wsl.neu") -replace "`0", "" | Set-Content "$HOME\AppData\Local\Temp\wsl.neu" 
+#wsl -l -v  | Out-File "$HOME\AppData\Local\Temp\wsl.version" -Encoding ASCII
+$wsl_comp = Select-String -Path "$HOME\AppData\Local\Temp\wsl.neu" -Pattern ' 2'
+if($wsl_comp) {
+  echo 2  | Out-File "$HOME\DISCUS_INSTALLATION\discus_wsl_ver.txt" -Encoding ASCII
+  $wsl_ver = 2
+}
+Else {
+  echo 1  | Out-File "$HOME\DISCUS_INSTALLATION\discus_wsl_ver.txt" -Encoding ASCII
+  $wsl_ver = 1
+}
+$wsl_ver
+################################################################################
+if($IS_ELEVATED_SHELL) {
+  if($wsl_ver -eq "1" -Or $win_ver -eq "10") {
+    Fw_profile
+    Vcxsrv-Installation   
+  }
+  ELSE{
+    Write-Host " No need for VCXsrv"
+  }
+}
 #
 $W_TEMP = $env:USERPROFILE -split "\\"
 $W_USER = $W_TEMP[2]
@@ -520,50 +570,7 @@ if (-not $?) {
   exit
 }
 #
-Write-Host " A desktop icon will be placed."
-#
-$ShortcutLocation=[Environment]::GetFolderPath('DesktopDirectory')+"\DiscusSUITE_WSL.lnk"
-$SourceFileLocation = "$DISCUS_INST_FOLDER" + "\DiscusWSL\discus_suite_ps1.bat"
-#
-Write-Host "W_USER             " $W_USER
-Write-Host "SourceFileLocation " $SourceFileLocation
-Write-Host "ShortcutLocation   " $ShortcutLocation
-$WScriptShell = New-Object -ComObject Wscript.Shell
-$Shortcut = $WScriptShell.CreateShortcut($ShortcutLocation)
-$Shortcut.TargetPath = $SourceFileLocation
-$Shortcut.IconLocation = "$DISCUS_INST_FOLDER" + "\DiscusWSL\discus_suite_128.ico"
-$Shortcut.Save()
-if (-not $?) {
-  Write-Host ""
-  Write-Host " The desktop icon was not placed successfully " -ForegroundColor $ColorWarn
-  Write-Host " Check the error messages and try to correct"   -ForegroundColor $ColorWarn
-  Write-Host ""
-  $done = (Read-Host 'Type enter to finish POWERSHELL')
-  exit
-}
-#
-#
-#$ShortcutLocation=[Environment]::GetFolderPath('DesktopDirectory')+"\DiscusTERMINAL_WSL.lnk"
-#$SourceFileLocation = "$DISCUS_INST_FOLDER" + "\DiscusWSL\discus_terminal_ps1.bat"
-##
-#Write-Host "W_USER             " $W_USER
-#Write-Host "SourceFileLocation " $SourceFileLocation
-#Write-Host "ShortcutLocation   " $ShortcutLocation
-#$WScriptShell = New-Object -ComObject Wscript.Shell
-#$Shortcut = $WScriptShell.CreateShortcut($ShortcutLocation)
-#$Shortcut.TargetPath = $SourceFileLocation
-#$Shortcut.IconLocation = "$DISCUS_INST_FOLDER" + "\DiscusWSL\discus_terminal.ico"
-#$Shortcut.Save()
-#if (-not $?) {
-#  Write-Host ""
-#  Write-Host " The desktop icon was not placed successfully "
-#  Write-Host " Check the error messages and try to correct"
-#  Write-Host ""
-#  $done = (Read-Host 'Type enter to finish POWERSHELL')
-#  exit
-#}
-##
 #
 & "$SourceFileLocation"
 #
-$done = (Read-Host 'Type enter to finish POWERSHELL')
+#$done = (Read-Host 'Type enter to finish POWERSHELL')
