@@ -3,11 +3,12 @@
 #  Install finufft library
 #
 #
-source ./get_omp_version.sh
+#source ./get_omp_version.sh
 mkdir -p develop
 cd develop
 rm -rf finufft
 rm -rf FINUFFT.tar.gz
+mkdir -p DiffuseCode
 #
 export GITHUB_SITE="github.com"
 export FINUFFT_RAW_SITE="https://"$GITHUB_SITE"/flatironinstitute/finufft/releases/latest"
@@ -25,22 +26,22 @@ export FINUFFT_CODE_URL='https://'$GITHUB_SITE'/flatironinstitute/finufft/archiv
 curl -k -o FINUFFT.tar.gz -fsSL ${FINUFFT_CODE_URL}
 tar -zxf FINUFFT.tar.gz
 export FINUFFT_DIR='finufft-'${FINUFFT_VERSION}
-mv $FINUFFT_DIR finufft
+cp -r $FINUFFT_DIR DiffuseCode/finufft
 #
-cd finufft
-if [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
-  cp ../../SUPPORT/make.inc.macosx_clang make.inc
-fi
-make lib
-if [[ "$OPERATING" == "DISCUS_LINUX" ]] || [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
-  sudo mkdir -p /usr/lib/finufft
-  sudo cp lib/libfinufft.so /usr/lib/finufft/
-elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
-  sudo mkdir -p /usr/local/lib
-  sudo cp lib/libfinufft.so /usr/local/lib/
-fi
+#cd finufft
+#if [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
+#  cp ../../SUPPORT/make.inc.macosx_clang make.inc
+#fi
+#make lib
+#if [[ "$OPERATING" == "DISCUS_LINUX" ]] || [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then
+#  sudo mkdir -p /usr/lib/finufft
+#  sudo cp lib/libfinufft.so /usr/lib/finufft/
+#elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then
+#  sudo mkdir -p /usr/local/lib
+#  sudo cp lib/libfinufft.so /usr/local/lib/
+#fi
 #
 #  While finufft does not have a module file, use our own
-cp ../../SUPPORT/finufft_mod.f90 include
-cd ../..      # Back to DIFFUSE_INSTALL
+cp ../SUPPORT/finufft_mod.f90 DiffuseCode/finufft/include
+cd ..     # Back to DIFFUSE_INSTALL
 #
