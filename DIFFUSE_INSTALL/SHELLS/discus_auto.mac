@@ -1,0 +1,7 @@
+set prompt, off
+echo
+echo Preparing pgxwin server
+echo Ignore this window, it will close automatically
+echo
+#system "pgxwin_server &"
+exit
