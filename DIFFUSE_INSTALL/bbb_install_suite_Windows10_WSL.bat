@@ -1,15 +1,16 @@
 REM  Search for latest powershell; run with explicit path and exit
 REM  Some DISCUS users do not have the PATH set up all that well
 REM  BAT does not have an "elseif"
-REM
+REM  
 if not exist "%USERPROFILE%\DISCUS_INSTALLATION\" (
   mkdir "%USERPROFILE%\DISCUS_INSTALLATION\"
 )
 REM
-cp "bbb_install_suite_Windows10_WSL.ps1"  "%USERPROFILE%\DISCUS_INSTALLATION\"
+copy "bbb_install_suite_Windows10_WSL.ps1"  "%USERPROFILE%\DISCUS_INSTALLATION\"
+copy "bbb_install_suite_Windows10_WSL.bat"  "%USERPROFILE%\DISCUS_INSTALLATION\"
 REM
 cd %USERPROFILE%\DISCUS_INSTALLATION\  
-REM 
+REM
 if exist "C:\Program Files\Powershell\8" (
   REM Might be the new version in 20xx??
   "C:\Program Files\Powershell\8\pwsh.exe" -ExecutionPolicy Bypass -File "bbb_install_suite_Windows10_WSL.ps1"
@@ -25,5 +26,5 @@ if exist "C:\Program Files\Powershell\6" (
   "C:\Program Files\Powershell\6\pwsh.exe" -ExecutionPolicy Bypass -File "bbb_install_suite_Windows10_WSL.ps1"
   exit
 )
-REM Default if no pwsh.exe is detected
+REM Default if no pwsh.exe is detected 
 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -File "bbb_install_suite_Windows10_WSL.ps1"
