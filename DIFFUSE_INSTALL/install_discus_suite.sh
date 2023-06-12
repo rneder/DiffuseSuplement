@@ -108,9 +108,11 @@ if [[ ${DISCUS_DO_COMPILE} == "COMPILE" ]]; then
 #
 #   Fortran compiler is not defined
 #
-    FC=$(which gfortran)
+    export FC=$(which gfortran)
+    export DISCUS_GFORTRAN=$(which gfortran)
     if [[ -z ${FC} ]]; then
-      FC=$(which ifort)
+      export FC=$(which ifort)
+      export DISCUS_GFORTRAN=$(which ifort)
       if [[ -z ${FC} ]]; then
         echo
         echo "The environment variable FC is not set"
@@ -123,6 +125,18 @@ if [[ ${DISCUS_DO_COMPILE} == "COMPILE" ]]; then
     fi
     export FC
   fi
+fi
+#
+# Test for gcc and g++ compiler
+#
+if [[ "$OPERATING" == "DISCUS_LINUX" ]]; then                # Native Linux  ######
+  export DISCUS_GCC=$(which gcc)
+  export DISCUS_GXX=$(which g++)
+elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then          # WINDOWS WSL ######
+  export DISCUS_GCC=$(which gcc)
+  export DISCUS_GXX=$(which g++)
+elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then              # MAC OS #######
+  source ./find_gcc.sh
 fi
 # 
 echo
@@ -225,26 +239,49 @@ fi
 #
 cd $DISCUS_INST_DIR
 if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
-  rm -rf   DiscusWSL
-  mkdir -p DiscusWSL
-  mkdir -p DiscusWSL/doc
-  cp ICONS/discus_suite_128.ico        DiscusWSL/
-  cp ICONS/discus_terminal_128.ico     DiscusWSL/
-  cp SHELLS/config.xlaunch             DiscusWSL/
-  cp SHELLS/discus_suite.ps1           DiscusWSL/discus_suite.ps1
-  cp SHELLS/discus_terminal.ps1        DiscusWSL/discus_terminal.ps1
 #
   cd /mnt/c/Users
   export WSL_USER_PROFILE=$(cmd.exe /c echo %userprofile% | sed -nr 's///p')
   export WSL_USER_NAME=${WSL_USER_PROFILE##*\\}
+  export WSL_DIR='/mnt/c/Users/'${WSL_USER_NAME}'/DISCUS_INSTALLATION/'
+  cp $DISCUS_INST_DIR/SHELLS/get_win_ver.ps1 "$WSL_DIR"
+  cp $DISCUS_INST_DIR/SHELLS/get_wsl_ver.ps1 "$WSL_DIR"
+  cp $DISCUS_INST_DIR/SHELLS/get_ubuntu.ps1 "$WSL_DIR"
+  cp $DISCUS_INST_DIR/SHELLS/xlaunch.ps1 "$WSL_DIR"
+  cp $DISCUS_INST_DIR/SHELLS/discus_create_startup.ps1 "$WSL_DIR"
+  cp $DISCUS_INST_DIR/SHELLS/discus_place_icon.ps1 "$WSL_DIR"
+  cp $DISCUS_INST_DIR/SHELLS/discus_place_term_icon.ps1 "$WSL_DIR"
+  cd "$WSL_DIR"
+  powershell.exe -File get_wsl_ver.ps1
+  powershell.exe -File get_win_ver.ps1
+  export WIN_VER=$(cat discus_win_ver.txt | sed -nr 's///p')
+  export WSL_VER=$(cat discus_wsl_ver.txt | sed -nr 's///p')
 #
   cd $DISCUS_INST_DIR
+#
+  sudo cp SHELLS/discus_start_pgxwin.sh /usr/local/bin
+  sudo chmod ugo+x /usr/local/bin/discus_start_pgxwin.sh
+#
+  rm -rf   DiscusWSL
+  mkdir -p DiscusWSL
+  mkdir -p DiscusWSL/doc
+  cp ICONS/discus_suite_128.ico        DiscusWSL/
+  cp ICONS/discus_terminal.ico         DiscusWSL/
+#
+  cp SHELLS/config.xlaunch             DiscusWSL/
+  cp SHELLS/discus_suite.ps1           DiscusWSL/discus_suite.ps1
+  cp SHELLS/discus_terminal.ps1        DiscusWSL/discus_terminal.ps1
+  cp SHELLS/discus_startup.ps1            DiscusWSL/discus_startup.ps1
+#
   source ./prepare_suite_bat.sh
   source ./prepare_terminal_bat.sh
-  chmod u+x DiscusWSL/discus_suite_ps1.bat
-  chmod u+x DiscusWSL/discus_suite.ps1
-  chmod u+x DiscusWSL/discus_terminal_ps1.bat
-  chmod u+x DiscusWSL/discus_terminal.ps1
+  source ./prepare_startup_bat.sh
+  chmod ugo+x DiscusWSL/discus_suite_ps1.bat
+  chmod ugo+x DiscusWSL/discus_suite.ps1
+  chmod ugo+x DiscusWSL/discus_terminal_ps1.bat
+  chmod ugo+x DiscusWSL/discus_terminal.ps1
+  chmod ugo+x DiscusWSL/discus_startup.bat
+  chmod ugo+x DiscusWSL/discus_startup.ps1
 #
   cp $DISCUS_BIN_PREFIX/share/suite_man.pdf DiscusWSL/doc
   cp $DISCUS_BIN_PREFIX/share/discus_man.pdf DiscusWSL/doc
@@ -257,7 +294,6 @@ if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
   cp SHELLS/terminator.config $HOME/.config/terminator/config
 # export WSL_DIR='/mnt/c/Users/$WINDOWS_USER/DISCUS_INSTALLATION/'
 # export WSL_PATH=$(echo $WSL_USER_PROFILE | sed -nr '0,/.*Users\\(\w+).*/ s//\1/p')
-  export WSL_DIR='/mnt/c/Users/'${WSL_USER_NAME}'/DISCUS_INSTALLATION/'
 # echo "WSL_PRO " $WSL_USER_PROFILE
 # echo "WSL_PAT " ${WSL_PATH}    
 # echo "WSL_DIR " $WSL_DIR
@@ -271,12 +307,19 @@ if [[ $OPERATING == "DISCUS_WSL_LINUX" ]]; then
   fi
   if [[ "${DISCUS_STARTED}"  == "powershell" ]]; then
 #   echo "REMOVING OLD DIRECTORY DiscusWSL > " "${WSL_DIR}" "<<"
-    sudo rm -rf "${WSL_DIR}/DiscusWSL"
+    sudo rm -rf "${WSL_DIR}DiscusWSL"
 #   echo "COPYING NEW  DIRECTORY DiscusWSL > " "${WSL_DIR}" "<<"
     sudo cp -r DiscusWSL "${WSL_DIR}"
   fi
   cd SHELLS
   cp -r ./.DISCUS $HOME
+  cp discus_auto.mac $HOME/.DISCUS
+#
+#    Place Icons and startup batch file
+  cd "$WSL_DIR"
+  powershell.exe -File discus_place_icon.ps1
+  powershell.exe -File discus_place_term_icon.ps1
+  powershell.exe -File discus_create_startup.ps1
 # source ./install_vcxsrv.sh
 fi
 #
