@@ -12,7 +12,7 @@ $win_ver = & $dis_inst\get_win_ver.ps1
 $UBUNTU_EXE = & $dis_inst\get_ubuntu.ps1
 #
 if( -not ($wsl_use -eq "2" -And $win_ver -eq "11")) {
-  & .\xlaunch.ps1
+  & $dis_inst\xlaunch.ps1
 }
 #
 cd "$HOME"
