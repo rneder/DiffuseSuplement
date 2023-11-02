@@ -40,6 +40,7 @@ if [[ $PGPLOT_DONE == 1 ]]; then
      kill -9 $PID_PGXWIN
   fi
 #
+  mkdir -p $DISCUS_INST_DIR/src
   cd $DISCUS_INST_DIR/src
 #
   rm -rf pgplot_libs
