@@ -49,7 +49,7 @@ $ForegroundColors = (get-host).ui.rawui.ForegroundColor
 $ColorHigh = $ForegroundColors
 $ColorWarn = $ForegroundColors
 if( $BackgroundColors -eq "Black") {
-  $ColorHigh = "Yellow"
+  $ColorHigh = "Darkgreen"
   $ColorWarn = "Red"
 }
 elseif( $BackgroundColors -eq "White") {
@@ -525,6 +525,7 @@ $W_USER_DIR = $env:USERPROFILE
 $DISCUS_INST_NAME   = "DISCUS_INSTALLATION"
 $DISCUS_INST_FOLDER = "$W_USER_DIR" + "\$DISCUS_INST_NAME"
 $DISCUS_WSL_FOLDER = "$W_USER_DIR"  + "\$DISCUS_INST_NAME" + "\DiscusWSL"
+$SourceFileLocation = "$DISCUS_INST_FOLDER" + "\DiscusWSL\discus_suite_ps1.bat"
 #Write-Host "DISCUS_INST_NAME   " $DISCUS_INST_NAME
 #Write-Host "DISCUS_INST_FOLDER " $DISCUS_INST_FOLDER
 #Write-Host "DISCUS_WSL_FOLDER  " $DISCUS_WSL_FOLDER

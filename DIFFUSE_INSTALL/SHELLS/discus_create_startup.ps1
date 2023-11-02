@@ -25,7 +25,7 @@ $ForegroundColors = (get-host).ui.rawui.ForegroundColor
 $ColorHigh = $ForegroundColors
 $ColorWarn = $ForegroundColors
 if( $BackgroundColors -eq "Black") {
-  $ColorHigh = "Yellow"
+  $ColorHigh = "Darkgreen"
   $ColorWarn = "Red"
 }
 elseif( $BackgroundColors -eq "White") {
