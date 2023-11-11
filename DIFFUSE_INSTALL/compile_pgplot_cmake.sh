@@ -35,10 +35,15 @@ if [[ $PGPLOT_DONE == 1 ]]; then
 #
   source set_conda_off.sh
 #
-  PID_PGXWIN=$(pgrep pgxwin_server)
-  if [ ! -z $PID_PGXWIN ]; then
-     kill -9 $PID_PGXWIN
+  set +e
+  PGXWIN_ACTIVE=$(ps aux | fgrep -v grep | fgrep pgxwin_server)
+  if [ ! -z PGXWIN_ACTIVE ]; then
+    PID_PGXWIN=$(pgrep pgxwin_server)
+    if [ ! -z $PID_PGXWIN ]; then
+       kill -9 $PID_PGXWIN
+    fi
   fi
+  set -e
 #
   mkdir -p $DISCUS_INST_DIR/src
   cd $DISCUS_INST_DIR/src
