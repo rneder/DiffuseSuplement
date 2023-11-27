@@ -30,6 +30,10 @@ fi
 which -s gfortran
 if [[ $? != 0 ]] ; then
   brew install gcc
+else
+  if [[ $DISCUS_OPERATING_NEW ]]; then
+    brew reinstall gcc
+  fi
 fi
 #
 # Install CMAKE
