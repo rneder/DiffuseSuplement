@@ -132,7 +132,8 @@ export DISCUS_CODE_URL='https://'$GITHUB_SITE'/tproffen/DiffuseCode/archive/'${D
 export DISCUS_SUPP_RAW="https://"$GITHUB_SITE"/rneder/DiffuseSuplement/releases/latest"
 export DISCUS_SUPPLEMENT=$(curl -k --silent --location $DISCUS_SUPP_RAW | grep "Release " | grep -m 1 -Poe 'v\.[0-9]*\.[0-9]*\.[0-9]*')
 export DISCUS_INSTALL_URL='https://'$GITHUB_SITE'/rneder/DiffuseSuplement/releases/download/'${DISCUS_SUPPLEMENT}'/DIFFUSE_INSTALL.tar.gz'
-export PGPLOT_CODE_URL='https://'$GITHUB_SITE'/rneder/DiffuseSuplement/releases/download/'${DISCUS_SUPPLEMENT}'/DIFFUSE_CODE_PGPLOT_CMAKE.tar.gz'
+#export PGPLOT_CODE_URL='https://'$GITHUB_SITE'/rneder/DiffuseSuplement/releases/download/'${DISCUS_SUPPLEMENT}'/DIFFUSE_CODE_PGPLOT_CMAKE.tar.gz'
+export PGPLOT_CODE_URL='https://'$GITHUB_SITE'/rneder/DiffuseSuplement/releases/download/'${DISCUS_SUPPLEMENT}'/DIFFUSE_CODE_pgplot.tar.gz'
 #
 #echo "DISCUS_VERSION     " $DISCUS_VERSION
 #echo "DISCUS_SUPPLEMENT  " $DISCUS_SUPPLEMENT

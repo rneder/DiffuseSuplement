@@ -170,7 +170,8 @@ if [[ "$OPERATING" == "DISCUS_LINUX" ]]; then                # Native Linux  ###
     source ./install_finufft.sh
     source  ./set_pgplot_bash.sh
     source set_source.sh
-    source  ./compile_pgplot_cmake.sh
+    source  ./compile_pgplot.sh
+#   source  ./compile_pgplot_cmake.sh
     source do_discus_complete.sh
 #
   fi
@@ -187,7 +188,8 @@ elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then          # WINDOWS WSL #####
     source ./install_finufft.sh
     source  ./set_pgplot_bash.sh
     source set_source.sh
-    source  ./compile_pgplot_cmake.sh
+    source  ./compile_pgplot.sh
+#   source  ./compile_pgplot_cmake.sh
     source do_discus_complete.sh
 #
   fi
@@ -203,7 +205,8 @@ elif [[ "$OPERATING" == "DISCUS_WSL_LINUX" ]]; then          # WINDOWS WSL #####
 elif [[ "$OPERATING" == "DISCUS_CYGWIN" ]]; then             # CYGWIN ######
 #
     source set_source.sh
-    source  ./compile_pgplot_cmake.sh
+    source  ./compile_pgplot.sh
+#   source  ./compile_pgplot_cmake.sh
     export DIFFEV_MPI_FLAG=ON
     source  ./compile_discus.sh clean
     cp $DISCUS_BIN_PREFIX/bin/discus_suite.exe $DISCUS_BIN_PREFIX/bin/discus_suite_parallel.exe
@@ -222,6 +225,7 @@ elif [[ "$OPERATING" == "DISCUS_MACOS" ]]; then              # MAC OS ######
 #
     source install_mac.sh
 #   source set_source.sh
+#   source  ./compile_pgplot.sh
 #   source  ./compile_pgplot_cmake.sh
 #   export DIFFEV_MPI_FLAG=ON
 #   source  ./compile_discus.sh clean

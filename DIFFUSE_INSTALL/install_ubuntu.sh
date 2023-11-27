@@ -38,7 +38,8 @@ else
 #   Precompiled file does not exist, do full installation, pass down argument 1
 #
   source set_source.sh 
-  source  ./compile_pgplot_cmake.sh
+  source  ./compile_pgplot.sh
+# source  ./compile_pgplot_cmake.sh
   source do_discus_complete.sh
 #
 fi
